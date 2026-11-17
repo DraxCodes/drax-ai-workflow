@@ -125,8 +125,80 @@ test("new rejects a literal API key in the profile", () => {
     { env: homeEnv(home) },
   );
   assert.equal(result.status, 2);
-  assert.match(result.stdout, /literal API key/);
+  assert.match(result.stdout, /literal secret/);
   assert.equal(existsSync(join(project, ".opencode")), false);
+});
+
+test("new rejects a made-up reference shape", () => {
+  const base = fixtureBase();
+  const project = tempDir("wb-profile-fakeref-");
+  const home = tempDir("wb-home-");
+  const tool = join(base, "tools", "base.mjs");
+  writeProfile(join(home, ".config", "drax", "bootstrap.json"), {
+    opencode: {
+      provider: {
+        test: { options: { apiKey: "{literal:myOpaqueBearerToken9f8e7d6c5b4a3b2c1d0e}" } },
+      },
+    },
+  });
+
+  const result = run(
+    tool,
+    ["new", project, "--from", base, "--preset", "bare", "--config"],
+    { env: homeEnv(home) },
+  );
+  assert.equal(result.status, 2);
+  assert.match(result.stdout, /literal secret/);
+  assert.equal(existsSync(join(project, "opencode.json")), false);
+});
+
+test("new rejects a literal secret under a token-shaped key", () => {
+  const base = fixtureBase();
+  const project = tempDir("wb-profile-token-");
+  const home = tempDir("wb-home-");
+  const tool = join(base, "tools", "base.mjs");
+  writeProfile(join(home, ".config", "drax", "bootstrap.json"), {
+    opencode: {
+      provider: {
+        test: { options: { token: "myOpaqueBearerToken9f8e7d6c5b4a3b2c1d0e" } },
+      },
+    },
+  });
+
+  const result = run(
+    tool,
+    ["new", project, "--from", base, "--preset", "bare", "--config"],
+    { env: homeEnv(home) },
+  );
+  assert.equal(result.status, 2);
+  assert.match(result.stdout, /literal secret/);
+  assert.equal(existsSync(join(project, "opencode.json")), false);
+});
+
+test("new accepts env and file references", () => {
+  const base = fixtureBase();
+  const project = tempDir("wb-profile-refs-");
+  const home = tempDir("wb-home-");
+  const tool = join(base, "tools", "base.mjs");
+  writeProfile(join(home, ".config", "drax", "bootstrap.json"), {
+    opencode: {
+      provider: {
+        test: {
+          options: { apiKey: "{env:TEST_KEY}", token: "{file:./token.txt}" },
+        },
+      },
+    },
+  });
+
+  const result = run(
+    tool,
+    ["new", project, "--from", base, "--preset", "bare", "--config"],
+    { env: homeEnv(home) },
+  );
+  assert.equal(result.status, 0, result.stdout + result.stderr);
+  const config = JSON.parse(readFileSync(join(project, "opencode.json"), "utf8"));
+  assert.equal(config.provider.test.options.apiKey, "{env:TEST_KEY}");
+  assert.equal(config.provider.test.options.token, "{file:./token.txt}");
 });
 
 test("new rejects a missing explicit profile", () => {

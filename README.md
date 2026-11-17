@@ -117,8 +117,9 @@ vendor-neutral.
 
 - `--profile <file>` reads another file and must exist; `--no-profile` ignores the
   profile and writes the placeholder scaffold. Both require `--config`.
-- API keys must be `{env:NAME}` references or `<placeholders>`. A literal key is
-  rejected with exit 2 before anything is written.
+- Credential fields (`apiKey`, `token`, `secret`, `password`, `Authorization`) must
+  be `{env:NAME}` or `{file:path}` references, or `<placeholders>`. A literal value
+  is rejected with exit 2 before anything is written.
 - The profile is machine-local. It is not part of the base, is never committed,
   and `base` never writes or updates it.
 
@@ -214,7 +215,8 @@ node --test
 
 The suite covers the seam schema, hash normalization (CRLF/LF), the plan/applier
 and rollback, `new` with presets (including `--config`, `--dry-run` and bootstrap
-profiles: default path, `--profile`, `--no-profile`, literal-key rejection),
+profiles: default path, `--profile`, `--no-profile`, credential-literal
+rejection including made-up `{word:...}` shapes and token-shaped keys),
 `doctor --fix`, and an end-to-end init → check → doctor → update → pack → eject
 run in temp directories.
 

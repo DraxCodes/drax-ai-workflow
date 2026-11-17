@@ -34,5 +34,5 @@ test("doctor scans the vendored tools and the root config for secrets", () => {
   const result = run(tool, ["doctor", project, "--home", home]);
   assert.equal(result.status, 1, result.stdout + result.stderr);
   assert.match(result.stdout, /\.opencode\/tools\/leak\.mjs: looks like a GitHub token/);
-  assert.match(result.stdout, /opencode\.json: possible inline apiKey/);
+  assert.match(result.stdout, /opencode\.json: possible inline credential/);
 });
