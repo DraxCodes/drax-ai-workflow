@@ -1,6 +1,6 @@
 {
   "name": "drax-ai-workflow",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "private": true,
   "type": "module",
   "description": "Project-agnostic OpenCode workflows: council, hillclimb, grilling, handoff, security, and their seam.",

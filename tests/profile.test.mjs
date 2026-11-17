@@ -175,6 +175,55 @@ test("new rejects a literal secret under a token-shaped key", () => {
   assert.equal(existsSync(join(project, "opencode.json")), false);
 });
 
+test("new rejects a placeholder-shaped credential", () => {
+  const base = fixtureBase();
+  const project = tempDir("wb-profile-angle-");
+  const home = tempDir("wb-home-");
+  const tool = join(base, "tools", "base.mjs");
+  writeProfile(join(home, ".config", "drax", "bootstrap.json"), {
+    opencode: {
+      provider: {
+        test: { options: { apiKey: "<myOpaqueBearerToken9f8e7d6c5b4a3b2c1d0e>" } },
+      },
+    },
+  });
+
+  const result = run(
+    tool,
+    ["new", project, "--from", base, "--preset", "bare", "--config"],
+    { env: homeEnv(home) },
+  );
+  assert.equal(result.status, 2);
+  assert.match(result.stdout, /literal secret/);
+  assert.equal(existsSync(join(project, "opencode.json")), false);
+});
+
+test("new rejects literal secrets under key and Bearer names", () => {
+  const base = fixtureBase();
+  const tool = join(base, "tools", "base.mjs");
+  const cases = [
+    { key: "key", value: "myOpaqueBearerToken9f8e7d6c5b4a3b2c1d0e" },
+    { key: "Bearer", value: "myOpaqueBearerToken9f8e7d6c5b4a3b2c1d0e" },
+  ];
+
+  for (const { key, value } of cases) {
+    const project = tempDir("wb-profile-alias-");
+    const home = tempDir("wb-home-");
+    writeProfile(join(home, ".config", "drax", "bootstrap.json"), {
+      opencode: { provider: { test: { options: { [key]: value } } } },
+    });
+
+    const result = run(
+      tool,
+      ["new", project, "--from", base, "--preset", "bare", "--config"],
+      { env: homeEnv(home) },
+    );
+    assert.equal(result.status, 2, `${key}: ${result.stdout}${result.stderr}`);
+    assert.match(result.stdout, /literal secret/);
+    assert.equal(existsSync(join(project, "opencode.json")), false);
+  }
+});
+
 test("new accepts env and file references", () => {
   const base = fixtureBase();
   const project = tempDir("wb-profile-refs-");
