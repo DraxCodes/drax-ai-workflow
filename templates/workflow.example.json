@@ -17,6 +17,7 @@
     "themes": [],
     "notes": "No human-facing surface yet; use a measurable metric as the target."
   },
+  "rubrics": { "default": "perception" },
   "docs": {
     "issues": ".scratch",
     "glossary": "GLOSSARY.md",

@@ -65,6 +65,13 @@
         "notes": { "type": "string" }
       }
     },
+    "rubrics": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "default": { "type": "string", "minLength": 1 }
+      }
+    },
     "docs": {
       "type": "object",
       "additionalProperties": false,

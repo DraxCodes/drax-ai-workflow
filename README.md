@@ -27,7 +27,7 @@ instead of a surprise.
 ```
 agents/        task-orchestrator, plan-architect, quality-gatekeeper, security-auditor
 commands/      council, start-project, hillclimb, grill-me, handoff
-skills/        council, hillclimb (+ rubric), grilling, handoff, workflow-base, find-skills, context-engineering
+skills/        council, hillclimb (+ four rubrics), grilling, handoff, workflow-base, find-skills, context-engineering
 packs/         engineering (optional third-party skills)
 schema/        the seam JSON Schema
 templates/     a starter seam
@@ -64,8 +64,8 @@ Set up this folder with Drax AI Workflow, then start the project.
 1. Clone https://github.com/DraxCodes/drax-ai-workflow into a temp dir
    (or use $env:WORKFLOW_BASE when it is set); call that path <base>.
 2. Run:
-   node <base>/tools/base.mjs new . --project <name> --preset web --config
-   (use --preset bare with --build/--test/--surface for a non-web stack)
+   node <base>/tools/base.mjs new . --project <name> --preset checks-web --config
+   (use --preset checks-none with --build/--test/--surface for a non-web stack)
 3. Optional engineering skills:
    node .opencode/tools/base.mjs pack install engineering .
 4. If this folder is not a git repo, run git init, add the stack's .gitignore
@@ -79,6 +79,43 @@ you leave the prompt. Agents, commands and skills written mid-session may not be
 visible until OpenCode restarts; that restart is why step 5 exists. `/start-project`
 turns the idea into an approved first spec in the issue directory and stops — it
 does not scaffold the stack or write app code.
+
+## Hillclimb rubrics
+
+The hillclimb gate is a named 1–10 rubric, not one fixed scale. Four ship in the
+`hillclimb` skill's `references/rubrics/`:
+
+| Rubric | Artifact | Gate question |
+| --- | --- | --- |
+| `perception` | UI, UX, visual surfaces, copy, rendered docs | Does it land well with a person looking at it? |
+| `usability` | API, CLI, errors, logs, config, docs | Can a first-time user get value without guessing? |
+| `performance` | latency, throughput, memory, size, build time, cost | Does it meet a budget declared before measuring? |
+| `completeness` | a spec, proposal, architecture choice, built feature | Is every obligation decided, including the unnamed ones? |
+
+Selection happens once, before the first score:
+
+1. `Rubric: <name>` in the task or spec wins.
+2. Otherwise the seam's `rubrics.default` (`"rubrics": { "default": "performance" }`).
+3. Otherwise `perception`.
+
+The shared parts never move: the seam's `checks` are the floor, a red floor cannot
+score 8, scores are whole numbers, 8 ships unless a 10 was demanded, and two
+iterations without a higher score stop the run. What changes per rubric is the
+probes, the level anchors, and the evidence a score must cite.
+
+`completeness` is the "what did I miss?" gate: it scores an artifact against a
+filled obligation inventory (actors, inputs, states, failure, permissions, data
+lifecycle, limits, observability, compatibility, cost, security, dependencies,
+non-goals). A short spec that decides every row beats a long one that decides
+none. Use it to hillclimb a feature proposal before building it.
+
+`performance` requires the budget table — metric, baseline, target, method and
+environment — to be declared *before* the first measurement. A target chosen after
+seeing the number is void.
+
+A project can add its own rubric file and name it in `rubrics.default`; a path
+like `docs/rubrics/security.md` is accepted and `doctor` resolves it. The
+`docs.rubricAddendum` still extends whichever rubric is selected.
 
 ## VS Code Copilot Chat
 
@@ -123,18 +160,33 @@ changes for OpenCode or T3 Code.
 ```sh
 node tools/base.mjs new <project-dir> \
   --project <name> \
-  --preset web \
+  --preset checks-web \
   --pack engineering \
   --config
 ```
 
-It fills a preset seam (`bare`, `web`, `cli`, `docs`), creates the required
-`.scratch` and `docs/adr` directories, optionally writes a one-shot
-`opencode.json` scaffold (`--config`, only when absent), and runs `check` and
-`doctor`. Flags override the preset: `--build`, `--test`, `--free`, `--paid`,
-`--surface`, `--widths`, `--themes`, `--seed`, `--capture`, the doc paths and
-`--pack`. A non-Node stack uses `--preset bare` plus explicit checks, for example
-`--build "make" --test "make test" --surface cli`.
+A preset fills **exactly five seam fields and nothing else**: `checks.build`,
+`checks.test`, `verify.surface`, `verify.widths` and `verify.themes`. It never
+chooses a language, framework, folder layout, architecture or dependency — the
+project makes those decisions in `/start-project`.
+
+| Preset | Fills |
+| --- | --- |
+| `checks-none` | No build or test; `surface: none` |
+| `checks-web` | `npm run build`, `npm test`; `surface: web`; 375/900; light/dark |
+| `checks-cli` | `npm run build`, `npm test`; `surface: cli` |
+| `checks-docs` | No build or test; `surface: docs` |
+
+The old names `bare`, `web`, `cli` and `docs` are aliases, so existing prompt
+blocks keep working; `base new` prints the canonical name, the alias it replaced,
+and the five fields it filled. Flags override every field: `--build`, `--test`,
+`--free`, `--paid`, `--surface`, `--widths`, `--themes`, `--seed`, `--capture`,
+the doc paths and `--pack`. A non-Node stack uses `--preset checks-none` plus
+explicit checks, for example `--build "make" --test "make test" --surface cli`.
+
+It also creates the required `.scratch` and `docs/adr` directories, optionally
+writes a one-shot `opencode.json` scaffold (`--config`, only when absent), and
+runs `check` and `doctor`.
 
 The scaffold's `<provider/model>` placeholders are intentional: `doctor` warns
 until they are replaced. The base writes `opencode.json` once, at creation, and
@@ -229,9 +281,9 @@ All commands accept the target directory (default `.`). Exit codes: `0` success,
 
 `.opencode/workflow.json` is the only file a project edits under `.opencode/`. It
 names the build/test/free/paid checks, how a visual artifact is seeded and captured,
-which docs the skills read, and which packs to vendor. Unknown keys are rejected;
-`base.version` must match the manifest. The full schema is in
-`skills/workflow-base/references/seam.md` and `schema/workflow.schema.json`.
+the default hillclimb rubric, which docs the skills read, and which packs to vendor.
+Unknown keys are rejected; `base.version` must match the manifest. The full schema is
+in `skills/workflow-base/references/seam.md` and `schema/workflow.schema.json`.
 
 ## Updating
 
@@ -270,7 +322,9 @@ profiles: default path, `--profile`, `--no-profile`, credential-literal
 rejection including made-up `{word:...}` shapes, `<...>` wrappers and
 token-shaped keys), the Copilot bridge (skill/agent shape, `name` matching the
 directory, `$ARGUMENTS` substitution, command/skill body merging, `--no-copilot`,
-and a `doctor` failure on a mismatched name),
+and a `doctor` failure on a mismatched name), the rubric library (four shipped
+files, a seam default, a project-path rubric and an unresolved-name failure), the
+preset scope (`checks-*`, aliases, and no stack scaffold),
 `doctor --fix`, and an end-to-end init → check → doctor → update → pack → eject
 run in temp directories.
 
@@ -287,3 +341,5 @@ half-written tree.
 is vendored rather than global, and the dissent.
 [`docs/adr/0002-copilot-bridge.md`](docs/adr/0002-copilot-bridge.md) records why the
 Copilot support is a generated `.github/` bridge rather than a parallel tree.
+[`docs/adr/0003-named-rubrics.md`](docs/adr/0003-named-rubrics.md) records why the
+hillclimb gate ships named rubrics instead of one fixed scale.

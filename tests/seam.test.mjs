@@ -1,7 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { defaultSeam, validateSeam } from "../tools/lib/seam.mjs";
-import { readFileSync } from "node:fs";
+import { readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import { repoRoot } from "./helpers.mjs";
 
@@ -77,6 +77,35 @@ test("an empty command is rejected", () => {
   const seam = valid();
   seam.checks.test = { command: "" };
   assert.match(validateSeam(seam).errors.join("\n"), /checks\.test\.command/);
+});
+
+test("a rubric default validates, and unknown rubrics keys are rejected", () => {
+  const seam = valid();
+  seam.rubrics = { default: "performance" };
+  assert.deepEqual(validateSeam(seam).errors, []);
+
+  const bad = valid();
+  bad.rubrics = { default: "perception", extra: true };
+  assert.match(validateSeam(bad).errors.join("\n"), /rubrics\.extra: unknown key/);
+
+  const empty = valid();
+  empty.rubrics = { default: "" };
+  assert.match(validateSeam(empty).errors.join("\n"), /rubrics\.default/);
+});
+
+test("the shipped rubric files exist and every one is named in the seam constant", () => {
+  const dir = join(repoRoot, "skills", "hillclimb", "references", "rubrics");
+  const names = readdirSync(dir)
+    .filter((name) => name.endsWith(".md"))
+    .map((name) => name.slice(0, -3))
+    .sort();
+  assert.deepEqual(names, ["completeness", "perception", "performance", "usability"]);
+  for (const name of names) {
+    const text = readFileSync(join(dir, `${name}.md`), "utf8");
+    assert.ok(text.includes(`(\`${name}\`)`), `${name}.md names itself`);
+    assert.match(text, /### 8 —/, `${name}.md defines the level-8 anchor`);
+    assert.match(text, /Anti-inflation rules/, `${name}.md has anti-inflation rules`);
+  }
 });
 
 test("build and test may both be null with a warning", () => {

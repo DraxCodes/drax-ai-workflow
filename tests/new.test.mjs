@@ -53,6 +53,9 @@ test("new writes a preset seam, docs, config and verifies", () => {
   assert.equal(seam.verify.surface, "web");
   assert.deepEqual(seam.verify.widths, [375, 900]);
   assert.deepEqual(seam.verify.themes, ["light", "dark"]);
+  assert.equal(seam.rubrics.default, "perception");
+  assert.match(result.stdout, /preset: checks-web \(alias web\)/);
+  assert.match(result.stdout, /no stack, layout or dependency/);
 
   assert.ok(existsSync(join(project, ".scratch")));
   assert.ok(existsSync(join(project, "docs", "adr")));
@@ -80,6 +83,33 @@ test("new --dry-run writes nothing", () => {
   assert.equal(result.status, 0, result.stdout + result.stderr);
   assert.equal(existsSync(join(project, ".opencode")), false);
   assert.equal(existsSync(join(project, "opencode.json")), false);
+});
+
+test("a preset fills checks and the verify surface, never a stack", () => {
+  const base = fixtureBase();
+  const project = tempDir("wb-new-preset-");
+  const home = tempDir("wb-home-");
+  const tool = join(base, "tools", "base.mjs");
+
+  const result = run(
+    tool,
+    ["new", project, "--from", base, "--preset", "checks-cli"],
+    { env: homeEnv(home) },
+  );
+  assert.equal(result.status, 0, result.stdout + result.stderr);
+
+  const seam = JSON.parse(
+    readFileSync(join(project, ".opencode", "workflow.json"), "utf8"),
+  );
+  assert.equal(seam.checks.build.command, "npm run build");
+  assert.equal(seam.checks.test.command, "npm test");
+  assert.equal(seam.verify.surface, "cli");
+
+  // No stack scaffold: no package.json, src, app or dependency manifest.
+  for (const name of ["package.json", "src", "app", "node_modules"]) {
+    assert.equal(existsSync(join(project, name)), false, `${name} was not written`);
+  }
+  assert.match(result.stdout, /preset: checks-cli —/);
 });
 
 test("new rejects an unknown preset", () => {
