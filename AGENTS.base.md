@@ -76,6 +76,32 @@ scores against intent plus the rubric.
 4. **Gate hillclimb on perceived quality, not statistics.** Score with the rubric from real
    evidence. A green number never substitutes for the rubric; tests and build are a floor.
 
+### Spend discipline
+
+Cost follows **context size**, not the number of steps. Three tiers, and they are not
+interchangeable:
+
+| Tier | Scope | When |
+| --- | --- | --- |
+| Lens | one change, as a diff | every change |
+| Gate | one artifact, as evidence | every hillclimb iteration |
+| Audit | everything since a fixed point | a release or branch end, once |
+
+1. **Scope every review before starting it.** Name the fixed point and the paths, for
+   example "the diff from `<tag>` in `tools/` and its tests". "Review the repo" is not a
+   scope. If the scope is a whole tree or a very large diff, split it into passes and ask
+   first.
+2. **Default to the change, not the repository.** A review reads the changed files and
+   their tests. Reach for the whole tree only at a release or a tag, and only once.
+3. **Give a delegated brief a scope.** A subagent starts with no context: what you paste or
+   point it at is the whole cost. Pass paths and a commit range, never "read everything and
+   tell me".
+4. **Escalate the model, not the scope.** If a finding needs a stronger model, send that
+   finding — not the diff it came from. A small model with the right files beats a frontier
+   model with the repo.
+5. **Say what a big review will cost before running it.** If a task would read more than a
+   few hundred files or a multi-megabyte diff, state that in one line and ask.
+
 ### Session hygiene
 
 One session per task; `/compact` when switching topics; prefer targeted reads; delegate

@@ -34,6 +34,14 @@ change — for both the AI model / agent usage and the project's stack and archi
 and say what you checked and what you found. Prefer primary sources (OWASP, the
 framework's security guide, the provider's docs) and note the date you checked.
 
+## Scope
+
+You are the **lens**, not the audit: review the change as a diff, plus the files it
+touches and their tests. Do not read the whole repository to check one change — the
+cost of a review is the context it reads. If you are asked to audit a tree rather than
+a change, say so in one line, name the paths and the commit range you will read, and
+keep it to that. Report what you read.
+
 ## Report
 
 - **Verdict**: `PASS` or `CONCERNS`.

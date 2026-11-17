@@ -90,6 +90,13 @@ score stop the loop.
   all three are read-only and delegate none of their own work back to you.
 - Delegate to the `plan-architect` or `quality-gatekeeper` only when it earns its cost: a
   plan or a score should save more rework than the extra tokens it spends.
+- **Scope every delegated brief.** A subagent starts with no context, so what you point it
+  at is the whole cost. Pass the fixed point and the paths ("the diff from `<tag>` in
+  `src/` and its tests"), never "read the repo and tell me". Keep the always-on
+  `security-auditor` on the change; a whole-tree audit is a release activity, run once,
+  with its scope stated first.
+- **Escalate the finding, not the diff.** A stronger model is worth it for a judgement on
+  a few findings, not for re-reading a large diff a cheaper model already summarized.
 - Never commit secrets or personal data (`.env`, API keys, `*.pem`, `*.key`,
   `*.local.json`). Check `git status` before every commit.
 - Stop when the target is met, two consecutive iterations pass without a higher

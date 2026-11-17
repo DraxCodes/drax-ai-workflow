@@ -117,6 +117,31 @@ A project can add its own rubric file and name it in `rubrics.default`; a path
 like `docs/rubrics/security.md` is accepted and `doctor` resolves it. The
 `docs.rubricAddendum` still extends whichever rubric is selected.
 
+## Spend discipline
+
+Cost follows **context size**, not step count. A ten-step task on a few files is cheap;
+one review that reads a whole tree is not. Three tiers exist and are not interchangeable:
+
+| Tier | Scope | Frequency |
+| --- | --- | --- |
+| Lens (`security-auditor`) | one change, as a diff | every change |
+| Gate (`quality-gatekeeper`) | one artifact, as evidence | every hillclimb iteration |
+| Audit (a review since a fixed point) | the diff or tree since a tag | a release or branch end, once |
+
+The rules, also in the managed `AGENTS.md` block so every session and both harnesses
+load them:
+
+- **Scope every review before starting it** — a fixed point plus paths, never "the repo".
+- **Default to the change, not the repository.** Whole-tree only at a release, once.
+- **Give a delegated brief a scope.** A subagent starts with no context; what you point it
+  at is the whole cost.
+- **Escalate the model, not the scope.** Send the finding, not the diff it came from.
+- **State the cost of a big review in one line before running it.**
+
+Estimates in a UI usually price tokens at list rates. A discounted provider can bill a
+fraction of that, so treat a displayed figure as an upper bound and check the invoice
+before concluding a model is expensive.
+
 ## VS Code Copilot Chat
 
 Copilot Chat reads `AGENTS.md` directly, so the managed block and the project's own
