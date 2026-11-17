@@ -1,7 +1,7 @@
 # Drax AI Workflow
 
 The authored source of a project-agnostic OpenCode workflow set: a council for
-divergent decisions, a hillclimb loop with a 1–10 perception rubric, grilling,
+divergent decisions, a hillclimb loop with a named 1-10 rubric, grilling,
 handoff, a security lens, domain-doc and issue-tracker conventions, and the `base`
 CLI that vendors them into a project.
 

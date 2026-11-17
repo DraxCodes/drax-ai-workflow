@@ -44,12 +44,15 @@ to build, what the result must feel like, and which trade-off is accepted.
 ## Hillclimb (perceived quality and measurable objectives)
 
 When the task is quality-sensitive — UI, UX, visual, copy or docs — or has a measurable
-objective (coverage, warnings, latency, bundle size, failing tests), follow the
+objective (coverage, warnings, latency, bundle size, failing tests), or is a decision
+that may be missing an obligation (a spec, a proposal, a feature), follow the
 `hillclimb` skill and run the loop:
 
-- Hold the artifact, the target score and the qualities in the `hillclimb` skill's
-  `references/hillclimb-rubric.md` (plus the project addendum named by the seam) in view at
-  all times. The target is 8 unless the task says `Target score: 10`.
+- Select **one** rubric before the first score — an explicit `Rubric: <name>`, else the
+  seam's `rubrics.default`, else `perception` — and hold its file at
+  `references/rubrics/<name>.md` (plus the project addendum named by the seam) in view at
+  all times. Record the rubric with the target; neither moves during the run. The target
+  is 8 unless the task says `Target score: 10`.
 - Delegate the target, evidence plan, ordered flaws and floor to the `plan-architect`
   before making any change.
 - Make each iteration's change yourself — the smallest change that fixes the top named
@@ -64,9 +67,9 @@ objective (coverage, warnings, latency, bundle size, failing tests), follow the
 
 Apply the rubric gate exactly:
 
-- **Below 8:** name the specific subjective flaws holding it back (for example
-  clunky transitions, visual clutter, unclear hierarchy), fix those flaws, and
-  iterate.
+- **Below 8:** name the specific flaws holding it back (for a UI, clunky
+  transitions; for a spec, an undecided failure path; for a budget, the tail missed
+  at p95), fix those flaws, and iterate.
 - **8 or above:** stop and ship, unless the task explicitly demands a 10.
 - **8–9 with a 10 demanded:** name what a 10 requires, attempt at most two
   iterations, then stop and report the ceiling if the score does not move.

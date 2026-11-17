@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { readFileSync, readdirSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { join, relative } from "node:path";
 import { repoRoot } from "./helpers.mjs";
 
@@ -26,5 +26,32 @@ test("the shipped base carries no project-specific terms", () => {
   for (const abs of files) {
     const rel = relative(repoRoot, abs);
     assert.doesNotMatch(readFileSync(abs, "utf8"), forbidden, rel);
+  }
+});
+
+test("nothing points at the moved rubric path; the pointer is the only exception", () => {
+  const pointer = join(
+    repoRoot,
+    "skills",
+    "hillclimb",
+    "references",
+    "hillclimb-rubric.md",
+  );
+  assert.ok(existsSync(pointer), "the compatibility pointer still exists");
+
+  const files = [];
+  for (const tree of ["agents", "commands", "skills"]) {
+    files.push(...walk(join(repoRoot, tree)));
+  }
+  files.push(join(repoRoot, "AGENTS.base.md"));
+
+  for (const abs of files) {
+    if (abs === pointer) continue;
+    const rel = relative(repoRoot, abs);
+    assert.doesNotMatch(
+      readFileSync(abs, "utf8"),
+      /references\/hillclimb-rubric\.md/,
+      `${rel} should point at references/rubrics/<name>.md`,
+    );
   }
 });

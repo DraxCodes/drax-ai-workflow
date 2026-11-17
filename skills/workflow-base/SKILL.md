@@ -46,7 +46,7 @@ guessing at a project's checks or docs.
   generated file. A project skill with the same ID as a vendored one overrides it,
   which is a drift the next update reports.
 - Universal docs are addressed skill-relatively (for example "the `hillclimb`
-  skill's `references/hillclimb-rubric.md`"), never by an absolute path.
+  skill's `references/rubrics/<name>.md`"), never by an absolute path.
 
 ## Daily commands
 

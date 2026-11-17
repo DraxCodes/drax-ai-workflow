@@ -10,34 +10,40 @@ concrete, ordered plan, and the gates the `quality-gatekeeper` will enforce.
 
 ## Inputs
 
-Expect an objective, and optionally the artifact, a target score and constraints.
-Read the `hillclimb` skill's `references/hillclimb-rubric.md` and the project addendum
-named by the seam before planning; quote them, do not paraphrase the levels.
+Expect an objective, and optionally the artifact, the selected rubric, a target score
+and constraints. Read that rubric at the `hillclimb` skill's
+`references/rubrics/<name>.md`, plus the project addendum named by the seam, before
+planning; quote them, do not paraphrase the levels.
 
 ## What to produce
 
-1. **Objective** — restate the goal in one sentence, naming the artifact a person
-   will experience.
-2. **Target score** — 8 by default. A 10 only when the task or spec says
+1. **Objective** — restate the goal in one sentence, naming the artifact and who
+   experiences it.
+2. **Rubric** — the one selected before any score: an explicit `Rubric: <name>`,
+   else the seam's `rubrics.default`, else `perception`. State it and do not drift.
+3. **Target score** — 8 by default. A 10 only when the task or spec says
    `Target score: 10`. If neither is stated, use 8; do not ask.
-3. **Evidence plan** — the evidence the seam's `verify` block declares: the seed, the
-   capture command, the widths and themes, and the first-run/keyboard read-through. For a
-   non-visual surface, the measurable command and the baseline it must beat.
-4. **Baseline flaws** — the named flaws visible in the current artifact, in severity
+4. **Evidence plan** — what the selected rubric requires. For `perception`: the
+   seam's `verify` block (seed, capture, widths, themes) plus the first-run and
+   keyboard read-through. For `usability`: the first-use attempt and the error paths
+   to trigger. For `performance`: the budget table — metric, baseline, target, method
+   and environment — declared **before** the first measurement. For `completeness`:
+   the obligation inventory, filled before scoring.
+5. **Baseline flaws** — the named flaws visible in the current artifact, in severity
    order, each with what, where and the condition that exposes it. The plan fixes
    these in order.
-5. **Floor** — the exact free commands from the seam's `checks` (build, test and free)
+6. **Floor** — the exact free commands from the seam's `checks` (build, test and free)
    that must pass before any score counts. The `paid` checks are excluded unless the
    orchestrator shows explicit approval. Label anything not run as **not run**.
-6. **Plan** — an ordered list of small, independent iterations. Each is the
+7. **Plan** — an ordered list of small, independent iterations. Each is the
    smallest change that could fix the top flaw, and each is independently
    revertable (one atomic commit).
-7. **Stop conditions** — target met, two consecutive iterations without a higher
+8. **Stop conditions** — target met, two consecutive iterations without a higher
    score, the ceiling reached on a demanded 10, or budget exhausted.
 
-For internal-only work with no human-facing surface, a measurable metric may be the
-target instead of a score. State it exactly, with its command and baseline, and
-keep the same floor and atomic-commit rules.
+An artifact with no human-facing surface is not a reason to drop the gate: route it
+to `performance` when the target is a number, or `completeness` when the target is a
+decision.
 
 ## Rules
 
