@@ -1,0 +1,100 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://drax-ai-workflow.local/schema/workflow.schema.json",
+  "title": "drax-ai-workflow project seam",
+  "description": "The machine-checkable half of a project's workflow seam. Prose lives in AGENTS.md.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "base", "project", "checks"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "base": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "version"],
+      "properties": {
+        "name": { "const": "drax-ai-workflow" },
+        "version": { "type": "string", "minLength": 1 }
+      }
+    },
+    "project": { "type": "string", "minLength": 1 },
+    "workflows": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "enum": ["council", "hillclimb", "grilling", "handoff", "security"]
+      }
+    },
+    "checks": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["build", "test", "free", "paid"],
+      "properties": {
+        "build": {
+          "oneOf": [{ "$ref": "#/$defs/command" }, { "type": "null" }]
+        },
+        "test": {
+          "oneOf": [{ "$ref": "#/$defs/command" }, { "type": "null" }]
+        },
+        "free": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/command" }
+        },
+        "paid": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/command" }
+        }
+      }
+    },
+    "verify": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "surface": { "enum": ["web", "cli", "api", "docs", "none"] },
+        "seed": { "type": "string" },
+        "capture": { "type": "string" },
+        "captureCwd": { "type": "string" },
+        "widths": {
+          "type": "array",
+          "items": { "type": "number" }
+        },
+        "themes": {
+          "type": "array",
+          "items": { "enum": ["light", "dark"] }
+        },
+        "notes": { "type": "string" }
+      }
+    },
+    "docs": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "issues": { "type": "string", "minLength": 1 },
+        "glossary": { "type": "string", "minLength": 1 },
+        "adr": { "type": "string", "minLength": 1 },
+        "rubricAddendum": { "type": "string", "minLength": 1 },
+        "contract": { "type": "string", "minLength": 1 },
+        "artDirection": { "type": "string", "minLength": 1 }
+      }
+    },
+    "neverCommit": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "packs": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    }
+  },
+  "$defs": {
+    "command": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["command"],
+      "properties": {
+        "command": { "type": "string", "minLength": 1 },
+        "cwd": { "type": "string", "minLength": 1 }
+      }
+    }
+  }
+}

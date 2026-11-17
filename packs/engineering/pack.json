@@ -1,0 +1,25 @@
+{
+  "$comment": "Optional engineering skills, installed per project on demand. These are NOT part of the universal base. Install with: node .opencode/tools/base.mjs pack install engineering .",
+  "agent": "opencode",
+  "cli": "skills@1.9.0",
+  "sources": [
+    {
+      "repo": "mattpocock/skills",
+      "skills": [
+        "setup-matt-pocock-skills",
+        "code-review",
+        "codebase-design",
+        "improve-codebase-architecture",
+        "setup-pre-commit"
+      ]
+    },
+    {
+      "repo": "addyosmani/agent-skills",
+      "skills": ["documentation-and-adrs"]
+    },
+    {
+      "repo": "anthropics/skills",
+      "skills": ["webapp-testing"]
+    }
+  ]
+}

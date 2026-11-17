@@ -1,0 +1,18 @@
+# Local
+node_modules/
+.opencode/.workflow-backup/
+.opencode/.workflow-stage/
+*.local.json
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+.npmrc
+id_rsa*
+
+# OS noise
+.DS_Store
+Thumbs.db

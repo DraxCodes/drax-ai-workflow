@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "base": { "name": "drax-ai-workflow", "version": "0.1.0" },
+  "project": "example",
+  "workflows": ["council", "hillclimb", "grilling", "handoff", "security"],
+  "checks": {
+    "build": { "command": "npm run build", "cwd": "." },
+    "test": { "command": "npm test", "cwd": "." },
+    "free": [],
+    "paid": []
+  },
+  "verify": {
+    "surface": "none",
+    "seed": "",
+    "capture": "",
+    "widths": [],
+    "themes": [],
+    "notes": "No human-facing surface yet; use a measurable metric as the target."
+  },
+  "docs": {
+    "issues": ".scratch",
+    "glossary": "GLOSSARY.md",
+    "adr": "docs/adr"
+  },
+  "neverCommit": [".env", "*.pem", "*.key", "*.local.json"],
+  "packs": []
+}
