@@ -63,7 +63,7 @@ Set up this folder with Drax AI Workflow, then start the project.
 
 `base new` prints `check` and `doctor` results, so the baseline is verified before
 you leave the prompt. Agents, commands and skills written mid-session may not be
-visible until OpenCode restarts; that restart is why step 4 exists. `/start-project`
+visible until OpenCode restarts; that restart is why step 5 exists. `/start-project`
 turns the idea into an approved first spec in the issue directory and stops — it
 does not scaffold the stack or write app code.
 
@@ -105,7 +105,7 @@ vendor-neutral.
   "opencode": {
     "$schema": "https://opencode.ai/config.json",
     "model": "provider/default-model",
-    "provider": { "provider": { "options": { "apiKey": "{env:PROVIDER_KEY}" } } },
+    "provider": { "myprovider": { "options": { "apiKey": "{env:PROVIDER_KEY}" } } },
     "agents": {
       "task-orchestrator": { "model": "provider/default-model#low" },
       "quality-gatekeeper": { "model": "provider/experience-model#medium" }
