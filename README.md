@@ -5,6 +5,10 @@ divergent decisions, a hillclimb loop with a 1–10 perception rubric, grilling,
 handoff, a security lens, domain-doc and issue-tracker conventions, and the `base`
 CLI that vendors them into a project.
 
+The same workflows also run in **VS Code Copilot Chat**; `base new`/`init`/`update`
+generate a `.github/` bridge (see [VS Code Copilot Chat](#vs-code-copilot-chat)),
+so one prompt starts a project in either harness.
+
 The **base never runs in a project**. Each project carries a pinned copy under
 `.opencode/` and a small seam (`.opencode/workflow.json`). The copy is committed,
 reviewable and hash-checked; the seam is project-edited and base-validated.
@@ -32,6 +36,14 @@ AGENTS.base.md the managed block injected into a project AGENTS.md
 VERSION        the release version; git tags are the immutable store
 ```
 
+Generated into a project by the Copilot bridge (source of truth stays under
+`.opencode/`):
+
+```
+.github/skills/<id>/   one Agent Skill per command and skill (SKILL.md + references)
+.github/agents/        plan-architect, quality-gatekeeper, security-auditor (.agent.md)
+```
+
 The base owns no `opencode.json`. Provider, model, permissions, compaction and tool
 output are the project's. Agents carry no `model:` and no permissions; they inherit
 the project's, and the project supplies the cheap per-agent models and the
@@ -43,7 +55,8 @@ scaffold, so the public base names no provider (see below).
 ## Start from a prompt
 
 The shortest path from an empty folder to project work is one prompt. Open
-OpenCode in the empty folder and paste:
+OpenCode in the empty folder and paste (the same block works in Copilot Chat —
+see [VS Code Copilot Chat](#vs-code-copilot-chat)):
 
 ```text
 Set up this folder with Drax AI Workflow, then start the project.
@@ -67,6 +80,42 @@ visible until OpenCode restarts; that restart is why step 5 exists. `/start-proj
 turns the idea into an approved first spec in the issue directory and stops — it
 does not scaffold the stack or write app code.
 
+## VS Code Copilot Chat
+
+Copilot Chat reads `AGENTS.md` directly, so the managed block and the project's own
+rules load without a second instruction file. The rest of the workflow is bridged
+into the two native Copilot formats when `base new`, `init` or `update` copies a
+tree:
+
+| Generated | Source | Purpose |
+| --- | --- | --- |
+| `.github/skills/<id>/SKILL.md` | `commands/<id>.md` and `skills/<id>/SKILL.md` | Agent Skills, which Copilot shows as `/<id>` slash commands and auto-loads from their description |
+| `.github/agents/<id>.agent.md` | `agents/<id>.md` for the three lenses | Custom agents: `plan-architect` (read/search), `quality-gatekeeper` (adds `execute`), `security-auditor` (adds `execute`, `web`) |
+
+The bridge is generated, never hand-edited — the canonical files stay under
+`.opencode/`, and `base check` reports drift. Some mechanics differ from OpenCode:
+
+- A command and a skill can share an id (`council`, `hillclimb`, `handoff`).
+  Copilot keeps one skill per directory, so the generated `SKILL.md` is the command's
+  entry point with the canonical skill body appended as a reference section.
+- The command frontmatter's `agent:` is dropped, `$ARGUMENTS` becomes "the text the
+  user typed after `/<id>`", and each skill's `name` is normalized to its directory
+  (Copilot silently ignores a skill whose `name` and directory disagree).
+- The skill body points at the canonical `.opencode/agents/` and `.opencode/skills/`
+  paths, because the generated copies are what Copilot loads.
+
+To use it: open the new folder in VS Code, open Copilot Chat, and paste the same
+[prompt block](#start-from-a-prompt). After `base new` finishes, start a **new chat**
+(the Copilot equivalent of the restart), then type `/start-project <idea>`.
+`/council`, `/hillclimb`, `/grill-me` and `/handoff` are available the same way, and
+the three lens agents appear in the agent picker.
+
+`--no-copilot` skips the bridge on `new`, `init` and `update` and removes an existing
+`.github/skills` + `.github/agents` tree. `doctor` prints `copilot: N skills` /
+`copilot: N agents`, or `copilot: bridge not installed`; it fails a skill whose
+`name` does not match its directory. Nothing under `.opencode/` or `AGENTS.md`
+changes for OpenCode or T3 Code.
+
 ## Start a brand-new project
 
 `base new` is `init` plus the mechanical setup:
@@ -89,7 +138,8 @@ It fills a preset seam (`bare`, `web`, `cli`, `docs`), creates the required
 
 The scaffold's `<provider/model>` placeholders are intentional: `doctor` warns
 until they are replaced. The base writes `opencode.json` once, at creation, and
-never updates it. `--no-verify` skips the post-install check and doctor.
+never updates it. `--no-verify` skips the post-install check and doctor, and
+`--no-copilot` skips the [Copilot bridge](#vs-code-copilot-chat).
 
 ### Bootstrap profile
 
@@ -218,7 +268,9 @@ The suite covers the seam schema, hash normalization (CRLF/LF), the plan/applier
 and rollback, `new` with presets (including `--config`, `--dry-run` and bootstrap
 profiles: default path, `--profile`, `--no-profile`, credential-literal
 rejection including made-up `{word:...}` shapes, `<...>` wrappers and
-token-shaped keys),
+token-shaped keys), the Copilot bridge (skill/agent shape, `name` matching the
+directory, `$ARGUMENTS` substitution, command/skill body merging, `--no-copilot`,
+and a `doctor` failure on a mismatched name),
 `doctor --fix`, and an end-to-end init → check → doctor → update → pack → eject
 run in temp directories.
 
@@ -233,3 +285,5 @@ half-written tree.
 
 [`docs/adr/0001-vendored-base.md`](docs/adr/0001-vendored-base.md) records why this
 is vendored rather than global, and the dissent.
+[`docs/adr/0002-copilot-bridge.md`](docs/adr/0002-copilot-bridge.md) records why the
+Copilot support is a generated `.github/` bridge rather than a parallel tree.

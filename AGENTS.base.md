@@ -10,6 +10,11 @@ seam is missing, these workflows are dormant: say so and stop.
 drift with `node .opencode/tools/base.mjs check .`; update with
 `... update . --from <base>`; remove with `... eject .`.
 
+`.github/skills` and `.github/agents` are a generated bridge for VS Code Copilot Chat, from
+the same source. Never hand-edit them; the canonical files are under `.opencode/`. Copilot
+reads this `AGENTS.md` directly, so the rules below apply there unchanged. If `.github/` is
+missing, this project was installed with `--no-copilot` and only the OpenCode tree exists.
+
 ### Starting a project
 
 A new project starts with `/start-project <idea>`. It writes an approved first spec
