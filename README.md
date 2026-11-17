@@ -22,7 +22,7 @@ instead of a surprise.
 
 ```
 agents/        task-orchestrator, plan-architect, quality-gatekeeper, security-auditor
-commands/      council, hillclimb, grill-me, handoff
+commands/      council, start-project, hillclimb, grill-me, handoff
 skills/        council, hillclimb (+ rubric), grilling, handoff, workflow-base, find-skills, context-engineering
 packs/         engineering (optional third-party skills)
 schema/        the seam JSON Schema
@@ -37,7 +37,35 @@ output are the project's. Agents carry no `model:` and no permissions; they inhe
 the project's, and the project supplies the cheap per-agent models and the
 read-only edit-deny rules for the subagents. The one exception is the opt-in
 `base new --config` scaffold, written only when the file is absent; the base never
-updates it afterwards.
+updates it afterwards. A machine-local **bootstrap profile** can fill that
+scaffold, so the public base names no provider (see below).
+
+## Start from a prompt
+
+The shortest path from an empty folder to project work is one prompt. Open
+OpenCode in the empty folder and paste:
+
+```text
+Set up this folder with Drax AI Workflow, then start the project.
+
+1. Clone https://github.com/DraxCodes/drax-ai-workflow into a temp dir
+   (or use $env:WORKFLOW_BASE when it is set); call that path <base>.
+2. Run:
+   node <base>/tools/base.mjs new . --project <name> --preset web --config
+   (use --preset bare with --build/--test/--surface for a non-web stack)
+3. Optional engineering skills:
+   node .opencode/tools/base.mjs pack install engineering .
+4. If this folder is not a git repo, run git init, add the stack's .gitignore
+   and commit the baseline. Delete the temp clone.
+5. Do not write app code yet. Tell me to restart the session so the new agents,
+   skills and commands load, then run /start-project <my idea>.
+```
+
+`base new` prints `check` and `doctor` results, so the baseline is verified before
+you leave the prompt. Agents, commands and skills written mid-session may not be
+visible until OpenCode restarts; that restart is why step 4 exists. `/start-project`
+turns the idea into an approved first spec in the issue directory and stops — it
+does not scaffold the stack or write app code.
 
 ## Start a brand-new project
 
@@ -62,6 +90,37 @@ It fills a preset seam (`bare`, `web`, `cli`, `docs`), creates the required
 The scaffold's `<provider/model>` placeholders are intentional: `doctor` warns
 until they are replaced. The base writes `opencode.json` once, at creation, and
 never updates it. `--no-verify` skips the post-install check and doctor.
+
+### Bootstrap profile
+
+`base new --config` also looks for a machine-local profile at
+`~/.config/drax/bootstrap.json`. When it exists, its `opencode` object becomes
+`opencode.json` (no placeholders) and its `agentsMd` string is appended to
+`AGENTS.md`, outside the managed block. That is how a personal provider, model
+mix and council seats reach a new project while the public base stays
+vendor-neutral.
+
+```json
+{
+  "opencode": {
+    "$schema": "https://opencode.ai/config.json",
+    "model": "provider/default-model",
+    "provider": { "provider": { "options": { "apiKey": "{env:PROVIDER_KEY}" } } },
+    "agents": {
+      "task-orchestrator": { "model": "provider/default-model#low" },
+      "quality-gatekeeper": { "model": "provider/experience-model#medium" }
+    }
+  },
+  "agentsMd": "### Council seat models\n\nChair runs ...; experience runs ..."
+}
+```
+
+- `--profile <file>` reads another file and must exist; `--no-profile` ignores the
+  profile and writes the placeholder scaffold. Both require `--config`.
+- API keys must be `{env:NAME}` references or `<placeholders>`. A literal key is
+  rejected with exit 2 before anything is written.
+- The profile is machine-local. It is not part of the base, is never committed,
+  and `base` never writes or updates it.
 
 `doctor --fix` performs the two mechanical fixes: it creates the required doc
 directories and moves same-ID global agents into a dated `agents.bak-*` backup.
@@ -154,7 +213,8 @@ node --test
 ```
 
 The suite covers the seam schema, hash normalization (CRLF/LF), the plan/applier
-and rollback, `new` with presets (including `--config` and `--dry-run`),
+and rollback, `new` with presets (including `--config`, `--dry-run` and bootstrap
+profiles: default path, `--profile`, `--no-profile`, literal-key rejection),
 `doctor --fix`, and an end-to-end init → check → doctor → update → pack → eject
 run in temp directories.
 

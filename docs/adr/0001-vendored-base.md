@@ -17,6 +17,11 @@ model, permissions and compaction. The sole exception is the opt-in one-shot
 `base new --config` scaffold, written only when the file is absent. Base agents
 carry no `model:` and no permissions.
 
+That scaffold can be filled from a **machine-local bootstrap profile**
+(`~/.config/drax/bootstrap.json`) instead of placeholders, so a personal provider
+and model mix start a new project without the public base naming a vendor. The
+profile is never committed and the base never writes it.
+
 Git tags (`v0.1.0`, …) are the immutable store. A project pins by checking out a tag
 and running `base update`.
 

@@ -10,6 +10,12 @@ seam is missing, these workflows are dormant: say so and stop.
 drift with `node .opencode/tools/base.mjs check .`; update with
 `... update . --from <base>`; remove with `... eject .`.
 
+### Starting a project
+
+A new project starts with `/start-project <idea>`. It writes an approved first spec
+in the issue directory and stops before any code; if at least two council triggers
+hold it asks for `/council` first.
+
 ### Hillclimb
 
 When a task is quality-sensitive — UI, UX, visual, copy or docs — or has a clear,
