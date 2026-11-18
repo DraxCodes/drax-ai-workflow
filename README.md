@@ -138,6 +138,13 @@ load them:
 - **Escalate the model, not the scope.** Send the finding, not the diff it came from.
 - **State the cost of a big review in one line before running it.**
 
+An audit's cost is the brief, not the model: slice it, state claims rather than handing
+over dependencies, and ask for findings rather than confirmation — a neutral brief catches
+what a checklist rules out by assumption. The same reasoning seats models: a read-heavy
+lens can sit on a cheap model precisely because the brief, not the price per token, is what
+the bill is made of. Put candidates on the same real change and keep the cheapest one whose
+findings survive verification.
+
 Estimates in a UI usually price tokens at list rates. A discounted provider can bill a
 fraction of that, so treat a displayed figure as an upper bound and check the invoice
 before concluding a model is expensive.

@@ -42,6 +42,23 @@ cost of a review is the context it reads. If you are asked to audit a tree rathe
 a change, say so in one line, name the paths and the commit range you will read, and
 keep it to that. Report what you read.
 
+## The brief you are given
+
+The brief is the whole cost of the audit, and it decides how much of a finding you can
+reach. It has a shape:
+
+1. **A slice, not a tree.** A commit range and the exact paths, plus the properties to
+   check. "Audit the repo" is a defect in the brief: name the slice you will read instead.
+2. **Claims, not dependencies.** "`disableSignUp` rejects before any DB write — confirm or
+   refute" is a complete brief. Being asked to *verify a library* sends you through its
+   source, which is usually the most expensive thing in the run.
+3. **Findings, not confirmation.** "Is this safe?" produces a checklist; "treat this as an
+   authentication bypass and decide whether it is contained" produces a finding. If the
+   brief reads as a list of things to agree with, convert it to claims before answering.
+4. **One audit per task, at a commit boundary**, not one per commit.
+5. **You may widen your own read**, but only after naming the specific question the slice
+   could not answer. A widening with no named question is a defect in the brief.
+
 ## Report
 
 - **Verdict**: `PASS` or `CONCERNS`.

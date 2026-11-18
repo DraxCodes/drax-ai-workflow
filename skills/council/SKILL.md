@@ -66,15 +66,32 @@ The chair proposes its own option first, so it is not only a switchboard.
 ## Seat models
 
 Seats run on the agents' configured models, so the project decides the mix in
-`opencode.json`. Aim for at least two model lineages across the four seats: put the
-cheapest reliable model on chair and shape (aggregation and structure), the strongest taste
-judgement on experience, and the bluntest model on risk. The project's own `AGENTS.md` may
+`opencode.json`. Aim for at least two model lineages across the four seats. A reasonable
+*starting* mix is the cheapest reliable model on chair and shape (aggregation and
+structure), the strongest taste judgement on experience, and the bluntest model on risk —
+but that is a hypothesis about the lenses, not a finding. The project's own `AGENTS.md` may
 name a measured mix; use it when it does.
 
 **Verify, do not assume.** A provider can list a model and still fail the request (a
 routing floor, a retired version, a market that moved). Make one one-token call before
 changing a seat, and record the fallback in the artifact. Model diversity is a hypothesis,
 not a guarantee; a better brief beats a better model.
+
+**Seat by evidence, not by tier.** When two models are candidates for a seat, give both the
+same real change, blind, and read the findings and scores they return. The seat goes to the
+cheapest model whose findings survive verification: a cheap model that reproduces the catch
+keeps the seat, and an expensive one that misses it loses it, whatever its list price. Price
+decides between models that find the same things — never instead of evidence.
+
+**Match the model to the lens's work shape.** A read-heavy, write-light lens (gate, audit)
+wants a low input price and a long context; a lens that writes long prose wants a cheap
+output price. A per-token price says nothing until you know how many tokens go in, so price
+the brief, not the model.
+
+**Write the fallback down.** If the agent config has no fallback key, the fallback is a
+rule in the project's `AGENTS.md`: which model replaces which, why, and when to restore it.
+Probing a candidate is one call with a one-line brief — cheaper than discovering the failure
+mid-task.
 
 ## The brief
 

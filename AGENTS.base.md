@@ -102,6 +102,23 @@ interchangeable:
 5. **Say what a big review will cost before running it.** If a task would read more than a
    few hundred files or a multi-megabyte diff, state that in one line and ask.
 
+### Audit briefs
+
+The security lens runs on every change, and its cost is **input**, so the brief decides
+what it costs:
+
+1. **Brief a slice** — the commit range and the exact files, never a directory.
+2. **State claims; do not hand over dependencies.** "X rejects before any DB write —
+   confirm or refute" is a complete brief. Asking it to verify a library sends it through
+   `node_modules`, which is where the expensive runs go.
+3. **Ask for findings, not confirmation.** A neutral brief — "treat this as an
+   authentication bypass and decide whether it is contained" — catches what a checklist
+   rules out by assumption.
+4. **It may widen its own read**, but only after naming the question the slice could not
+   answer.
+5. **One audit per task, at a commit boundary**, not one per commit. Findings are routed,
+   never skipped.
+
 ### Session hygiene
 
 One session per task; `/compact` when switching topics; prefer targeted reads; delegate
@@ -116,5 +133,5 @@ Small atomic commits with a clear scope; never commit secrets or personal data; 
 
 - Seam, precedence, update/eject, issue tracker, domain docs: the `workflow-base` skill.
 - Rubric: the `hillclimb` skill.
-- Security lens: the `security-auditor` subagent, on every change.
+- Security lens and the shape of its brief: the `security-auditor` subagent, on every change.
 <!-- workflow-base:end -->
