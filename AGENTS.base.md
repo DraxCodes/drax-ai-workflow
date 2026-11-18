@@ -124,6 +124,17 @@ what it costs:
 One session per task; `/compact` when switching topics; prefer targeted reads; delegate
 isolated work to subagents.
 
+### Handoff
+
+Write a handoff before a context compaction, at the end of a work item, or whenever another
+session will pick the work up: `/handoff`, saved to the OS temp directory rather than the
+repo. It names the focus, the branch and commit, the decisions still open, the traps
+already paid for, and the skills to load, and it links to the spec, issues and commits
+instead of restating them. Finish with a pasteable starting prompt for the next session.
+
+The failure this prevents is silent: a fresh session with no handoff re-derives context that
+already existed, and repeats the mistakes the last run had already ruled out.
+
 ### Conventions
 
 Small atomic commits with a clear scope; never commit secrets or personal data; check
@@ -134,4 +145,5 @@ Small atomic commits with a clear scope; never commit secrets or personal data; 
 - Seam, precedence, update/eject, issue tracker, domain docs: the `workflow-base` skill.
 - Rubric: the `hillclimb` skill.
 - Security lens and the shape of its brief: the `security-auditor` subagent, on every change.
+- Handoff, and when it is due: `/handoff` and the `handoff` skill.
 <!-- workflow-base:end -->

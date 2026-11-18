@@ -149,6 +149,16 @@ Estimates in a UI usually price tokens at list rates. A discounted provider can 
 fraction of that, so treat a displayed figure as an upper bound and check the invoice
 before concluding a model is expensive.
 
+## Handoff
+
+A session that ends by compaction or at a work-item boundary leaves a `/handoff` document
+in the OS temp directory: the focus, the branch and commit, the decisions still open, the
+traps already paid for, the skills to load next, and a pasteable starting prompt. It links
+to the spec, issues and commits rather than copying them.
+
+The trigger is in the managed `AGENTS.md` block, because a handoff nobody remembers to write
+costs the next session everything the last one learned.
+
 ## VS Code Copilot Chat
 
 Copilot Chat reads `AGENTS.md` directly, so the managed block and the project's own
