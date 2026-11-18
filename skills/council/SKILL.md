@@ -93,6 +93,23 @@ rule in the project's `AGENTS.md`: which model replaces which, why, and when to 
 Probing a candidate is one call with a one-line brief — cheaper than discovering the failure
 mid-task.
 
+**Routability is per request, not per catalogue.** A model that routes at one hour can fail
+the next: resale markets move, and a discount floor the provider enforces can leave a
+listed model with no seller. Read the failure message, not the status code — "no sellers
+meet the floor" arrives looking like a transport problem and stops a commit just as
+effectively as a 404. Probe immediately before you rely on a seat, not when you chose it.
+
+**Two seats on one lineage are one opinion.** The second seat exists to catch what the first
+missed, and a shared model family shares its blind spots. When routability forces the gate
+onto the auditor's lineage, say so in the artifact and check that seat's finding against the
+lens that *did not* write the code. Restore the split seat when the market clears.
+
+**Modality decides a perceptual seat.** A gate that scores screenshots needs a model whose
+input modality includes images; a text-only model can only score a description of the
+artifact, which is not the artifact. Confirm the modality in the catalogue before seating
+a perceptual lens, and do not spend a frontier-model exception to read a screenshot a
+cheaper vision model can read directly.
+
 ## The brief
 
 The chair writes one brief and every seat receives it verbatim. It must contain:
