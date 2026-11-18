@@ -21,7 +21,8 @@
   "docs": {
     "issues": ".scratch",
     "glossary": "GLOSSARY.md",
-    "adr": "docs/adr"
+    "adr": "docs/adr",
+    "notes": "docs/notes"
   },
   "neverCommit": [".env", "*.pem", "*.key", "*.local.json"],
   "packs": []

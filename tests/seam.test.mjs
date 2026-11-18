@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { defaultSeam, validateSeam } from "../tools/lib/seam.mjs";
+import { defaultSeam, validateSeam, DOC_KEYS } from "../tools/lib/seam.mjs";
 import { readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import { repoRoot } from "./helpers.mjs";
@@ -40,6 +40,16 @@ test("the shipped example validates", () => {
 test("defaultSeam validates", () => {
   const { errors } = validateSeam(defaultSeam({ project: "demo", baseVersion: "0.1.0" }));
   assert.deepEqual(errors, []);
+});
+
+test("every schema docs key is a known doc key", () => {
+  const schema = JSON.parse(
+    readFileSync(join(repoRoot, "schema", "workflow.schema.json"), "utf8"),
+  );
+  assert.deepEqual(
+    Object.keys(schema.properties.docs.properties).sort(),
+    [...DOC_KEYS].sort(),
+  );
 });
 
 test("valid seam has no errors", () => {

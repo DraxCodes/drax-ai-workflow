@@ -149,6 +149,23 @@ Estimates in a UI usually price tokens at list rates. A discounted provider can 
 fraction of that, so treat a displayed figure as an upper bound and check the invoice
 before concluding a model is expensive.
 
+## Docs for the next agent
+
+The workflow writes down what it learned. `docs.notes` (default `docs/notes/`) is a
+working notebook: one note per topic, for an agent rather than a person, committed so it
+survives a change of machine.
+
+A note earns its place when a session lost time to something that will cost the next one
+the same time — a library behaving unlike its documentation, a version-specific detail an
+upgrade will break, an environment quirk producing a misleading error, or the reliable way
+to run a project's common procedure. Each carries the version it was written against and
+the file or command that shows it, and states the cause rather than only the symptom.
+
+Notes are distinct from the other doc kinds the seam names: an ADR records a decision, a
+glossary defines a domain term, a spec states a requirement, and a note records a fact
+about the tools. The managed block carries the writing rule, so every project inherits it;
+`doctor` warns while the directory is absent.
+
 ## Handoff
 
 A session that ends by compaction or at a work-item boundary leaves a `/handoff` document
@@ -223,8 +240,9 @@ The old names `bare`, `web`, `cli` and `docs` are aliases, so existing prompt
 blocks keep working; `base new` prints the canonical name, the alias it replaced,
 and the five fields it filled. Flags override every field: `--build`, `--test`,
 `--free`, `--paid`, `--surface`, `--widths`, `--themes`, `--seed`, `--capture`,
-the doc paths and `--pack`. A non-Node stack uses `--preset checks-none` plus
-explicit checks, for example `--build "make" --test "make test" --surface cli`.
+the doc paths (`--issues`, `--adr`, `--glossary`, `--notes-dir`) and `--pack`. A non-Node
+stack uses `--preset checks-none` plus explicit checks, for example
+`--build "make" --test "make test" --surface cli`.
 
 It also creates the required `.scratch` and `docs/adr` directories, optionally
 writes a one-shot `opencode.json` scaffold (`--config`, only when absent), and
@@ -343,6 +361,11 @@ The update stages, validates and replaces; a write failure restores the old tree
 from `.opencode/.workflow-backup/<timestamp>/`. Review the diff, run the seam's
 floor, and commit the vendored tree, the manifest, the seam version and the
 `AGENTS.md` block together.
+
+`update` never merges new seam keys into an existing project — the seam belongs to the
+project. When a release introduces an optional one, add it yourself. Since 0.5.2 that is
+`docs.notes`, defaulting to `docs/notes`; without it `doctor` checks nothing and the
+managed block's pointer is the only mention of where notes go.
 
 ## Precedence
 

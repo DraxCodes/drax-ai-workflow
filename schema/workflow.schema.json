@@ -79,6 +79,7 @@
         "issues": { "type": "string", "minLength": 1 },
         "glossary": { "type": "string", "minLength": 1 },
         "adr": { "type": "string", "minLength": 1 },
+        "notes": { "type": "string", "minLength": 1 },
         "rubricAddendum": { "type": "string", "minLength": 1 },
         "contract": { "type": "string", "minLength": 1 },
         "artDirection": { "type": "string", "minLength": 1 }

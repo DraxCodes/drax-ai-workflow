@@ -128,6 +128,7 @@ function applySeamFlags(seam, flags, { extended = false } = {}) {
   if (flags.issues) seam.docs.issues = flags.issues;
   if (flags.glossary) seam.docs.glossary = flags.glossary;
   if (flags.adr) seam.docs.adr = flags.adr;
+  if (flags.notesDir) seam.docs.notes = flags.notesDir;
   if (flags.rubricAddendum) seam.docs.rubricAddendum = flags.rubricAddendum;
   if (extended) {
     if (flags.widths) {

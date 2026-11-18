@@ -32,6 +32,7 @@ keys are rejected so a typo cannot silently disable a check.
     "issues": ".scratch",
     "glossary": "GLOSSARY.md",
     "adr": "docs/adr",
+    "notes": "docs/notes",
     "rubricAddendum": "docs/agents/hillclimb-addendum.md",
     "contract": "docs/ui-contract.md",
     "artDirection": "docs/ui-art-direction.md"
@@ -104,6 +105,11 @@ Project-relative paths the skills read. Optional.
 - `issues`: the issue-tracker directory (default `.scratch`).
 - `glossary`: the glossary path (default `GLOSSARY.md`).
 - `adr`: the ADR directory (default `docs/adr`).
+- `notes`: the working notebook directory (default `docs/notes`). Notes are what a
+  past session learned the hard way — a library quirk, a version-specific detail, an
+  environment trap, a reliable procedure — written for the next agent, not for a human
+  reader, and committed so they survive a change of machine. See the managed block's
+  "Docs for the next agent".
 - `rubricAddendum`: project probes and caps added to the selected hillclimb rubric.
 - `contract` and `artDirection`: the design contract the provenance and
   art-direction probes read.

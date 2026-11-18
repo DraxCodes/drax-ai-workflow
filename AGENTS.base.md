@@ -124,6 +124,32 @@ what it costs:
 One session per task; `/compact` when switching topics; prefer targeted reads; delegate
 isolated work to subagents.
 
+### Docs for the next agent
+
+The repo carries a working notebook, not a manual: `docs.notes` (default
+`docs/notes/`) holds what cost this session time and would cost the next one the same,
+written for an agent rather than a person, and committed so it survives a change of
+machine.
+
+Write there when you:
+
+- lose time to a library, tool or API behaving unlike its documentation, and find out why;
+- settle a version-specific detail — a renamed option, a removed flag, an output mode —
+  that a later upgrade will break;
+- learn an environment quirk that produces a misleading error;
+- find the reliable way to do something this project does often: seeding, capture,
+  migration, a debug procedure.
+
+One topic per note, named for the topic. Record the version it was written against, the
+file or command that demonstrates it, and what to do instead. Write the cause, not only
+the symptom: "X fails" is a bug report; "X fails because Y unless Z" is a note. Update the
+existing note rather than appending a second one, delete what stopped being true, and
+never record a secret, a token or a real credential path.
+
+Notes are not ADRs (no decision), not the glossary (no domain term) and not the spec (no
+requirement). Keep them short enough that a fresh session can read the whole directory
+before starting work.
+
 ### Handoff
 
 Write a handoff before a context compaction, at the end of a work item, or whenever another
@@ -146,4 +172,5 @@ Small atomic commits with a clear scope; never commit secrets or personal data; 
 - Rubric: the `hillclimb` skill.
 - Security lens and the shape of its brief: the `security-auditor` subagent, on every change.
 - Handoff, and when it is due: `/handoff` and the `handoff` skill.
+- What previous sessions already paid for: read `docs.notes` before debugging.
 <!-- workflow-base:end -->

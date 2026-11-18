@@ -52,7 +52,7 @@ function agentIdsFromManifest(manifest) {
 function checkDocs(seam, projectDir, errors, warnings, notes) {
   if (!seam.docs) return;
   const required = ["issues", "adr"];
-  const optional = ["glossary", "rubricAddendum", "contract", "artDirection"];
+  const optional = ["glossary", "notes", "rubricAddendum", "contract", "artDirection"];
   for (const [key, rel] of Object.entries(seam.docs)) {
     const abs = join(projectDir, rel);
     if (existsSync(abs)) {
