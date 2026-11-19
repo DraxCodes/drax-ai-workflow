@@ -279,6 +279,11 @@ vendor-neutral.
 
 - `--profile <file>` reads another file and must exist; `--no-profile` ignores the
   profile and writes the placeholder scaffold. Both require `--config`.
+- Declare a model's allowed `variants` in the profile (`"variants": { "low": {}, "high": {} }`);
+  `doctor` then flags a seat that names a variant outside that set or one marked
+  `"disabled": true`, and warns when a seat names a model the provider block does
+  not declare. Without a declared variant list the catalogue owns the names, so the
+  check leaves them alone.
 - Credential fields (`apiKey`, `token`, `secret`, `password`, `key`, `Authorization`,
   `Bearer`) must be `{env:NAME}` or `{file:path}` references. A literal value —
   including one wrapped in `<...>` — is rejected with exit 2 before anything is
@@ -324,7 +329,7 @@ Run from the project root; the CLI is vendored at `.opencode/tools/base.mjs`.
 | Command | Behaviour |
 | --- | --- |
 | `base check .` | Drift against the manifest; lists changed, missing and unowned-extra files; exit 1 on changed/missing content or a seam/manifest mismatch. |
-| `base doctor .` | Seam schema, required docs, model/permissions warnings, global-agent shadowing, AGENTS block hash, secret scan, pack state. |
+| `base doctor .` | Seam schema, required docs, model/variant selector warnings, permissions warnings, global-agent shadowing, AGENTS block hash, secret scan, pack state. |
 | `base doctor --fix .` | Create the required doc dirs and move same-ID global agents into a dated backup. |
 | `base status .` | Version, commit, per-file state, seam summary. |
 | `base update . --from <base>` | Copy the current base version, atomically. Refuses locally modified files unless `--force`. |
@@ -391,7 +396,8 @@ and a `doctor` failure on a mismatched name), the rubric library (four shipped
 files, a seam default, a project-path rubric and an unresolved-name failure), the
 preset scope (`checks-*`, aliases, and no stack scaffold),
 `doctor --fix`, and an end-to-end init → check → doctor → update → pack → eject
-run in temp directories.
+run in temp directories. It also checks seat model selectors against the provider's
+declared catalogue and variant lists.
 
 ## Windows
 

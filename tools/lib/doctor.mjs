@@ -67,6 +67,129 @@ function checkDocs(seam, projectDir, errors, warnings, notes) {
   }
 }
 
+function isPlaceholderModel(model) {
+  return typeof model === "string" && /^<.*>$/.test(model.trim());
+}
+
+/**
+ * Read a model selector in either the string form (`provider/model#variant`)
+ * or the expanded object form OpenCode also accepts.
+ */
+function parseModelSelector(model) {
+  if (typeof model === "string") {
+    const raw = model.trim();
+    const match = /^([^/#]+)\/([^#]+)(?:#([^#]+))?$/.exec(raw);
+    if (!match) return null;
+    return { raw, providerID: match[1], modelID: match[2], variant: match[3] ?? null };
+  }
+  if (
+    model &&
+    typeof model === "object" &&
+    typeof model.providerID === "string" &&
+    typeof model.model === "string"
+  ) {
+    const variant = typeof model.variant === "string" ? model.variant : null;
+    return {
+      raw: `${model.providerID}/${model.model}${variant ? `#${variant}` : ""}`,
+      providerID: model.providerID,
+      modelID: model.model,
+      variant,
+    };
+  }
+  return null;
+}
+
+/**
+ * A model may declare its variants as an array (newer config) or an object map
+ * (legacy config). Only a declared set can be checked; an absent list is
+ * catalog-owned and left alone.
+ */
+function declaredVariants(modelConfig) {
+  const variants = modelConfig?.variants;
+  if (Array.isArray(variants)) {
+    const entries = variants
+      .filter((variant) => variant && typeof variant.id === "string")
+      .map((variant) => [variant.id, variant.disabled === true]);
+    return entries.length > 0 ? new Map(entries) : null;
+  }
+  if (variants && typeof variants === "object") {
+    const entries = Object.entries(variants).map(([id, variant]) => [
+      id,
+      variant?.disabled === true,
+    ]);
+    return entries.length > 0 ? new Map(entries) : null;
+  }
+  return null;
+}
+
+/**
+ * Every selector in the project must name a model the config declares and,
+ * when the model publishes a variant list, a variant that list allows. The
+ * base's agents carry no model, so a seat that silently falls back to a
+ * missing catalogue entry is exactly the drift this check catches.
+ */
+function checkModelSelectors(value, agentIds, errors, warnings, notes) {
+  const agents = value.agents && typeof value.agents === "object" ? value.agents : {};
+  const providers = {
+    ...(value.providers && typeof value.providers === "object" ? value.providers : {}),
+    ...(value.provider && typeof value.provider === "object" ? value.provider : {}),
+  };
+
+  const selectors = [];
+  if (value.model) selectors.push({ label: "model", model: value.model });
+  const ids = new Set([...agentIds, ...Object.keys(agents)]);
+  for (const id of ids) {
+    const model = agents[id]?.model;
+    if (model) selectors.push({ label: `agents.${id}.model`, model });
+  }
+
+  let resolved = 0;
+  for (const { label, model } of selectors) {
+    if (isPlaceholderModel(model)) continue;
+    const selector = parseModelSelector(model);
+    if (!selector) {
+      warnings.push(
+        `opencode.json: ${label} is not a provider/model selector (got ${JSON.stringify(model)})`,
+      );
+      continue;
+    }
+
+    const provider = providers[selector.providerID];
+    const models =
+      provider && typeof provider === "object" && provider.models && typeof provider.models === "object"
+        ? provider.models
+        : null;
+    // A provider with no declared catalogue is built-in or discovered, so the
+    // base cannot know its model IDs and must not guess.
+    if (!models) continue;
+
+    resolved += 1;
+    if (!Object.prototype.hasOwnProperty.call(models, selector.modelID)) {
+      warnings.push(
+        `opencode.json: ${label} "${selector.raw}" names a model not declared under provider.${selector.providerID}.models`,
+      );
+      continue;
+    }
+    if (!selector.variant) continue;
+
+    const variants = declaredVariants(models[selector.modelID]);
+    if (!variants) continue;
+    if (!variants.has(selector.variant)) {
+      warnings.push(
+        `opencode.json: ${label} "${selector.raw}" uses variant "${selector.variant}", which is not declared for that model (declared: ${[...variants.keys()].join(", ") || "none"})`,
+      );
+    } else if (variants.get(selector.variant)) {
+      errors.push(
+        `opencode.json: ${label} "${selector.raw}" uses variant "${selector.variant}", which is disabled for that model`,
+      );
+    }
+  }
+
+  if (resolved > 0) {
+    notes.push(`opencode.json: ${resolved} model selector(s) checked against declared models`);
+  }
+}
+
 function checkConfig(projectDir, agentIds, errors, warnings, notes) {
   const file = join(projectDir, "opencode.json");
   if (!existsSync(file)) {
@@ -80,15 +203,13 @@ function checkConfig(projectDir, agentIds, errors, warnings, notes) {
   }
   const rootModel = value.model;
   const agents = value.agents ?? {};
-  const isPlaceholder = (model) =>
-    typeof model === "string" && /^<.*>$/.test(model.trim());
   const placeholders = [];
-  let anyModel = Boolean(rootModel) && !isPlaceholder(rootModel);
-  if (isPlaceholder(rootModel)) placeholders.push("model");
+  let anyModel = Boolean(rootModel) && !isPlaceholderModel(rootModel);
+  if (isPlaceholderModel(rootModel)) placeholders.push("model");
   for (const id of agentIds) {
     const model = agents[id]?.model;
-    if (model && !isPlaceholder(model)) anyModel = true;
-    if (isPlaceholder(model)) placeholders.push(`agents.${id}.model`);
+    if (model && !isPlaceholderModel(model)) anyModel = true;
+    if (isPlaceholderModel(model)) placeholders.push(`agents.${id}.model`);
   }
   if (!anyModel && placeholders.length === 0) {
     warnings.push(
@@ -100,6 +221,8 @@ function checkConfig(projectDir, agentIds, errors, warnings, notes) {
       `opencode.json: replace the placeholders in ${placeholders.join(", ")}`,
     );
   }
+
+  checkModelSelectors(value, agentIds, errors, warnings, notes);
 
   for (const id of READ_ONLY_AGENTS) {
     const rules = agents[id]?.permissions ?? [];
