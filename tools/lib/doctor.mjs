@@ -17,6 +17,7 @@ import {
   readManifest,
   toPosix,
 } from "./manifest.mjs";
+import { checkRequirements, loadProjectRequirements } from "./requirements.mjs";
 import { loadSeam } from "./seam.mjs";
 
 const READ_ONLY_AGENTS = ["plan-architect", "quality-gatekeeper", "security-auditor"];
@@ -128,7 +129,7 @@ function declaredVariants(modelConfig) {
  * base's agents carry no model, so a seat that silently falls back to a
  * missing catalogue entry is exactly the drift this check catches.
  */
-function checkModelSelectors(value, agentIds, errors, warnings, notes) {
+function checkModelSelectors(value, agentIds, errors, warnings, notes, extra = []) {
   const agents = value.agents && typeof value.agents === "object" ? value.agents : {};
   const providers = {
     ...(value.providers && typeof value.providers === "object" ? value.providers : {}),
@@ -142,6 +143,7 @@ function checkModelSelectors(value, agentIds, errors, warnings, notes) {
     const model = agents[id]?.model;
     if (model) selectors.push({ label: `agents.${id}.model`, model });
   }
+  selectors.push(...extra);
 
   let resolved = 0;
   for (const { label, model } of selectors) {
@@ -190,16 +192,16 @@ function checkModelSelectors(value, agentIds, errors, warnings, notes) {
   }
 }
 
-function checkConfig(projectDir, agentIds, errors, warnings, notes) {
+function checkConfig(projectDir, agentIds, errors, warnings, notes, seam) {
   const file = join(projectDir, "opencode.json");
   if (!existsSync(file)) {
     warnings.push("opencode.json: not found; the project model and permissions are unset");
-    return;
+    return null;
   }
   const { value, error } = readJson(file);
   if (error) {
     warnings.push(`opencode.json: could not parse (${error.message}); skipped config checks`);
-    return;
+    return null;
   }
   const rootModel = value.model;
   const agents = value.agents ?? {};
@@ -222,7 +224,12 @@ function checkConfig(projectDir, agentIds, errors, warnings, notes) {
     );
   }
 
-  checkModelSelectors(value, agentIds, errors, warnings, notes);
+  const extra = [];
+  const visualModel = seam?.visualReview?.model;
+  if (typeof visualModel === "string" && visualModel.trim().length > 0) {
+    extra.push({ label: "visualReview.model", model: visualModel });
+  }
+  checkModelSelectors(value, agentIds, errors, warnings, notes, extra);
 
   for (const id of READ_ONLY_AGENTS) {
     const rules = agents[id]?.permissions ?? [];
@@ -240,6 +247,7 @@ function checkConfig(projectDir, agentIds, errors, warnings, notes) {
   }
 
   if (value.permissions) notes.push("opencode.json: project permissions present");
+  return value;
 }
 
 function checkGlobalShadowing(home, agentIds, errors, notes) {
@@ -455,7 +463,19 @@ export function doctor(projectDir, { home = homedir() } = {}) {
   }
   const agentIds = agentIdsFromManifest(manifest);
   const ids = agentIds.length > 0 ? agentIds : ALL_AGENTS;
-  checkConfig(projectDir, ids, errors, warnings, notes);
+  const config = checkConfig(projectDir, ids, errors, warnings, notes, seam);
+  const { slots, error: requirementsError } = loadProjectRequirements(projectDir);
+  if (requirementsError) {
+    notes.push(requirementsError);
+  } else {
+    checkRequirements({
+      seam,
+      config,
+      slots,
+      warnings,
+      configFound: config !== null,
+    });
+  }
   checkGlobalShadowing(home, ids, errors, notes);
   checkSecrets(projectDir, errors, warnings, notes);
 

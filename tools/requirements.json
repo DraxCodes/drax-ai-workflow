@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "slots": [
+    {
+      "id": "council.chair",
+      "since": "0.5.0",
+      "serves": ["council.chair"],
+      "purpose": "Owns the council brief, rounds, triage and record.",
+      "needs": { "modality": ["text"], "workShape": "cheap structured output" },
+      "bind": { "kind": "agent", "agent": "task-orchestrator" }
+    },
+    {
+      "id": "council.shape",
+      "since": "0.5.0",
+      "serves": ["council.shape"],
+      "purpose": "Simplest viable shape, seams and reversibility.",
+      "needs": { "modality": ["text"], "workShape": "short structured output" },
+      "bind": { "kind": "agent", "agent": "plan-architect" }
+    },
+    {
+      "id": "council.experience",
+      "since": "0.5.0",
+      "serves": ["council.experience", "hillclimb.gate"],
+      "purpose": "The felt read: experience thesis at council, perception scoring at the gate.",
+      "needs": { "modality": ["text", "image"], "workShape": "read-heavy, long context" },
+      "bind": { "kind": "agent", "agent": "quality-gatekeeper" }
+    },
+    {
+      "id": "council.risk",
+      "since": "0.5.0",
+      "serves": ["council.risk", "audit"],
+      "purpose": "Abuse, exposure, failure modes and local-only posture.",
+      "needs": { "modality": ["text"], "workShape": "read-heavy, long context" },
+      "bind": { "kind": "agent", "agent": "security-auditor" }
+    },
+    {
+      "id": "hillclimb.blindspot",
+      "since": "0.6.0",
+      "serves": ["hillclimb.blindspot"],
+      "purpose": "Independent visual blindspot pass on the perception gate.",
+      "needs": {
+        "modality": ["text", "image"],
+        "workShape": "read-heavy",
+        "lineageDiversity": true
+      },
+      "bind": { "kind": "seam", "path": "visualReview.model" }
+    }
+  ]
+}

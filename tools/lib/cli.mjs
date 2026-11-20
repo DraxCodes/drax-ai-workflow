@@ -19,6 +19,11 @@ import { planCheck, planEject, planInit, planUpdate, listExtraFiles } from "./pl
 import { copilotFiles } from "./copilot.mjs";
 import { DEFAULT_PROFILE, loadProfile } from "./profile.mjs";
 import { PRESETS, PRESET_ALIASES, applyPreset, resolvePresetName } from "./presets.mjs";
+import {
+  describeRequirement,
+  loadBaseRequirements,
+  newRequirements,
+} from "./requirements.mjs";
 import { SEAM_REL, defaultSeam, loadSeam, validateSeam } from "./seam.mjs";
 
 const REPEATABLE = new Set(["free", "paid", "pack"]);
@@ -404,6 +409,8 @@ function updateCommand(flags) {
   }
   const source = requireSource(flags);
   const version = readVersion(source);
+  const { slots } = loadBaseRequirements(source);
+  const incoming = newRequirements(manifest.version, version, slots);
   const { seam } = loadSeam(target);
   const packs = flags.pack ? toArray(flags.pack) : (manifest.packs ?? []);
   const files = readBaseFiles(source, listBaseFiles(source, packs));
@@ -427,6 +434,10 @@ function updateCommand(flags) {
     for (const write of plan.writes) console.log(`  write ${write.path}`);
     for (const del of plan.deletes) console.log(`  delete ${del}`);
     for (const conflict of plan.conflicts) console.log(`  ✗ ${conflict}`);
+    if (incoming.length > 0) {
+      console.log(`  new model requirements (${version}):`);
+      for (const slot of incoming) console.log(`    · ${describeRequirement(slot)}`);
+    }
     if (plan.conflicts.length > 0) return 1;
     return plan.writes.length > 0 || plan.deletes.length > 0 ? 1 : 0;
   }
@@ -440,6 +451,13 @@ function updateCommand(flags) {
   console.log(`Updated ${manifest.version} -> ${version}.`);
   console.log(`  files: ${result.written.length} written, ${result.deleted.length} removed`);
   if (result.backupDir) console.log(`  backup: ${result.backupDir}`);
+  if (incoming.length > 0) {
+    console.log(`  new model requirements (${incoming.length}):`);
+    for (const slot of incoming) console.log(`    · ${describeRequirement(slot)}`);
+    console.log(
+      "  Next: node .opencode/tools/base.mjs doctor . — bind the slots it lists.",
+    );
+  }
   return 0;
 }
 

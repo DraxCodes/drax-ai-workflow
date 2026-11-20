@@ -87,6 +87,21 @@ How a visual artifact is seeded and captured. Optional.
 - `themes`: required for `web`; a subset of `light`, `dark`.
 - `notes`: the project's read-through nuance (a host to stop, a server to start).
 
+### `visualReview`
+
+Binds the independent visual blindspot reviewer the `perception` gate runs beside
+the gatekeeper. Optional.
+
+- `model`: a `provider/model` selector, resolved by the blindspot script. It must
+  name an image-capable model; a text-only model can only score a description of
+  the artifact.
+- Omit the block and the pass is skipped, with a note in the gate artifact. It
+  never falls back to the gate's own model — two opinions from one lineage are one
+  opinion.
+- Bind it here, not in `opencode.json`: the reviewer is a script, not an agent.
+  Credentials come from that provider's block in `opencode.json`.
+- `notes`: free text for a local exception (a routing floor, the probe date).
+
 ### `rubrics`
 
 The hillclimb gate's default rubric. Optional; omit for `perception`.

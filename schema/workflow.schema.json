@@ -65,6 +65,15 @@
         "notes": { "type": "string" }
       }
     },
+    "visualReview": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["model"],
+      "properties": {
+        "model": { "type": "string", "minLength": 1 },
+        "notes": { "type": "string" }
+      }
+    },
     "rubrics": {
       "type": "object",
       "additionalProperties": false,

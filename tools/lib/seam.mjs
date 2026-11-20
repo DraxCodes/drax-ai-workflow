@@ -63,6 +63,7 @@ export function validateSeam(seam) {
       "workflows",
       "checks",
       "verify",
+      "visualReview",
       "rubrics",
       "docs",
       "neverCommit",
@@ -170,6 +171,21 @@ export function validateSeam(seam) {
         if (!Array.isArray(v.themes) || v.themes.length === 0) {
           errors.push("verify.themes: required when surface is web");
         }
+      }
+    }
+  }
+
+  if (seam.visualReview !== undefined) {
+    const v = seam.visualReview;
+    if (!isObject(v)) {
+      errors.push("visualReview: expected an object with a model selector");
+    } else {
+      checkKeys(v, ["model", "notes"], "visualReview", errors);
+      if (!isNonEmptyString(v.model)) {
+        errors.push("visualReview.model: expected a provider/model selector");
+      }
+      if (v.notes !== undefined && typeof v.notes !== "string") {
+        errors.push("visualReview.notes: expected a string");
       }
     }
   }
