@@ -662,8 +662,12 @@ function requirementsCommand(flags) {
         ? `${row.needs.modality.join(" + ")} input`
         : "";
     const needs = [modality, row.needs.workShape].filter(Boolean).join(", ");
+    const action =
+      row.state === "placeholder"
+        ? `replace the placeholder in ${row.file}`
+        : `add it to ${row.file} after asking`;
     console.log(
-      `  ${"".padEnd(20)} ${"".padEnd(12)} ${needs ? `needs ${needs}; ` : ""}add it to ${row.file} after asking`,
+      `  ${"".padEnd(20)} ${"".padEnd(12)} ${needs ? `needs ${needs}; ` : ""}${action}`,
     );
   }
   return 0;

@@ -31,7 +31,7 @@ skills/        council, hillclimb (+ four rubrics), grilling, handoff, workflow-
 packs/         engineering (optional third-party skills)
 schema/        the seam JSON Schema
 templates/     a starter seam and the copy-paste prompts
-tools/         the `base` CLI (vendored into every project)
+tools/         the `base` CLI and the visual review script (vendored into every project)
 AGENTS.base.md the managed block injected into a project AGENTS.md
 VERSION        the release version; git tags are the immutable store
 ```
@@ -152,6 +152,14 @@ seeing the number is void.
 A project can add its own rubric file and name it in `rubrics.default`; a path
 like `docs/rubrics/security.md` is accepted and `doctor` resolves it. The
 `docs.rubricAddendum` still extends whichever rubric is selected.
+
+`perception` also has an independent reviewer. Before the first SHIP or STOP verdict,
+the gate runs a scripted blindspot pass over the same screenshots with a second model
+(`seam.visualReview.model`). It reports findings and never a score; the gatekeeper
+accepts or rejects each one against the shots, and a disagreement evidence cannot
+settle stops the loop and goes to the user. One run, plus one more when the gate names
+a low-confidence trigger. With no model bound the pass is skipped and recorded — it
+never falls back to the gate's own model.
 
 ## Spend discipline
 
@@ -392,7 +400,7 @@ in `skills/workflow-base/references/seam.md` and `schema/workflow.schema.json`.
 From the project root, point at the base checkout:
 
 ```sh
-git -C <base> checkout v0.2.0
+git -C <base> checkout v0.6.0
 node .opencode/tools/base.mjs update . --from <base>
 ```
 
@@ -408,6 +416,11 @@ floor, and commit the vendored tree, the manifest, the seam version and the
 project. When a release introduces an optional one, add it yourself. Since 0.5.2 that is
 `docs.notes`, defaulting to `docs/notes`; without it `doctor` checks nothing and the
 managed block's pointer is the only mention of where notes go.
+
+Since 0.6.0 the optional key is `visualReview`, and `update` announces the new
+`hillclimb.blindspot` slot. Bind an image-capable model there (or leave it unbound and
+the pass is skipped and recorded); `base requirements .` prints the exact key and the
+model shape it needs.
 
 ## Precedence
 
