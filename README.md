@@ -30,7 +30,7 @@ commands/      council, start-project, hillclimb, grill-me, handoff
 skills/        council, hillclimb (+ four rubrics), grilling, handoff, workflow-base, find-skills, context-engineering
 packs/         engineering (optional third-party skills)
 schema/        the seam JSON Schema
-templates/     a starter seam
+templates/     a starter seam and the copy-paste prompts
 tools/         the `base` CLI (vendored into every project)
 AGENTS.base.md the managed block injected into a project AGENTS.md
 VERSION        the release version; git tags are the immutable store
@@ -58,6 +58,7 @@ The shortest path from an empty folder to project work is one prompt. Open
 OpenCode in the empty folder and paste (the same block works in Copilot Chat —
 see [VS Code Copilot Chat](#vs-code-copilot-chat)):
 
+<!-- prompt:new-project:begin -->
 ```text
 Set up this folder with Drax AI Workflow, then start the project.
 
@@ -68,17 +69,52 @@ Set up this folder with Drax AI Workflow, then start the project.
    (use --preset checks-none with --build/--test/--surface for a non-web stack)
 3. Optional engineering skills:
    node .opencode/tools/base.mjs pack install engineering .
-4. If this folder is not a git repo, run git init, add the stack's .gitignore
+4. Run: node .opencode/tools/base.mjs requirements .
+   If a slot is unbound or still a placeholder, ask me which model to bind — ranked
+   options with modality, price and lineage, plus "assign later". Do not bind one
+   without my answer. Probe the model you bound with one one-token call.
+5. If this folder is not a git repo, run git init, add the stack's .gitignore
    and commit the baseline. Delete the temp clone.
-5. Do not write app code yet. Tell me to restart the session so the new agents,
+6. Do not write app code yet. Tell me to restart the session so the new agents,
    skills and commands load, then run /start-project <my idea>.
 ```
+<!-- prompt:new-project:end -->
 
 `base new` prints `check` and `doctor` results, so the baseline is verified before
 you leave the prompt. Agents, commands and skills written mid-session may not be
-visible until OpenCode restarts; that restart is why step 5 exists. `/start-project`
-turns the idea into an approved first spec in the issue directory and stops — it
-does not scaffold the stack or write app code.
+visible until OpenCode restarts; that restart is why the last step exists.
+`/start-project` turns the idea into an approved first spec in the issue directory
+and stops — it does not scaffold the stack or write app code.
+
+## Update from a prompt
+
+In a project that already carries the base, paste this to pull a newer release:
+
+<!-- prompt:update-project:begin -->
+```text
+Update this project's vendored Drax AI Workflow, then tell me what needs configuring.
+
+1. Clone https://github.com/DraxCodes/drax-ai-workflow into a temp dir
+   (or use $env:WORKFLOW_BASE when it is set); call that path <base>.
+2. Run: node .opencode/tools/base.mjs update . --from <base> --check
+3. Apply what the plan shows: node .opencode/tools/base.mjs update . --from <base>
+   If it refuses on locally modified files, list them and stop. Do not use --force
+   without asking me.
+4. Run: node .opencode/tools/base.mjs doctor .
+   and: node .opencode/tools/base.mjs requirements .
+5. Report: old -> new version, files changed, and every unbound or placeholder slot.
+6. For each unbound slot, ask me which model to bind — ranked options with modality,
+   price and lineage, plus "assign later". Do not bind a model without my answer.
+   Probe the model you bound with one one-token call and record the result.
+7. If the update changed agents, commands or skills, tell me to restart the session.
+   Delete the temp clone. Do not commit anything I have not seen.
+```
+<!-- prompt:update-project:end -->
+
+`update` refuses locally modified files unless `--force`; the prompt tells the agent
+to list them and stop instead of forcing. New releases that add a model slot are
+announced by `update` and then reported by `requirements` — that is the moment the
+agent asks which model to bind.
 
 ## Hillclimb rubrics
 
