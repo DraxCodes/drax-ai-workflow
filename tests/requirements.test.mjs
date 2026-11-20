@@ -140,6 +140,57 @@ test("update announces a slot introduced in the incoming version", () => {
   assert.match(applied.stdout, /new model requirements \(1\)/);
 });
 
+test("base requirements reports each slot's state, key and needs", () => {
+  const base = fixtureBase();
+  const project = tempDir("wb-req-cmd-");
+  const tool = join(base, "tools", "base.mjs");
+
+  const init = run(tool, ["init", project, "--from", base, "--project", "demo"]);
+  assert.equal(init.status, 0, init.stdout + init.stderr);
+  initProject(project);
+
+  writeFileSync(
+    join(project, "opencode.json"),
+    `${JSON.stringify(
+      {
+        model: "test/base",
+        agents: {
+          "task-orchestrator": { model: "test/chair" },
+          "plan-architect": { model: "<provider/model>" },
+          "security-auditor": { model: "test/risk" },
+        },
+      },
+      null,
+      2,
+    )}\n`,
+  );
+  const seamFile = join(project, ".opencode", "workflow.json");
+  const seam = JSON.parse(readFileSync(seamFile, "utf8"));
+  seam.visualReview = { model: "test/visual" };
+  writeFileSync(seamFile, `${JSON.stringify(seam, null, 2)}\n`);
+
+  const json = run(tool, ["requirements", project, "--json"]);
+  assert.equal(json.status, 0, json.stdout + json.stderr);
+  const report = JSON.parse(json.stdout);
+  const byId = Object.fromEntries(report.slots.map((slot) => [slot.id, slot]));
+
+  assert.equal(byId["council.chair"].state, "bound");
+  assert.equal(byId["council.shape"].state, "placeholder");
+  assert.equal(byId["council.experience"].state, "unbound");
+  assert.equal(byId["council.risk"].state, "bound");
+  assert.equal(byId["hillclimb.blindspot"].state, "bound");
+  assert.equal(byId["hillclimb.blindspot"].key, "visualReview.model");
+  assert.equal(byId["hillclimb.blindspot"].file, ".opencode/workflow.json");
+  assert.ok(byId["hillclimb.blindspot"].needs.modality.includes("image"));
+  assert.equal(byId["council.shape"].key, "agents.plan-architect.model");
+
+  const text = run(tool, ["requirements", project]);
+  assert.equal(text.status, 0, text.stdout + text.stderr);
+  assert.match(text.stdout, /Model slots:/);
+  assert.match(text.stdout, /council\.experience\s+unbound/);
+  assert.match(text.stdout, /needs text \+ image input/);
+});
+
 test("the seam accepts visualReview and rejects an empty model", () => {
   const seam = {
     schemaVersion: 1,

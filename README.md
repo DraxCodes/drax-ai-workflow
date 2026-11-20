@@ -336,6 +336,7 @@ Run from the project root; the CLI is vendored at `.opencode/tools/base.mjs`.
 | `base update . --check` | Print the update plan and exit 1 if it would change anything. |
 | `base eject .` | Remove manifest-owned clean files, the managed block and the manifest; leave the seam. |
 | `base print-config .` | Print the `opencode.json` fragment to merge. |
+| `base requirements .` | List the model slots, their binding state and exact key; `--json` for scripts. |
 | `base pack install <name> .` | Run `packs/<name>/install.mjs` with the project as cwd. |
 | `base version` | Print the base version; falls back to the manifest in a consumer. |
 

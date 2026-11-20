@@ -133,12 +133,13 @@ isolated work to subagents.
 
 ### Updating the base
 
-After `base update`, run `node .opencode/tools/base.mjs doctor .` and read the
-`requirements:` warnings. For each unbound slot, ask the user which model to bind — offer
-ranked options with the modality and work shape the slot needs, and always include
-"assign later". Never bind a model without the user's answer. Probe the chosen model with
-one one-token call and record the result. A capability whose slot stays unbound is skipped
-and noted, not silently run on another seat's model.
+After `base update`, run `node .opencode/tools/base.mjs doctor .` and
+`node .opencode/tools/base.mjs requirements .`. For each unbound slot, ask the user which
+model to bind — offer ranked options with the modality and work shape the slot needs, and
+always include "assign later". Never bind a model without the user's answer. Probe the
+chosen model with one one-token call and record the result. A capability whose slot stays
+unbound is skipped and noted, not silently run on another seat's model. The ranking rules
+are in the `workflow-base` skill's `references/requirements.md`.
 
 ### Docs for the next agent
 

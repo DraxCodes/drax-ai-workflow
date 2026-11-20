@@ -57,6 +57,7 @@ node .opencode/tools/base.mjs check .    # drift against the manifest
 node .opencode/tools/base.mjs doctor .   # seam, docs, config, global shadowing, secrets
 node .opencode/tools/base.mjs status .   # version, commit, per-file state
 node .opencode/tools/base.mjs update . --from <base>   # bump to the checkout's version
+node .opencode/tools/base.mjs requirements .   # model slots and their binding state
 node .opencode/tools/base.mjs eject .    # remove base-owned clean files and the AGENTS block
 ```
 
@@ -81,9 +82,12 @@ in place for the project.
 1. Check out the target tag in a base checkout (pass `--from <dir>`, set
    `WORKFLOW_BASE`, or run from the checkout).
 2. From the project: `node .opencode/tools/base.mjs update . --from <base>`.
-3. Review the diff, run the floor (the seam's `checks`), commit the vendored tree,
+3. Run `node .opencode/tools/base.mjs requirements .` and bind any slot the update
+   announced — ask the user first, and probe the chosen model once. `update` names
+   the new slots; `doctor` keeps reporting the unbound ones.
+4. Review the diff, run the floor (the seam's `checks`), commit the vendored tree,
    the manifest, the seam's version and the `AGENTS.md` block together.
-4. `node .opencode/tools/base.mjs check .` must be clean before the commit.
+5. `node .opencode/tools/base.mjs check .` must be clean before the commit.
 
 The manifest records per-file `sha256:` hashes (normalized to LF) and the AGENTS
 block hash, so a CRLF checkout does not report drift.
@@ -91,6 +95,7 @@ block hash, so a CRLF checkout does not report drift.
 ## References
 
 - `references/seam.md` — the seam schema, field by field.
+- `references/requirements.md` — model slots, binding, and how to recommend a model.
 - `references/issue-tracker.md` — where issues, specs and triage state live.
 - `references/domain.md` — how to read the glossary and ADRs before exploring.
 

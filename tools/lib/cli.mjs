@@ -20,8 +20,10 @@ import { copilotFiles } from "./copilot.mjs";
 import { DEFAULT_PROFILE, loadProfile } from "./profile.mjs";
 import { PRESETS, PRESET_ALIASES, applyPreset, resolvePresetName } from "./presets.mjs";
 import {
+  bindingFor,
   describeRequirement,
   loadBaseRequirements,
+  loadProjectRequirements,
   newRequirements,
 } from "./requirements.mjs";
 import { SEAM_REL, defaultSeam, loadSeam, validateSeam } from "./seam.mjs";
@@ -600,6 +602,73 @@ function printConfigCommand(flags) {
   return 0;
 }
 
+function requirementsCommand(flags) {
+  const target = resolve(flags._[0] ?? ".");
+  const { seam, errors: seamErrors } = loadSeam(target);
+  if (!seam) {
+    printReport("Cannot read requirements:", { errors: seamErrors });
+    return 1;
+  }
+  const { slots, error } = loadProjectRequirements(target);
+  if (error) {
+    console.error(error);
+    return 1;
+  }
+
+  let config = null;
+  const configFile = join(target, "opencode.json");
+  if (existsSync(configFile)) {
+    try {
+      config = JSON.parse(readFileSync(configFile, "utf8").replace(/^\uFEFF/, ""));
+    } catch (parseError) {
+      console.error(`opencode.json: ${parseError.message}`);
+      return 1;
+    }
+  }
+
+  const rows = slots.map((slot) => {
+    const binding = bindingFor(slot, seam, config);
+    const value = typeof binding.value === "string" ? binding.value.trim() : "";
+    const state =
+      value.length === 0 ? "unbound" : /^<.*>$/.test(value) ? "placeholder" : "bound";
+    return {
+      id: slot.id,
+      state,
+      serves: slot.serves ?? [],
+      purpose: slot.purpose ?? "",
+      since: slot.since ?? null,
+      needs: slot.needs ?? {},
+      key: slot.bind.kind === "agent" ? `agents.${slot.bind.agent}.model` : slot.bind.path,
+      file: binding.file,
+      value: value || null,
+    };
+  });
+
+  if (flags.json) {
+    console.log(JSON.stringify({ project: target, slots: rows }, null, 2));
+    return 0;
+  }
+
+  const bound = rows.filter((row) => row.state === "bound").length;
+  console.log(`Model slots: ${target}`);
+  console.log(`  ${bound}/${rows.length} bound`);
+  for (const row of rows) {
+    const id = row.id.padEnd(20);
+    const state = row.state.padEnd(12);
+    console.log(`  ${id} ${state} ${row.key}${row.value ? ` = ${row.value}` : ""}`);
+    if (row.state === "bound") continue;
+    const modality =
+      Array.isArray(row.needs.modality) && row.needs.modality.length > 0
+        ? `${row.needs.modality.join(" + ")} input`
+        : "";
+    const needs = [modality, row.needs.workShape].filter(Boolean).join(", ");
+    console.log(
+      `  ${"".padEnd(20)} ${"".padEnd(12)} ${needs ? `needs ${needs}; ` : ""}add it to ${row.file} after asking`,
+    );
+  }
+  return 0;
+}
+
 function packCommand(flags) {
   const [sub, name, targetArg] = flags._;
   const target = resolve(targetArg ?? ".");
@@ -627,6 +696,7 @@ Usage:
   base status [target]             show the version, files and seam summary
   base eject [target]              remove the base-owned files and the AGENTS block
   base print-config [target]       print the opencode.json fragment to merge
+  base requirements [target]       list the model slots and their binding state
   base pack install <name> [target]
   base version
 
@@ -672,6 +742,8 @@ export function run(argv = process.argv.slice(2)) {
         return statusCommand(flags);
       case "eject":
         return ejectCommand(flags);
+      case "requirements":
+        return requirementsCommand(flags);
       case "print-config":
         return printConfigCommand(flags);
       case "pack":
