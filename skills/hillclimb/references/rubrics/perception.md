@@ -186,6 +186,10 @@ The score is the only iterate/stop signal. A green floor does not earn a ship; a
 number moving does not earn a ship. Only the rubric does. Two consecutive
 iterations without a higher score stop the loop.
 
+A blindspot finding confirmed against the shots can block a ship; a rejected
+finding never lowers the score. At a stop, the findings either explain the ceiling
+or are recorded as unrelated.
+
 A project may record a non-scoring supporting metric in its seam or addendum. It is
 evidence, not a gate, unless the project says otherwise.
 
@@ -198,6 +202,9 @@ A score without this evidence is invalid and is treated as below 8.
   throwaway file plus one hook.
 - **Shots:** when `verify.capture` is set, screenshots at the seam's declared widths
   and themes, named by screen and state.
+- **Blindspot:** when the independent review ran, `findings.glm.json`, the merge
+  result and the adjudication; when it was skipped, the reason. A pairing that was
+  not verified is not evidence.
 - **Read-through:** a short note from the first-run and keyboard passes — what was
   tried, what paused, what was guessed.
 - **Flaws and strengths:** each one states *what* is visible, *where* (screen,

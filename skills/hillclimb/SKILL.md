@@ -55,6 +55,33 @@ Every rubric uses the same gate:
 The score is the only iterate/stop signal. A green floor does not earn a ship; a
 number moving does not earn a ship.
 
+## The blindspot pass
+
+`perception` has a second, independent reviewer. It finds; it never scores.
+
+- **When.** One mandatory run at the gate's first **SHIP** or **STOP** verdict,
+  before that verdict becomes final. If the run ends without either verdict, record
+  that the pass never ran. One extra run is allowed when the gate is not sure: it
+  self-rates `low` with a reason, it names at most one flaw with a score of 7–8, the
+  shots are ambiguous in a named way, or the score did not move across two
+  iterations. Cap: one extra run.
+- **How.** The orchestrator writes a shot manifest and a neutral brief, then runs
+  `node .opencode/tools/visual-review.mjs --manifest <file> --brief <file> --out <dir>`.
+  The reviewer reads `seam.visualReview.model`; endpoint and credential come from
+  `opencode.json`. Unbound means the pass is **skipped** and the artifact says so —
+  it never falls back to the gate's model, because two opinions from one lineage are
+  one opinion.
+- **What it does not do.** It does not score, grade or rule. Its findings are
+  evidence, like a screenshot.
+- **At a STOP.** Findings are ceiling evidence: they explain why the score did not
+  move. They do not reopen the loop; another iteration is the user's call.
+- **The brief.** State the surfaces, states, widths and themes. Never name the flaw
+  you suspect: a hinted reviewer stops being independent.
+- **Independence.** The reviewer gets the shots, the manifest and the brief —
+  nothing else. No gate findings, no council artifact, no repo path.
+- **Adjudication.** The gatekeeper pairs, verifies and rules; see its blindspot
+  section. A pairing is a candidate, not an accepted finding.
+
 ## Roles
 
 - `plan-architect` (subagent): declares the rubric, the target score, the evidence
@@ -98,6 +125,10 @@ number moving does not earn a ship.
    its named remaining flaws, the floor results, and the kept commits. Remove the
    seed.
 
+Before a first **SHIP** or **STOP** verdict becomes final, run the blindspot pass
+once and have the gatekeeper adjudicate it. The pass happens at the decision, not on
+every iteration.
+
 ## The floor
 
 Before any score counts, run the seam's `checks`: build, test and the free checks. A paid
@@ -116,6 +147,9 @@ stopped first, a check that needs a live server); it may not weaken the floor.
 - Never let `quality-gatekeeper` or `plan-architect` modify files; both are
   read-only.
 - No score without named evidence. A score without evidence is treated as below 8.
+- A skipped blindspot run is recorded with its reason and never replaced by another
+  seat's model. A rejected finding does not lower the score; a confirmed one can
+  block a ship.
 - Prefer reverting a losing change over debugging it — the loop only moves forward
   on a higher score with a green floor.
 - Respect "8 or above ships": do not keep polishing toward a 10 the task did not

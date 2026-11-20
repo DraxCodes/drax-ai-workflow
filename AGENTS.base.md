@@ -49,6 +49,13 @@ Selection: an explicit `Rubric: <name>` wins, then the seam's `rubrics.default`,
 The score is the only iterate/stop signal. A green floor does not earn a ship; a number
 moving does not earn a ship.
 
+**Visual blindspot pass.** On `perception`, run one independent review before the first
+ship or stop verdict: write a shot manifest and a state-only brief, then
+`node .opencode/tools/visual-review.mjs --manifest <file> --brief <file> --out <dir>`.
+It is bound by `visualReview.model` in the seam. Unbound means it is skipped and recorded,
+never replaced by the gate's model. The gatekeeper adjudicates the findings; an
+unresolvable disagreement stops the loop and goes to the user.
+
 ### Council
 
 For a larger feature — one where the shape is worth more than the code — run a council
@@ -123,6 +130,15 @@ what it costs:
 
 One session per task; `/compact` when switching topics; prefer targeted reads; delegate
 isolated work to subagents.
+
+### Updating the base
+
+After `base update`, run `node .opencode/tools/base.mjs doctor .` and read the
+`requirements:` warnings. For each unbound slot, ask the user which model to bind — offer
+ranked options with the modality and work shape the slot needs, and always include
+"assign later". Never bind a model without the user's answer. Probe the chosen model with
+one one-token call and record the result. A capability whose slot stays unbound is skipped
+and noted, not silently run on another seat's model.
 
 ### Docs for the next agent
 

@@ -62,6 +62,19 @@ that may be missing an obligation (a spec, a proposal, a feature), follow the
 - Run the `security-auditor` on every iteration as well, and route its findings before
   keeping the change.
 - Keep each accepted iteration as its own atomic commit; revert anything it fails.
+- On `perception`, run the blindspot pass once at the gate's first SHIP or STOP
+  verdict, before it becomes final: write the shot manifest and a state-only brief,
+  run `node .opencode/tools/visual-review.mjs --manifest <file> --brief <file> --out <dir>`,
+  and send `findings.glm.json` plus `merged.json` to the `quality-gatekeeper` with
+  the shots. The reviewer never sees the gate's findings or your hypothesis.
+- If the gatekeeper returns `ASK`, put both readings and the shot paths to the user
+  with the `question` tool, record the answer, and resume. Do not break the tie
+  yourself.
+- One extra run is allowed only on the `hillclimb` skill's low-confidence triggers.
+  A skipped run (an unbound `visualReview.model`) is recorded with its reason, never
+  replaced by the gate's model.
+- At a STOP, report the findings as the ceiling explanation and do not iterate again
+  without the user's explicit approval.
 
 ## The gate
 

@@ -41,5 +41,11 @@ written:
 - **Floor:** the seam's `checks` (build, test and free) pass. A red floor cannot score 8
   and cannot ship. A rubric that needs no seed does not get one.
 
+On `perception`, the first SHIP or STOP verdict also triggers the blindspot pass: capture
+the shots, write a state-only brief, run
+`node .opencode/tools/visual-review.mjs --manifest <file> --brief <file> --out <dir>`, and
+hand the gatekeeper both findings sets. One extra run is allowed when the gate is unsure;
+a skipped run is recorded, never replaced by another seat's model.
+
 Keep each accepted iteration as its own atomic commit, and revert any iteration the
 score does not improve.
