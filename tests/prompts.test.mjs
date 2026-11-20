@@ -38,7 +38,8 @@ test("the update prompt keeps its safety and requirement steps", () => {
   const prompt = normalize(
     readFileSync(join(repoRoot, "templates", "prompts", "update-project.md"), "utf8"),
   );
-  assert.match(prompt, /--check/);
+  assert.match(prompt, /node <base>\/tools\/base\.mjs update \. --from <base> --check/);
+  assert.match(prompt, /node \.opencode\/tools\/base\.mjs update \. --from <base>/);
   assert.match(prompt, /--force/);
   assert.match(prompt, /requirements \./);
   assert.match(prompt, /assign later/);

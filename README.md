@@ -96,8 +96,10 @@ Update this project's vendored Drax AI Workflow, then tell me what needs configu
 
 1. Clone https://github.com/DraxCodes/drax-ai-workflow into a temp dir
    (or use $env:WORKFLOW_BASE when it is set); call that path <base>.
-2. Run: node .opencode/tools/base.mjs update . --from <base> --check
-3. Apply what the plan shows: node .opencode/tools/base.mjs update . --from <base>
+2. Plan with the base's own CLI, so the release's new requirements are listed:
+   node <base>/tools/base.mjs update . --from <base> --check
+3. Apply with this project's vendored CLI:
+   node .opencode/tools/base.mjs update . --from <base>
    If it refuses on locally modified files, list them and stop. Do not use --force
    without asking me.
 4. Run: node .opencode/tools/base.mjs doctor .
@@ -401,11 +403,15 @@ From the project root, point at the base checkout:
 
 ```sh
 git -C <base> checkout v0.6.0
-node .opencode/tools/base.mjs update . --from <base>
+node <base>/tools/base.mjs update . --from <base> --check   # plan, and this release's new slots
+node .opencode/tools/base.mjs update . --from <base>        # apply, with the project's own CLI
 ```
 
 `--from` (or the `WORKFLOW_BASE` environment variable) is required when the base
-is not the current directory. Run `update . --check` first to see the plan.
+is not the current directory. Plan with the base's CLI: the code that knows a
+release's new requirements arrives *with* the update, so the project's vendored
+copy cannot announce them for that same release. Apply with the vendored CLI, the
+code the project already runs.
 
 The update stages, validates and replaces; a write failure restores the old tree
 from `.opencode/.workflow-backup/<timestamp>/`. Review the diff, run the seam's

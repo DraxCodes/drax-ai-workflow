@@ -81,13 +81,16 @@ in place for the project.
 
 1. Check out the target tag in a base checkout (pass `--from <dir>`, set
    `WORKFLOW_BASE`, or run from the checkout).
-2. From the project: `node .opencode/tools/base.mjs update . --from <base>`.
-3. Run `node .opencode/tools/base.mjs requirements .` and bind any slot the update
-   announced — ask the user first, and probe the chosen model once. `update` names
-   the new slots; `doctor` keeps reporting the unbound ones.
-4. Review the diff, run the floor (the seam's `checks`), commit the vendored tree,
+2. Plan with the base's CLI: `node <base>/tools/base.mjs update . --from <base> --check`.
+   The project's vendored copy predates the release, so only the base's CLI can list
+   the model slots that release adds.
+3. Apply with the project's CLI: `node .opencode/tools/base.mjs update . --from <base>`.
+4. Run `node .opencode/tools/base.mjs requirements .` and bind any unbound slot — ask
+   the user first, and probe the chosen model once. `doctor` keeps reporting the
+   unbound ones.
+5. Review the diff, run the floor (the seam's `checks`), commit the vendored tree,
    the manifest, the seam's version and the `AGENTS.md` block together.
-5. `node .opencode/tools/base.mjs check .` must be clean before the commit.
+6. `node .opencode/tools/base.mjs check .` must be clean before the commit.
 
 The manifest records per-file `sha256:` hashes (normalized to LF) and the AGENTS
 block hash, so a CRLF checkout does not report drift.
