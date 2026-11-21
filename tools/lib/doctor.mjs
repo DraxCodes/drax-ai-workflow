@@ -5,11 +5,12 @@ import {
   readFileSync,
   readdirSync,
   rmSync,
+  statSync,
 } from "node:fs";
 import { homedir } from "node:os";
 import { dirname, join } from "node:path";
+import { checkDocs as auditDocs } from "./docs.mjs";
 import { sha256 } from "./hash.mjs";
-import { parseDocument } from "./frontmatter.mjs";
 import {
   MANIFEST_REL,
   extractBlock,
@@ -17,7 +18,11 @@ import {
   readManifest,
   toPosix,
 } from "./manifest.mjs";
-import { checkRequirements, loadProjectRequirements } from "./requirements.mjs";
+import {
+  checkLineageDiversity,
+  checkRequirements,
+  loadProjectRequirements,
+} from "./requirements.mjs";
 import { loadSeam } from "./seam.mjs";
 
 const READ_ONLY_AGENTS = ["plan-architect", "quality-gatekeeper", "security-auditor"];
@@ -192,6 +197,88 @@ function checkModelSelectors(value, agentIds, errors, warnings, notes, extra = [
   }
 }
 
+function permissionRules(agents, id) {
+  const rules = agents[id]?.permissions;
+  return Array.isArray(rules) ? rules : [];
+}
+
+function hasPermission(rules, action, effect) {
+  return rules.some(
+    (rule) =>
+      rule &&
+      rule.action === action &&
+      rule.effect === effect &&
+      (rule.resource === "*" || rule.resource === "**"),
+  );
+}
+
+/**
+ * The role matrix is advisory: a project may have a reason to widen or narrow a
+ * seat, but the read-only guarantee and the always-on lens depend on the shape
+ * being visible. Report the drift; never fail the project for it.
+ */
+function checkPermissionMatrix(agents, warnings, notes) {
+  let checked = 0;
+  for (const id of ALL_AGENTS) {
+    const rules = permissionRules(agents, id);
+    if (rules.length === 0) continue;
+    checked += 1;
+
+    if (id === "task-orchestrator") {
+      if (hasPermission(rules, "edit", "deny")) {
+        warnings.push(
+          "opencode.json: task-orchestrator has an edit-deny; it owns the change and cannot make it",
+        );
+      }
+      if (hasPermission(rules, "task", "deny")) {
+        warnings.push(
+          "opencode.json: task-orchestrator cannot delegate; the read-only seats are unreachable",
+        );
+      }
+    }
+
+    if (id === "plan-architect") {
+      if (hasPermission(rules, "bash", "allow")) {
+        warnings.push(
+          "opencode.json: plan-architect can run bash; a plan should be read-only",
+        );
+      }
+      if (hasPermission(rules, "webfetch", "allow")) {
+        warnings.push(
+          "opencode.json: plan-architect can fetch the web; keep the plan inside the brief",
+        );
+      }
+    }
+
+    if (id === "quality-gatekeeper" && hasPermission(rules, "edit", "allow")) {
+      warnings.push(
+        "opencode.json: quality-gatekeeper can edit; the read-only guarantee is weakened",
+      );
+    }
+
+    if (id === "security-auditor") {
+      if (hasPermission(rules, "edit", "allow")) {
+        warnings.push(
+          "opencode.json: security-auditor can edit; the read-only guarantee is weakened",
+        );
+      }
+      if (hasPermission(rules, "webfetch", "deny")) {
+        warnings.push(
+          "opencode.json: security-auditor cannot fetch the web; its best-practice check is blocked",
+        );
+      }
+      if (hasPermission(rules, "bash", "deny")) {
+        warnings.push(
+          "opencode.json: security-auditor cannot run the checks; tests are unverified",
+        );
+      }
+    }
+  }
+  if (checked > 0) {
+    notes.push(`permissions: role matrix checked for ${checked} agent(s) with explicit rules`);
+  }
+}
+
 function checkConfig(projectDir, agentIds, errors, warnings, notes, seam) {
   const file = join(projectDir, "opencode.json");
   if (!existsSync(file)) {
@@ -245,6 +332,7 @@ function checkConfig(projectDir, agentIds, errors, warnings, notes, seam) {
       );
     }
   }
+  checkPermissionMatrix(agents, warnings, notes);
 
   if (value.permissions) notes.push("opencode.json: project permissions present");
   return value;
@@ -267,9 +355,13 @@ function checkGlobalShadowing(home, agentIds, errors, notes) {
 
 const SECRET_PATTERNS = [
   { re: /-----BEGIN [A-Z ]*PRIVATE KEY-----/, kind: "error", label: "private key" },
-  { re: /\bsk-[A-Za-z0-9_-]{20,}/, kind: "error", label: "API key" },
+  { re: /\bsk-(?:ant-|proj-)?[A-Za-z0-9_-]{20,}/, kind: "error", label: "API key" },
   { re: /\bgh[pousr]_[A-Za-z0-9]{20,}/, kind: "error", label: "GitHub token" },
   { re: /\bgithub_pat_[A-Za-z0-9_]{20,}/, kind: "error", label: "GitHub token" },
+  { re: /\bglpat-[A-Za-z0-9_-]{20,}/, kind: "error", label: "GitLab token" },
+  { re: /\bnpm_[A-Za-z0-9]{20,}/, kind: "error", label: "npm token" },
+  { re: /\bpypi-[A-Za-z0-9_-]{20,}/, kind: "error", label: "PyPI token" },
+  { re: /\bhf_[A-Za-z0-9]{20,}/, kind: "error", label: "Hugging Face token" },
   { re: /\bxox[baprs]-[A-Za-z0-9-]{10,}/, kind: "error", label: "Slack token" },
   { re: /\bAKIA[0-9A-Z]{16}/, kind: "error", label: "AWS access key" },
   { re: /\bAIza[0-9A-Za-z_-]{30,}/, kind: "error", label: "Google API key" },
@@ -285,6 +377,11 @@ const SECRET_PATTERNS = [
   },
   { re: /AccountKey=[A-Za-z0-9+/=]{20,}/, kind: "error", label: "Azure account key" },
   {
+    re: /\bSG\.[A-Za-z0-9_-]{16,}\.[A-Za-z0-9_-]{16,}/,
+    kind: "error",
+    label: "SendGrid key",
+  },
+  {
     re: /["']?(?:api[-_]?key|token|secret|password|passwd|credential|authorization|bearer)["']?\s*:\s*"(?!\{env:|\{file:)/i,
     kind: "warning",
     label: "inline credential",
@@ -294,88 +391,86 @@ const SECRET_PATTERNS = [
     kind: "warning",
     label: "inline credential",
   },
+  {
+    re: /\b(?:api[_-]?key|access[_-]?token|secret|password)\s*=\s*(?!\{env:|\{file:|<|$)[^\s#"']{16,}/i,
+    kind: "warning",
+    label: "literal credential assignment",
+  },
 ];
 
-const SECRET_EXTENSIONS = /\.(md|json|ya?ml|txt|mjs|cjs|js|ts|py)$/i;
+const SECRET_EXTENSIONS = /\.(md|mdx|json|jsonc|ya?ml|txt|toml|mjs|cjs|js|ts|py|sh|ps1)$/i;
+const SECRET_SKIP_DIRS = new Set([
+  ".git",
+  "node_modules",
+  "dist",
+  "build",
+  "coverage",
+  "target",
+  ".agents",
+  ".workflow-backup",
+  ".workflow-stage",
+]);
+const SECRET_MAX_BYTES = 1024 * 1024;
+// Benchmark task files are deliberately vulnerable fixtures, not project code.
+const SECRET_SKIP_PATH = /(?:^|[\\/])benchmarks[\\/]packs[\\/]/;
+
+function collectSecretFiles(path, out = []) {
+  if (!existsSync(path)) return out;
+  const stat = statSync(path);
+  if (stat.isFile()) {
+    if (SECRET_EXTENSIONS.test(path) && stat.size <= SECRET_MAX_BYTES) out.push(path);
+    return out;
+  }
+  for (const entry of readdirSync(path, { withFileTypes: true })) {
+    if (entry.isDirectory()) {
+      if (!SECRET_SKIP_DIRS.has(entry.name)) collectSecretFiles(join(path, entry.name), out);
+    } else if (entry.isFile()) {
+      const abs = join(path, entry.name);
+      try {
+        if (SECRET_EXTENSIONS.test(abs) && statSync(abs).size <= SECRET_MAX_BYTES) {
+          out.push(abs);
+        }
+      } catch {
+        // A file that disappeared mid-scan is not a secret.
+      }
+    }
+  }
+  return out;
+}
 
 function checkSecrets(projectDir, errors, warnings, notes) {
-  const roots = ["agents", "commands", "skills", "packs", "tools", "benchmarks"].map((dir) =>
-    join(projectDir, ".opencode", dir),
-  );
-  roots.push(join(projectDir, ".github", "skills"), join(projectDir, ".github", "agents"));
-  const files = roots.flatMap((root) => walk(root));
-  const config = join(projectDir, "opencode.json");
-  if (existsSync(config)) files.push(config);
+  const roots = [
+    join(projectDir, ".opencode"),
+    join(projectDir, "docs"),
+    join(projectDir, "templates"),
+    join(projectDir, "benchmarks"),
+    join(projectDir, ".cortexkit"),
+    join(projectDir, ".scratch"),
+    join(projectDir, "AGENTS.md"),
+    join(projectDir, "README.md"),
+    join(projectDir, "opencode.json"),
+    join(projectDir, "opencode.jsonc"),
+    join(projectDir, "package.json"),
+  ];
+  const files = [...new Set(roots.flatMap((root) => collectSecretFiles(root)))];
 
   let scanned = 0;
   for (const abs of files) {
-    if (!SECRET_EXTENSIONS.test(abs)) continue;
+    if (SECRET_SKIP_PATH.test(abs)) continue;
     scanned += 1;
+    const rel = toPosix(abs.slice(projectDir.length + 1));
+    const local = rel.startsWith(".scratch/") || rel.startsWith(".cortexkit/");
     const text = readFileSync(abs, "utf8");
     for (const { re, kind, label } of SECRET_PATTERNS) {
-      if (re.test(text)) {
-        const rel = toPosix(abs.slice(projectDir.length + 1));
-        if (kind === "error") errors.push(`${rel}: looks like a ${label}`);
-        else warnings.push(`${rel}: possible ${label} (verify it is an example)`);
+      if (!re.test(text)) continue;
+      if (local || kind === "warning") {
+        warnings.push(`${rel}: possible ${label} (verify it is an example)`);
+      } else {
+        errors.push(`${rel}: looks like a ${label}`);
       }
     }
   }
   notes.push(`secrets: scanned ${scanned} project text files`);
-}
-
-function checkCopilot(projectDir, owned, errors, warnings, notes) {
-  const skillFiles = [...owned].filter((rel) =>
-    /^\.github\/skills\/[^/]+\/SKILL\.md$/.test(rel),
-  );
-  const agentFiles = [...owned].filter((rel) =>
-    /^\.github\/agents\/[^/]+\.agent\.md$/.test(rel),
-  );
-
-  if (skillFiles.length === 0 && agentFiles.length === 0) {
-    notes.push("copilot: bridge not installed (--no-copilot)");
-    return;
-  }
-
-  for (const rel of skillFiles.sort()) {
-    const abs = projectFile(projectDir, rel);
-    if (!existsSync(abs)) {
-      errors.push(`${rel}: missing`);
-      continue;
-    }
-    const id = rel.split("/")[2];
-    const { data, body } = parseDocument(readFileSync(abs, "utf8"));
-    if (data.name !== id) {
-      errors.push(`${rel}: name must be "${id}" (got "${data.name ?? ""}")`);
-    }
-    if (!data.description) errors.push(`${rel}: description is missing`);
-    if (body.includes("$ARGUMENTS")) errors.push(`${rel}: $ARGUMENTS is not substituted`);
-  }
-  notes.push(`copilot: ${skillFiles.length} skills`);
-
-  for (const rel of agentFiles.sort()) {
-    const abs = projectFile(projectDir, rel);
-    if (!existsSync(abs)) {
-      errors.push(`${rel}: missing`);
-      continue;
-    }
-    const { data } = parseDocument(readFileSync(abs, "utf8"));
-    const expected = rel.slice(rel.lastIndexOf("/") + 1, -".agent.md".length);
-    if (!data.name) errors.push(`${rel}: name is missing`);
-    if (!data.description) errors.push(`${rel}: description is missing`);
-    if (data.name && data.name !== expected) {
-      warnings.push(`${rel}: name "${data.name}" does not match the file "${expected}"`);
-    }
-  }
-  notes.push(`copilot: ${agentFiles.length} agents`);
-
-  // A project may add its own Copilot files; report them like any other
-  // unowned file instead of failing the bridge's own validation on them.
-  for (const dir of [".github/skills", ".github/agents"]) {
-    for (const abs of walk(join(projectDir, ...dir.split("/")))) {
-      const rel = toPosix(abs.slice(projectDir.length + 1));
-      if (!owned.has(rel)) warnings.push(`${rel}: not owned by the workflow base`);
-    }
-  }
 }
 
 function checkRubrics(seam, projectDir, errors, notes) {
@@ -458,6 +553,16 @@ export function doctor(projectDir, { home = homedir() } = {}) {
 
   if (seam) {
     checkDocs(seam, projectDir, errors, warnings, notes);
+    const docAudit = auditDocs(projectDir, { seam });
+    for (const broken of docAudit.links.broken) {
+      warnings.push(`${broken.file}: link target does not exist: ${broken.target}`);
+    }
+    for (const issue of docAudit.adr.issues) {
+      warnings.push(`${issue.file}: ${issue.reason}`);
+    }
+    notes.push(
+      `docs: ${docAudit.links.files} markdown files, ${docAudit.links.checked} links checked, ${docAudit.adr.checked} ADRs`,
+    );
     checkRubrics(seam, projectDir, errors, notes);
     checkPacks(seam, projectDir, errors, warnings, notes);
   }
@@ -475,13 +580,12 @@ export function doctor(projectDir, { home = homedir() } = {}) {
       warnings,
       configFound: config !== null,
     });
+    checkLineageDiversity({ seam, config, slots, warnings, notes });
   }
   checkGlobalShadowing(home, ids, errors, notes);
   checkSecrets(projectDir, errors, warnings, notes);
 
   const owned = new Set(Object.keys(manifest.files));
-  checkCopilot(projectDir, owned, errors, warnings, notes);
-
   for (const dir of ["agents", "commands", "skills"]) {
     for (const abs of walk(join(projectDir, ".opencode", dir))) {
       const rel = toPosix(abs.slice(projectDir.length + 1));
@@ -518,7 +622,7 @@ export function fixDoctor(projectDir, { home = homedir(), dryRun = false } = {})
   const { seam, errors: seamErrors } = loadSeam(projectDir);
   errors.push(...seamErrors);
   if (seam?.docs) {
-    for (const key of ["issues", "adr"]) {
+    for (const key of ["issues", "adr", "notes"]) {
       const rel = seam.docs[key];
       if (!rel || existsSync(join(projectDir, rel))) continue;
       actions.push(`create ${rel}`);

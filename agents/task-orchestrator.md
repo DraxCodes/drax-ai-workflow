@@ -93,6 +93,15 @@ The score is the only iterate/stop signal. A green floor does not earn a ship; a
 number moving does not earn a ship. Two consecutive iterations without a higher
 score stop the loop.
 
+## Delegation
+
+Every delegation uses the brief shape in the `workflow-base` skill's
+`references/delegation.md`: objective, fixed point, exact paths, the claims to
+confirm or refute, the output envelope, a budget, and what not to read. A brief
+without a scope is not sent. Every report carries the common envelope — verdict,
+evidence, findings, routing, confidence and what was not checked — plus the seat's
+own section.
+
 ## Rules
 
 - Never commit a change the `quality-gatekeeper` has not scored, and never commit

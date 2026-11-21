@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "pilot",
+  "version": "0.1.0",
+  "protocol": "workflow-pilot-v1",
+  "minTasks": 10,
+  "tasks": ["01-bug-fix", "02-spec-review", "03-security-review"]
+}

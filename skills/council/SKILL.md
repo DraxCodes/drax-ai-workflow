@@ -73,9 +73,11 @@ but that is a hypothesis about the lenses, not a finding. The project's own `AGE
 name a measured mix; use it when it does.
 
 **Verify, do not assume.** A provider can list a model and still fail the request (a
-routing floor, a retired version, a market that moved). Make one one-token call before
-changing a seat, and record the fallback in the artifact. Model diversity is a hypothesis,
-not a guarantee; a better brief beats a better model.
+routing floor, a retired version, a market that moved). Run `base probe <slot> .` before
+changing a seat — or a one-token call when the provider cannot be probed — and record the
+result and fallback in the artifact. `doctor` warns when the bound council seats share one
+model lineage. Model diversity is a hypothesis, not a guarantee; a better brief beats a
+better model.
 
 **Seat by evidence, not by tier.** When two models are candidates for a seat, give both the
 same real change, blind, and read the findings and scores they return. The seat goes to the

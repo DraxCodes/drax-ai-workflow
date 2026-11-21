@@ -1,9 +1,12 @@
 import { spawnSync } from "node:child_process";
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { copyFileSync, existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { basename, dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { applyPlan } from "./apply.mjs";
+import { checkDocs as auditDocs } from "./docs.mjs";
 import { doctor, fixDoctor } from "./doctor.mjs";
+import { findInProject } from "./find.mjs";
+import { fleet } from "./fleet.mjs";
 import { sha256 } from "./hash.mjs";
 import {
   MANIFEST_REL,
@@ -16,9 +19,9 @@ import {
   renderBlock,
 } from "./manifest.mjs";
 import { planCheck, planEject, planInit, planUpdate, listExtraFiles } from "./plan.mjs";
-import { copilotFiles } from "./copilot.mjs";
 import { DEFAULT_PROFILE, loadProfile } from "./profile.mjs";
 import { PRESETS, PRESET_ALIASES, applyPreset, resolvePresetName } from "./presets.mjs";
+import { probeSlot } from "./probe.mjs";
 import {
   bindingFor,
   describeRequirement,
@@ -27,8 +30,17 @@ import {
   newRequirements,
 } from "./requirements.mjs";
 import { SEAM_REL, defaultSeam, loadSeam, validateSeam } from "./seam.mjs";
+import {
+  exportRuns,
+  finishRun,
+  listRuns,
+  recordRun,
+  showRun,
+  startRun,
+  summarizeRuns,
+} from "./runs.mjs";
 
-const REPEATABLE = new Set(["free", "paid", "pack"]);
+const REPEATABLE = new Set(["free", "paid", "pack", "evidence"]);
 
 function parseFlags(argv) {
   const flags = { _: [] };
@@ -169,7 +181,6 @@ function installProject({ baseRoot, target, seam, flags }) {
 
   const packs = seam.packs ?? [];
   const files = readBaseFiles(baseRoot, listBaseFiles(baseRoot, packs));
-  if (!flags.noCopilot) files.push(...copilotFiles(baseRoot));
   const block = renderBaseBlock(baseRoot, version);
   const plan = planInit({
     projectDir: target,
@@ -226,6 +237,26 @@ function initCommand(flags) {
   console.log(`  2. Run: node .opencode/tools/base.mjs doctor .`);
   console.log(`  3. Merge the fragment from: node .opencode/tools/base.mjs print-config .`);
   return 0;
+}
+
+function scaffoldDocs(baseRoot, target, seam) {
+  const created = [];
+  const pairs = [
+    [seam.docs.notes && "templates/docs/notes-readme.md", seam.docs.notes && `${seam.docs.notes}/README.md`],
+    [seam.docs.notes && "templates/docs/note.md", seam.docs.notes && `${seam.docs.notes}/_template.md`],
+    [seam.docs.adr && "templates/docs/adr-readme.md", seam.docs.adr && `${seam.docs.adr}/README.md`],
+    [seam.docs.adr && "templates/docs/adr.md", seam.docs.adr && `${seam.docs.adr}/0000-template.md`],
+  ];
+  for (const [from, to] of pairs) {
+    if (!from || !to) continue;
+    const src = join(baseRoot, from);
+    const dest = join(target, to);
+    if (!existsSync(src) || existsSync(dest)) continue;
+    mkdirSync(dirname(dest), { recursive: true });
+    copyFileSync(src, dest);
+    created.push(to);
+  }
+  return created;
 }
 
 function configScaffold(profile) {
@@ -332,14 +363,16 @@ function newCommand(flags) {
   );
 
   const created = [];
-  for (const key of ["issues", "adr"]) {
+  for (const key of ["issues", "adr", "notes"]) {
     const rel = seam.docs[key];
+    if (!rel) continue;
     const abs = join(target, rel);
     if (!existsSync(abs)) {
       mkdirSync(abs, { recursive: true });
       created.push(rel);
     }
   }
+  created.push(...scaffoldDocs(baseRoot, target, seam));
   console.log(
     `  docs: ${created.length > 0 ? `created ${created.join(", ")}` : "already present"}`,
   );
@@ -416,7 +449,6 @@ function updateCommand(flags) {
   const { seam } = loadSeam(target);
   const packs = flags.pack ? toArray(flags.pack) : (manifest.packs ?? []);
   const files = readBaseFiles(source, listBaseFiles(source, packs));
-  if (!flags.noCopilot) files.push(...copilotFiles(source));
   const block = renderBaseBlock(source, version);
 
   const plan = planUpdate({
@@ -673,6 +705,366 @@ function requirementsCommand(flags) {
   return 0;
 }
 
+function ciCommand(flags) {
+  const target = resolve(flags._[0] ?? ".");
+  const script = join(dirname(fileURLToPath(import.meta.url)), "..", "base.mjs");
+  const steps = [];
+  let ok = true;
+
+  const runStep = (name, args) => {
+    const result = spawnSync(process.execPath, [script, ...args], {
+      encoding: "utf8",
+      stdio: flags.json ? "pipe" : "inherit",
+    });
+    const status = result.status ?? 1;
+    steps.push({
+      name,
+      status,
+      stdout: flags.json ? result.stdout : undefined,
+      stderr: flags.json ? result.stderr : undefined,
+    });
+    if (status !== 0) ok = false;
+    return status;
+  };
+
+  runStep("check", ["check", target]);
+  runStep("doctor", ["doctor", target]);
+
+  if (!flags.noBenchmark) {
+    const pack = join(
+      dirname(fileURLToPath(import.meta.url)),
+      "..",
+      "benchmarks",
+      "packs",
+      "security-review",
+      "pack.json",
+    );
+    if (existsSync(pack)) runStep("benchmark", ["benchmark", "validate"]);
+    else steps.push({ name: "benchmark", status: 0, skipped: "pack not installed" });
+  }
+
+  if (flags.withProjectChecks) {
+    const { seam, errors } = loadSeam(target);
+    if (!seam) {
+      steps.push({ name: "project checks", status: 1, stderr: errors.join("; ") });
+      ok = false;
+    } else {
+      const entries = [
+        ["build", seam.checks.build],
+        ["test", seam.checks.test],
+        ...seam.checks.free.map((entry, index) => [`free[${index}]`, entry]),
+      ].filter(([, entry]) => entry && entry.command);
+      for (const [name, entry] of entries) {
+        const cwd = entry.cwd ? resolve(target, entry.cwd) : target;
+        const result = spawnSync(entry.command, {
+          cwd,
+          shell: true,
+          encoding: "utf8",
+          stdio: flags.json ? "pipe" : "inherit",
+        });
+        const status = result.status ?? 1;
+        steps.push({
+          name: `project ${name}`,
+          status,
+          stdout: flags.json ? result.stdout : undefined,
+          stderr: flags.json ? result.stderr : undefined,
+        });
+        if (status !== 0) ok = false;
+      }
+    }
+  }
+
+  if (flags.json) {
+    console.log(JSON.stringify({ target, ok, steps }, null, 2));
+  } else {
+    console.log(ok ? "\nCI: pass." : "\nCI: fail.");
+  }
+  return ok ? 0 : 1;
+}
+
+function findCommand(flags) {
+  const query = flags._[0];
+  const target = resolve(flags._[1] ?? ".");
+  if (!query || typeof query !== "string") {
+    console.error("usage: base find <question> [target] [--code] [--no-commits] [--limit n]");
+    return 2;
+  }
+  const limit = flags.limit === undefined ? 20 : Number(flags.limit);
+  if (!Number.isInteger(limit) || limit < 1 || limit > 100) {
+    console.error("find: --limit must be an integer from 1 to 100");
+    return 2;
+  }
+  const result = findInProject(target, query, {
+    code: Boolean(flags.code),
+    commits: !flags.noCommits,
+    limit,
+  });
+  if (flags.json) {
+    console.log(JSON.stringify(result, null, 2));
+    return result.total > 0 ? 0 : 1;
+  }
+  console.log(`Recall: "${query}" in ${target}`);
+  if (result.docs.length === 0 && result.commits.length === 0) {
+    console.log("  no matches; try fewer or different words");
+    return 1;
+  }
+  for (const hit of result.docs) {
+    console.log(`  ${hit.file}:${hit.line}  (${hit.score})`);
+    console.log(`    ${hit.text}`);
+  }
+  for (const hit of result.commits) {
+    console.log(`  commit ${hit.commit} ${hit.date}  ${hit.text}`);
+  }
+  return 0;
+}
+
+function fleetCommand(flags) {
+  const root = resolve(flags._[0] ?? ".");
+  const depth = flags.depth === undefined ? 3 : Number(flags.depth);
+  if (!Number.isInteger(depth) || depth < 1 || depth > 8) {
+    console.error("fleet: --depth must be an integer from 1 to 8");
+    return 2;
+  }
+  const result = fleet(root, { maxDepth: depth });
+  if (flags.json) {
+    console.log(JSON.stringify(result, null, 2));
+    return flags.check && (result.summary.drifted > 0 || result.summary.unbound > 0) ? 1 : 0;
+  }
+  console.log(`Fleet: ${result.root} (${result.summary.total} projects)`);
+  if (result.projects.length === 0) {
+    console.log("  no projects with .opencode/.workflow-manifest.json found");
+    return 0;
+  }
+  console.log("  project                          version  files  drift  slots  installed");
+  for (const project of result.projects) {
+    const drift = project.drift ? `${project.changed}/${project.missing}` : "clean";
+    const slots = `${project.slots - project.unbound - project.placeholder}/${project.slots}`;
+    console.log(
+      `  ${project.project.padEnd(32)} ${String(project.version).padEnd(8)} ${String(project.files).padEnd(6)} ${drift.padEnd(6)} ${slots.padEnd(6)} ${project.installedAt ?? ""}`,
+    );
+  }
+  console.log(
+    `  summary: ${result.summary.drifted} drifted, ${result.summary.unbound} unbound, ${result.summary.placeholders} placeholder`,
+  );
+  return flags.check && (result.summary.drifted > 0 || result.summary.unbound > 0) ? 1 : 0;
+}
+
+function docsCommand(flags) {
+  const target = resolve(flags._[1] ?? ".");
+  const { seam, errors } = loadSeam(target);
+  if (!seam) {
+    printReport("Cannot check docs:", { errors });
+    return 1;
+  }
+
+  const result = auditDocs(target, { seam });
+  if (flags.json) {
+    console.log(JSON.stringify(result, null, 2));
+    return result.links.broken.length > 0 ? 1 : 0;
+  }
+
+  console.log(`Docs: ${target}`);
+  console.log(
+    `  links: ${result.links.checked} checked in ${result.links.files} markdown files`,
+  );
+  for (const broken of result.links.broken) {
+    console.log(`  ✗ ${broken.file}: missing ${broken.target}`);
+  }
+  console.log(`  adr: ${result.adr.checked} decision records checked`);
+  for (const issue of result.adr.issues) {
+    console.log(`  ! ${issue.file}: ${issue.reason}`);
+  }
+  return result.links.broken.length > 0 ? 1 : 0;
+}
+
+async function probeCommand(flags) {
+  const slotId = flags.slot ?? flags._[0];
+  const target = resolve(flags._[1] ?? ".");
+  if (!slotId) {
+    console.error("usage: base probe <slot> [target] [--full] [--budget-usd <usd>] [--dry-run]");
+    return 2;
+  }
+
+  const result = await probeSlot({ projectDir: target, slotId, flags });
+  if (!result.ok && result.error) {
+    console.error(`probe: ${result.error}`);
+    return 1;
+  }
+  if (flags.json) {
+    console.log(JSON.stringify(result, null, 2));
+    return result.ok ? 0 : 1;
+  }
+  console.log(`Probe: ${result.slot} -> ${result.selector}`);
+  console.log(`  budget: $${result.budgetUsd}; suite: ${result.suite.join(", ")}`);
+  if (result.dryRun) {
+    console.log("  dry run: no provider call");
+    return 0;
+  }
+  for (const entry of result.results) {
+    const cost = entry.costUsd === null ? "cost unknown" : `$${entry.costUsd}`;
+    console.log(`  ${entry.name.padEnd(13)} ${entry.status.padEnd(11)} ${cost}  ${entry.detail ?? ""}`);
+  }
+  console.log(`  spent: $${result.spentUsd}`);
+  return result.ok ? 0 : 1;
+}
+
+function runProjectInfo(target, flags) {
+  const manifest = readManifest(target);
+  const { seam } = loadSeam(target);
+  const source = sourceRoot(flags);
+  return {
+    base: {
+      name: "drax-ai-workflow",
+      version: manifest?.version ?? (source ? readVersion(source) : null) ?? "unknown",
+      commit: manifest?.commit ?? gitCommit(target),
+    },
+    project: seam?.project ?? basename(target),
+  };
+}
+
+function parseUsage(flags) {
+  const usage = {};
+  for (const [key, flag] of [
+    ["inputTokens", "tokensIn"],
+    ["outputTokens", "tokensOut"],
+    ["costUsd", "costUsd"],
+    ["latencyMs", "latencyMs"],
+  ]) {
+    if (flags[flag] === undefined) continue;
+    const value = Number(flags[flag]);
+    if (!Number.isFinite(value)) {
+      throw new Error(`--${flag.replace(/[A-Z]/g, (c) => `-${c.toLowerCase()}`)} must be a number`);
+    }
+    usage[key] = value;
+  }
+  return Object.keys(usage).length > 0 ? usage : undefined;
+}
+
+function runCommand(flags) {
+  const sub = flags._[0];
+  const target = resolve(
+    sub === "start" || sub === "record" || sub === "list" || sub === "summary" || sub === "export"
+      ? flags._[1] ?? "."
+      : flags._[2] ?? ".",
+  );
+
+  if (sub === "start") {
+    if (!flags.kind) {
+      console.error("usage: base run start --kind <kind> --task <text> [target]");
+      return 2;
+    }
+    const info = runProjectInfo(target, flags);
+    const result = startRun({
+      projectDir: target,
+      kind: flags.kind,
+      task: flags.task,
+      project: info.project,
+      base: info.base,
+      commit: gitCommit(target),
+      models: flags.models ? String(flags.models).split(",").map((s) => s.trim()).filter(Boolean) : [],
+      rubric: flags.rubric,
+      protocol: flags.protocol,
+      pack: toArray(flags.pack)[0],
+      operator: flags.operator,
+      notes: flags.note,
+      evidence: toArray(flags.evidence),
+    });
+    if (flags.json) {
+      console.log(JSON.stringify(result.run, null, 2));
+    } else {
+      console.log(`Run ${result.run.id} started (${result.run.kind}).`);
+      console.log(`  ledger: ${result.file}`);
+    }
+    return 0;
+  }
+
+  if (sub === "finish") {
+    const id = flags._[1];
+    if (!id || !flags.status) {
+      console.error("usage: base run finish <id> --status <status> [target]");
+      return 2;
+    }
+    const result = finishRun(target, id, {
+      status: flags.status,
+      verdict: flags.verdict,
+      notes: flags.note,
+      usage: parseUsage(flags),
+      scores: flags.score !== undefined ? { score: Number(flags.score) } : undefined,
+      evidence: toArray(flags.evidence),
+    });
+    if (flags.json) console.log(JSON.stringify(result.run, null, 2));
+    else console.log(`Run ${result.run.id} ${result.run.status}.`);
+    return 0;
+  }
+
+  if (sub === "record") {
+    if (!flags.file) {
+      console.error("usage: base run record --file <run.json> [target]");
+      return 2;
+    }
+    const file = resolve(flags.file);
+    const value = JSON.parse(readFileSync(file, "utf8"));
+    const result = recordRun(target, value);
+    if (flags.json) console.log(JSON.stringify(result.run, null, 2));
+    else console.log(`Recorded run ${result.run.id}.`);
+    return 0;
+  }
+
+  if (sub === "list" || sub === "summary") {
+    const result = listRuns(target);
+    if (flags.json) {
+      console.log(JSON.stringify(sub === "summary" ? summarizeRuns(result.runs) : result, null, 2));
+      return result.errors.length > 0 ? 1 : 0;
+    }
+    if (sub === "summary") {
+      const summary = summarizeRuns(result.runs);
+      console.log(`Runs: ${summary.total} in ${target}`);
+      for (const [kind, count] of Object.entries(summary.byKind).sort()) {
+        console.log(`  ${kind}: ${count}`);
+      }
+      for (const [status, count] of Object.entries(summary.byStatus).sort()) {
+        console.log(`  ${status}: ${count}`);
+      }
+      console.log(`  cost: $${summary.costUsd}`);
+      return result.errors.length > 0 ? 1 : 0;
+    }
+    console.log(`Runs: ${result.runs.length} in ${target}`);
+    for (const run of result.runs) {
+      console.log(
+        `  ${run.id}  ${run.kind.padEnd(13)} ${run.status.padEnd(8)} ${run.task ?? ""}`,
+      );
+    }
+    for (const error of result.errors) console.log(`  ! ${error}`);
+    return result.errors.length > 0 ? 1 : 0;
+  }
+
+  if (sub === "show") {
+    const id = flags._[1];
+    if (!id) {
+      console.error("usage: base run show <id> [target]");
+      return 2;
+    }
+    const result = showRun(target, id);
+    if (!result.run) {
+      console.error(`no run ${id}`);
+      return 1;
+    }
+    console.log(JSON.stringify(result.run, null, 2));
+    return 0;
+  }
+
+  if (sub === "export") {
+    const result = exportRuns(target, flags.out);
+    console.log(`Exported ${result.runs} run(s) to ${result.file}.`);
+    return result.errors.length > 0 ? 1 : 0;
+  }
+
+  console.error(
+    "usage: base run start|finish|record|list|show|summary|export ... (see base help)",
+  );
+  return 2;
+}
+
 function packCommand(flags) {
   const [sub, name, targetArg] = flags._;
   const target = resolve(targetArg ?? ".");
@@ -701,6 +1093,13 @@ Usage:
   base eject [target]              remove the base-owned files and the AGENTS block
   base print-config [target]       print the opencode.json fragment to merge
   base requirements [target]       list the model slots and their binding state
+  base docs check [target]         validate doc links and ADR status (also runs in doctor)
+  base fleet [root] [--depth n]    read-only version/drift/slot view across projects
+  base find <question> [target]    search docs, notes and commit messages (no embeddings)
+  base ci [target]                 check + doctor + benchmark validate (CI wrapper)
+  base probe <slot> [target]       capability probe for a bound model slot
+  base run start|finish|record|list|show|summary|export
+                                   JSONL evidence ledger under .scratch/runs/
   base benchmark run|report|validate   model benchmark harness (see tools/benchmark.mjs)
   base pack install <name> [target]
   base version
@@ -721,13 +1120,12 @@ Flags:
   --config             write opencode.json once when absent (new)
   --profile <file>     bootstrap profile for --config (default ~/.config/drax/bootstrap.json)
   --no-profile         ignore the bootstrap profile and write placeholders
-  --no-copilot         skip the generated .github Copilot bridge (new, init, update)
   --no-verify          skip the post-install check and doctor (new)
   --fix                apply the mechanical doctor fixes
   --pack <name>        repeatable pack selection
 `;
 
-export function run(argv = process.argv.slice(2)) {
+export async function run(argv = process.argv.slice(2)) {
   const [command, ...rest] = argv;
   const flags = parseFlags(rest);
 
@@ -749,6 +1147,18 @@ export function run(argv = process.argv.slice(2)) {
         return ejectCommand(flags);
       case "requirements":
         return requirementsCommand(flags);
+      case "docs":
+        return docsCommand(flags);
+      case "fleet":
+        return fleetCommand(flags);
+      case "find":
+        return findCommand(flags);
+      case "ci":
+        return ciCommand(flags);
+      case "probe":
+        return probeCommand(flags);
+      case "run":
+        return runCommand(flags);
       case "benchmark": {
         const script = join(dirname(fileURLToPath(import.meta.url)), "..", "benchmark.mjs");
         const result = spawnSync(process.execPath, [script, ...rest], { stdio: "inherit" });

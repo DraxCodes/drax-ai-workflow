@@ -26,6 +26,16 @@ Never bind a model without the user's answer. Never fill an unbound slot with an
 seat's model — lineage diversity is the point of the second seat, and a shared family
 shares its blind spots.
 
+## Lineage diversity
+
+The four council seats and the visual blindspot are independent opinions only when they
+span more than one model family. A slot with `lineageDiversity: true` is part of that
+check. `doctor` warns when every bound council seat shares one family, and when
+`hillclimb.blindspot` shares a family with `council.experience` (the gate). Lineage is the
+model family — `claude`, `gpt`, `gemini`, `glm`, `deepseek`, `qwen` and so on — not the
+provider: two providers serving one family still share its blind spots. The warning is
+advisory; a project may have a deliberate reason, but it should be visible.
+
 ## How to recommend
 
 Filter first: modality (a screenshot seat needs `image` input), context, priced work
@@ -63,8 +73,11 @@ answer.
 
 - Write the selector to the slot's key. For the seam slot, keep `visualReview.notes`
   for a local exception such as a routing floor.
-- Probe the model with one one-token call; record the date and result in the artifact
-  or in `visualReview.notes`. A listed model can still fail to route.
+- Probe the model with `node .opencode/tools/base.mjs probe <slot> .`; record the date
+  and result in the artifact or in `visualReview.notes`. The probe checks text, JSON,
+  tool calling and — when the slot needs it — image input; `--full` adds a long-context
+  needle. A listed model can still fail to route, so a one-token call remains the
+  fallback when the provider has no price or no OpenAI-compatible endpoint.
 - Never claim a model works because it is in the catalogue.
 
 ## Benchmark evidence
@@ -84,10 +97,11 @@ node .opencode/tools/base.mjs benchmark report --slot council.risk
 The first shipped pack is `security-review` (ten code slices, protocol
 `security-review-v1`) for `council.risk`. A model is **measured** only after at
 least ten distinct tasks with no failed task; fewer is a **pilot**, which may
-justify one more run but never a permanent assignment. Evidence older than 180
-days is stale and ranks below fresh measured evidence. Unique catch and agreement
-need a `--reference-model`; without one the table still ranks catch, precision,
-false positives, cost and latency.
+justify one more run but never a permanent assignment. A measured row is `medium`
+confidence with one sample and `high` with two or more (`--samples 2`); a pilot is
+`low`. Evidence older than 180 days is stale and ranks below fresh measured evidence.
+Unique catch, agreement and cost per unique catch need a `--reference-model`; without
+one the table still ranks catch, precision, false positives, cost and latency.
 
 A paid run is explicit:
 

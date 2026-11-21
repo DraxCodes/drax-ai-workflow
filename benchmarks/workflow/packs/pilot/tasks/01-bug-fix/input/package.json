@@ -1,0 +1,9 @@
+{
+  "name": "slugify-kata",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test fixtures/slugify.spec.js",
+    "build": "node -e \"process.exit(0)\""
+  }
+}

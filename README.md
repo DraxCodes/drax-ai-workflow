@@ -5,9 +5,8 @@ divergent decisions, a hillclimb loop with a named 1-10 rubric, grilling,
 handoff, a security lens, domain-doc and issue-tracker conventions, and the `base`
 CLI that vendors them into a project.
 
-The same workflows also run in **VS Code Copilot Chat**; `base new`/`init`/`update`
-generate a `.github/` bridge (see [VS Code Copilot Chat](#vs-code-copilot-chat)),
-so one prompt starts a project in either harness.
+The workflow targets **OpenCode**. There is no second harness bridge; the
+`.opencode/` tree is the only generated copy.
 
 The **base never runs in a project**. Each project carries a pinned copy under
 `.opencode/` and a small seam (`.opencode/workflow.json`). The copy is committed,
@@ -26,23 +25,15 @@ instead of a surprise.
 
 ```
 agents/        task-orchestrator, plan-architect, quality-gatekeeper, security-auditor
-commands/      council, start-project, hillclimb, grill-me, handoff
-skills/        council, hillclimb (+ four rubrics), grilling, handoff, workflow-base, find-skills, context-engineering
+commands/      council, start-project, hillclimb, grill-me, handoff, wayfinder, checkpoint, domain-modeling
+skills/        council, hillclimb (+ four rubrics), grilling, handoff, wayfinder, checkpoint, domain-modeling, workflow-base, find-skills, context-engineering
 packs/         engineering (optional third-party skills)
 benchmarks/    model benchmark protocol, task packs and measured records
 schema/        the seam JSON Schema
-templates/     a starter seam and the copy-paste prompts
+templates/     a starter seam, doc templates, worked examples and the copy-paste prompts
 tools/         the `base` CLI, visual review and benchmark scripts (vendored into every project)
 AGENTS.base.md the managed block injected into a project AGENTS.md
 VERSION        the release version; git tags are the immutable store
-```
-
-Generated into a project by the Copilot bridge (source of truth stays under
-`.opencode/`):
-
-```
-.github/skills/<id>/   one Agent Skill per command and skill (SKILL.md + references)
-.github/agents/        plan-architect, quality-gatekeeper, security-auditor (.agent.md)
 ```
 
 The base owns no `opencode.json`. Provider, model, permissions, compaction and tool
@@ -56,8 +47,7 @@ scaffold, so the public base names no provider (see below).
 ## Start from a prompt
 
 The shortest path from an empty folder to project work is one prompt. Open
-OpenCode in the empty folder and paste (the same block works in Copilot Chat —
-see [VS Code Copilot Chat](#vs-code-copilot-chat)):
+OpenCode in the empty folder and paste:
 
 <!-- prompt:new-project:begin -->
 ```text
@@ -73,7 +63,7 @@ Set up this folder with Drax AI Workflow, then start the project.
 4. Run: node .opencode/tools/base.mjs requirements .
    If a slot is unbound or still a placeholder, ask me which model to bind — ranked
    options with modality, price and lineage, plus "assign later". Do not bind one
-   without my answer. Probe the model you bound with one one-token call.
+   without my answer. Probe the model you bound with `base probe <slot> .`.
 5. If this folder is not a git repo, run git init, add the stack's .gitignore
    (include .scratch/ for local specs and benchmark runs) and commit the baseline.
    Delete the temp clone.
@@ -109,7 +99,7 @@ Update this project's vendored Drax AI Workflow, then tell me what needs configu
 5. Report: old -> new version, files changed, and every unbound or placeholder slot.
 6. For each unbound slot, ask me which model to bind — ranked options with modality,
    price and lineage, plus "assign later". Do not bind a model without my answer.
-   Probe the model you bound with one one-token call and record the result.
+   Probe the model you bound with `base probe <slot> .` and record the result.
 7. If the update changed agents, commands or skills, tell me to restart the session.
    Delete the temp clone. Do not commit anything I have not seen.
 ```
@@ -263,6 +253,13 @@ glossary defines a domain term, a spec states a requirement, and a note records 
 about the tools. The managed block carries the writing rule, so every project inherits it;
 `doctor` warns while the directory is absent.
 
+`base new` scaffolds `docs/notes/README.md`, `docs/notes/_template.md`,
+`docs/adr/README.md` and `docs/adr/0000-template.md` from `templates/docs/`. ADRs carry a
+`Status:` line (`proposed`, `accepted`, `superseded`, `deprecated`, `rejected`). `base docs
+check` validates relative links across `docs/`, `AGENTS.md` and `README.md`, and checks the
+ADR status and filename; `doctor` reports the same problems as warnings, so a stale link is
+visible without failing an otherwise healthy project.
+
 ## Handoff
 
 A session that ends by compaction or at a work-item boundary leaves a `/handoff` document
@@ -273,41 +270,23 @@ to the spec, issues and commits rather than copying them.
 The trigger is in the managed `AGENTS.md` block, because a handoff nobody remembers to write
 costs the next session everything the last one learned.
 
-## VS Code Copilot Chat
+## Long efforts
 
-Copilot Chat reads `AGENTS.md` directly, so the managed block and the project's own
-rules load without a second instruction file. The rest of the workflow is bridged
-into the two native Copilot formats when `base new`, `init` or `update` copies a
-tree:
+An effort that outlives one session has two file-based tools, neither of which is a
+database or a second spec:
 
-| Generated | Source | Purpose |
-| --- | --- | --- |
-| `.github/skills/<id>/SKILL.md` | `commands/<id>.md` and `skills/<id>/SKILL.md` | Agent Skills, which Copilot shows as `/<id>` slash commands and auto-loads from their description |
-| `.github/agents/<id>.agent.md` | `agents/<id>.md` for the three lenses | Custom agents: `plan-architect` (read/search), `quality-gatekeeper` (adds `execute`), `security-auditor` (adds `execute`, `web`) |
+- **`/wayfinder`** keeps `<effort>/map.md` (notes, decisions so far, fog) and one ticket per
+  unit of work under `issues/`. A ticket carries `Type:`, `Status:` and `Blocked by:`. The
+  frontier is the open, unblocked, unclaimed tickets; claim one before touching code, write
+  its answer on resolve, and append the decision to the map.
+- **`/checkpoint`** writes a one-page `status.md` beside the spec for a single work item:
+  done, doing, next, blocked, decisions, files, verification and open questions. Use it
+  before a compaction or a restart; use `/handoff` when another session will pick the work
+  up.
 
-The bridge is generated, never hand-edited — the canonical files stay under
-`.opencode/`, and `base check` reports drift. Some mechanics differ from OpenCode:
-
-- A command and a skill can share an id (`council`, `hillclimb`, `handoff`).
-  Copilot keeps one skill per directory, so the generated `SKILL.md` is the command's
-  entry point with the canonical skill body appended as a reference section.
-- The command frontmatter's `agent:` is dropped, `$ARGUMENTS` becomes "the text the
-  user typed after `/<id>`", and each skill's `name` is normalized to its directory
-  (Copilot silently ignores a skill whose `name` and directory disagree).
-- The skill body points at the canonical `.opencode/agents/` and `.opencode/skills/`
-  paths, because the generated copies are what Copilot loads.
-
-To use it: open the new folder in VS Code, open Copilot Chat, and paste the same
-[prompt block](#start-from-a-prompt). After `base new` finishes, start a **new chat**
-(the Copilot equivalent of the restart), then type `/start-project <idea>`.
-`/council`, `/hillclimb`, `/grill-me` and `/handoff` are available the same way, and
-the three lens agents appear in the agent picker.
-
-`--no-copilot` skips the bridge on `new`, `init` and `update` and removes an existing
-`.github/skills` + `.github/agents` tree. `doctor` prints `copilot: N skills` /
-`copilot: N agents`, or `copilot: bridge not installed`; it fails a skill whose
-`name` does not match its directory. Nothing under `.opencode/` or `AGENTS.md`
-changes for OpenCode or T3 Code.
+Both are temporary state. Durable decisions go to ADRs, requirements to the spec, domain
+terms to the glossary, and tool facts to `docs/notes`. `/domain-modeling` creates those
+lazily when a term or decision actually needs settling.
 
 ## Start a brand-new project
 
@@ -347,8 +326,7 @@ runs `check` and `doctor`.
 
 The scaffold's `<provider/model>` placeholders are intentional: `doctor` warns
 until they are replaced. The base writes `opencode.json` once, at creation, and
-never updates it. `--no-verify` skips the post-install check and doctor, and
-`--no-copilot` skips the [Copilot bridge](#vs-code-copilot-chat).
+never updates it. `--no-verify` skips the post-install check and doctor.
 
 ### Bootstrap profile
 
@@ -434,6 +412,12 @@ Run from the project root; the CLI is vendored at `.opencode/tools/base.mjs`.
 | `base eject .` | Remove manifest-owned clean files, the managed block and the manifest; leave the seam. |
 | `base print-config .` | Print the `opencode.json` fragment to merge. |
 | `base requirements .` | List the model slots, their binding state and exact key; `--json` for scripts. |
+| `base docs check .` | Validate relative doc links and ADR status/filename; `--json` for scripts. |
+| `base fleet [root]` | Read-only version, drift and slot view across projects; `--json`, `--check`. |
+| `base find <question> .` | Search notes, docs and commit messages (and optionally code); no embeddings. |
+| `base ci .` | Run `check`, `doctor` and `benchmark validate`; `--with-project-checks` adds the seam's build/test/free checks; `--json`. |
+| `base probe <slot> .` | Probe a bound slot for text, JSON, tool calling, image input and (with `--full`) long context. |
+| `base run start/finish/list/show/summary/export` | Append and read the JSONL run/evidence ledger under `.scratch/runs/`. |
 | `base benchmark report --slot <id>` | Rank measured benchmark evidence for a slot; free, `--json` for scripts. |
 | `base benchmark validate` | Check the shipped task pack, its files and its keys; free. |
 | `base benchmark run ...` | Run a pack against explicit models; paid, and refuses without a budget and prices. |
@@ -456,7 +440,7 @@ in `skills/workflow-base/references/seam.md` and `schema/workflow.schema.json`.
 From the project root, point at the base checkout:
 
 ```sh
-git -C <base> checkout v0.6.0
+git -C <base> checkout v0.7.0
 node <base>/tools/base.mjs update . --from <base> --check   # plan, and this release's new slots
 node .opencode/tools/base.mjs update . --from <base>        # apply, with the project's own CLI
 ```
@@ -500,15 +484,16 @@ The suite covers the seam schema, hash normalization (CRLF/LF), the plan/applier
 and rollback, `new` with presets (including `--config`, `--dry-run` and bootstrap
 profiles: default path, `--profile`, `--no-profile`, credential-literal
 rejection including made-up `{word:...}` shapes, `<...>` wrappers and
-token-shaped keys), the Copilot bridge (skill/agent shape, `name` matching the
-directory, `$ARGUMENTS` substitution, command/skill body merging, `--no-copilot`,
-and a `doctor` failure on a mismatched name), the rubric library (four shipped
+token-shaped keys), the rubric library (four shipped
 files, a seam default, a project-path rubric and an unresolved-name failure), the
 preset scope (`checks-*`, aliases, and no stack scaffold),
 `doctor --fix`, and an end-to-end init → check → doctor → update → pack → eject
-run in temp directories. It also checks seat model selectors against the provider's
-declared catalogue and variant lists, and the benchmark pack, scoring, price band,
-budget stop, record ranking and both benchmark CLI entry points.
+run in temp directories. It also checks seat model selectors and lineage diversity
+against the provider's declared catalogue and variant lists; the doc link and ADR
+status checks; the secret scan across docs, `AGENTS.md` and local scratch; the JSONL
+run ledger; the capability probe; the fleet view and `base find`; the CI wrapper; and
+the benchmark pack, scoring, price band, budget stop, record ranking, confidence and
+both benchmark CLI entry points. The workflow regression pack has its own validation.
 
 ## Windows
 
@@ -521,7 +506,10 @@ half-written tree.
 
 [`docs/adr/0001-vendored-base.md`](docs/adr/0001-vendored-base.md) records why this
 is vendored rather than global, and the dissent.
-[`docs/adr/0002-copilot-bridge.md`](docs/adr/0002-copilot-bridge.md) records why the
-Copilot support is a generated `.github/` bridge rather than a parallel tree.
+[`docs/adr/0002-copilot-bridge.md`](docs/adr/0002-copilot-bridge.md) records the
+original Copilot bridge; [`docs/adr/0004-opencode-only.md`](docs/adr/0004-opencode-only.md)
+supersedes it.
 [`docs/adr/0003-named-rubrics.md`](docs/adr/0003-named-rubrics.md) records why the
 hillclimb gate ships named rubrics instead of one fixed scale.
+[`docs/adr/0005-data-layering.md`](docs/adr/0005-data-layering.md) records why git
+text and JSONL remain the record and SQLite is only a rebuildable index.

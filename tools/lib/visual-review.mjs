@@ -1,6 +1,8 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
-import { dirname, extname, isAbsolute, join, resolve } from "node:path";
+import { basename, dirname, extname, isAbsolute, join, resolve } from "node:path";
 import { sha256 } from "./hash.mjs";
+import { readManifest } from "./manifest.mjs";
+import { recordRun } from "./runs.mjs";
 
 const SCHEMA_VERSION = 1;
 const MIME = { ".png": "image/png", ".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".webp": "image/webp" };
@@ -32,6 +34,34 @@ function readJson(file) {
 }
 
 const nonEmpty = (value) => typeof value === "string" && value.trim().length > 0;
+
+/** The ledger is advisory: a review result must never fail because its record did. */
+function recordReview(
+  projectDir,
+  { status, reviewer, manifestPath, outDir, evidence = [], notes = null, findings = null },
+) {
+  try {
+    const manifest = readManifest(projectDir);
+    recordRun(projectDir, {
+      kind: "visual-review",
+      status,
+      base: {
+        name: "drax-ai-workflow",
+        version: manifest?.version ?? "unknown",
+        commit: manifest?.commit ?? null,
+      },
+      project: basename(projectDir),
+      task: manifestPath ? basename(manifestPath) : null,
+      models: reviewer?.selector ? [reviewer.selector] : [],
+      verdict: status === "passed" ? "PASS" : status === "skipped" ? "SKIP" : "CONCERNS",
+      scores: findings === null ? undefined : { findings },
+      evidence,
+      notes,
+    });
+  } catch {
+    // Evidence capture is never a reason to lose the review.
+  }
+}
 
 /** A manifest names the shots once; every finding cites one of those ids. */
 export function loadManifest(file) {
@@ -424,12 +454,39 @@ export async function runReview({
   fetchImpl = globalThis.fetch,
 }) {
   const reviewer = resolveReviewer(projectDir, env);
-  if (reviewer.error) return { ok: false, code: "unbound", message: reviewer.error };
+  if (reviewer.error) {
+    recordReview(projectDir, {
+      status: "skipped",
+      reviewer,
+      manifestPath,
+      outDir,
+      notes: reviewer.error,
+    });
+    return { ok: false, code: "unbound", message: reviewer.error };
+  }
 
   const manifest = loadManifest(manifestPath);
-  if (manifest.error) return { ok: false, code: "manifest", message: manifest.error };
+  if (manifest.error) {
+    recordReview(projectDir, {
+      status: "failed",
+      reviewer,
+      manifestPath,
+      outDir,
+      notes: manifest.error,
+    });
+    return { ok: false, code: "manifest", message: manifest.error };
+  }
   const brief = loadBrief(briefPath);
-  if (brief.error) return { ok: false, code: "brief", message: brief.error };
+  if (brief.error) {
+    recordReview(projectDir, {
+      status: "failed",
+      reviewer,
+      manifestPath,
+      outDir,
+      notes: brief.error,
+    });
+    return { ok: false, code: "brief", message: brief.error };
+  }
 
   const manifestFile = resolve(manifestPath);
   const manifestDir = dirname(manifestFile);
@@ -440,7 +497,16 @@ export async function runReview({
     manifestDir,
     maxTokens,
   });
-  if (built.error) return { ok: false, code: "manifest", message: built.error };
+  if (built.error) {
+    recordReview(projectDir, {
+      status: "failed",
+      reviewer,
+      manifestPath,
+      outDir,
+      notes: built.error,
+    });
+    return { ok: false, code: "manifest", message: built.error };
+  }
 
   const shotIds = new Set(manifest.shots.map((shot) => shot.id));
   const briefHash = sha256(brief.text);
@@ -463,6 +529,13 @@ export async function runReview({
     }
 
     if (response.status >= 400 && response.status < 500) {
+      recordReview(projectDir, {
+        status: "failed",
+        reviewer,
+        manifestPath,
+        outDir,
+        notes: `HTTP ${response.status}`,
+      });
       return {
         ok: false,
         code: "http_4xx",
@@ -518,6 +591,14 @@ export async function runReview({
         result.merged = merged;
       }
     }
+    recordReview(projectDir, {
+      status: "passed",
+      reviewer,
+      manifestPath,
+      outDir,
+      evidence: [file, result.mergedFile].filter(Boolean),
+      findings: envelope.findings.length,
+    });
     return result;
   }
 
@@ -542,8 +623,23 @@ export async function runReview({
         2,
       )}\n`,
     );
+    recordReview(projectDir, {
+      status: "failed",
+      reviewer,
+      manifestPath,
+      outDir,
+      evidence: [file],
+      notes: last.message,
+    });
     return { ok: false, code: "untrusted", message: last.message, file };
   }
 
+  recordReview(projectDir, {
+    status: "failed",
+    reviewer,
+    manifestPath,
+    outDir,
+    notes: last?.message ?? "review failed",
+  });
   return { ok: false, code: last.code, message: last.message };
 }

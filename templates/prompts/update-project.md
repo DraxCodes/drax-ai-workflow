@@ -13,6 +13,6 @@ Update this project's vendored Drax AI Workflow, then tell me what needs configu
 5. Report: old -> new version, files changed, and every unbound or placeholder slot.
 6. For each unbound slot, ask me which model to bind — ranked options with modality,
    price and lineage, plus "assign later". Do not bind a model without my answer.
-   Probe the model you bound with one one-token call and record the result.
+   Probe the model you bound with `base probe <slot> .` and record the result.
 7. If the update changed agents, commands or skills, tell me to restart the session.
    Delete the temp clone. Do not commit anything I have not seen.

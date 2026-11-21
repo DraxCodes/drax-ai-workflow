@@ -1,5 +1,5 @@
 import { existsSync, readdirSync, readFileSync } from "node:fs";
-import { dirname, isAbsolute, join, relative, resolve } from "node:path";
+import { basename, dirname, isAbsolute, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import {
   MEASURED_MIN_TASKS,
@@ -16,6 +16,8 @@ import {
   writeRecords,
 } from "./benchmark.mjs";
 import { readManifest } from "./manifest.mjs";
+import { recordRun } from "./runs.mjs";
+import { loadWorkflowPack } from "./workflow-pack.mjs";
 
 const here = dirname(fileURLToPath(import.meta.url));
 const baseRoot = resolve(here, "..", "..");
@@ -78,6 +80,18 @@ function harnessLabel(projectDir, root) {
     return `drax-ai-workflow@${readFileSync(versionFile, "utf8").trim()}`;
   }
   return "drax-ai-workflow@unknown";
+}
+
+function ledgerBase(projectDir, root) {
+  const manifest = readManifest(projectDir);
+  const versionFile = join(root, "VERSION");
+  return {
+    name: "drax-ai-workflow",
+    version:
+      manifest?.version ??
+      (existsSync(versionFile) ? readFileSync(versionFile, "utf8").trim() : "unknown"),
+    commit: manifest?.commit ?? null,
+  };
 }
 
 function printEstimate(estimate, budgetUsd) {
@@ -147,6 +161,12 @@ async function runCommand(flags) {
     console.log("  price band not checked: no reference model");
   }
 
+  const samples = Number(flags.samples ?? flags.repeat ?? 1);
+  if (!Number.isInteger(samples) || samples < 1 || samples > 5) {
+    console.error("benchmark run: --samples/--repeat must be an integer from 1 to 5");
+    return 2;
+  }
+
   const outDir = resolve(
     flags.out ?? join(projectDir, ".scratch", "benchmarks", timestamp()),
   );
@@ -168,7 +188,7 @@ async function runCommand(flags) {
       outDir,
       prices,
       budgetUsd: effectiveBudget,
-      samples: Number(flags.samples ?? 1),
+      samples,
       maxTokens: Number(flags.maxTokens ?? 1200),
       timeoutMs: Number(flags.timeout ?? 60000),
       retries: Number(flags.retries ?? 0),
@@ -203,6 +223,27 @@ async function runCommand(flags) {
       `  ${row.model}: catch ${Math.round(row.catch * 100)}%, precision ${precision}, FP ${row.falsePositives}, $${(row.costUsd ?? 0).toFixed(4)}`,
     );
   }
+
+  try {
+    recordRun(projectDir, {
+      kind: "benchmark",
+      status: result.summary.failed > 0 || result.stopped ? "failed" : "passed",
+      startedAt: result.summary.startedAt,
+      endedAt: result.summary.finishedAt,
+      base: ledgerBase(projectDir, baseRoot),
+      project: basename(projectDir),
+      task: `${pack.id}@${pack.version}`,
+      models,
+      protocol: pack.protocol,
+      pack: pack.id,
+      usage: { costUsd: result.spentUsd },
+      evidence: [result.recordsFile, join(result.outDir, "run.json")],
+      notes: result.stopped ? `stopped: ${result.stopped.code}` : null,
+    });
+  } catch (error) {
+    console.log(`  ledger: ${error.message}`);
+  }
+
   return result.summary.failed > 0 || result.stopped ? 1 : 0;
 }
 
@@ -402,6 +443,43 @@ function promoteCommand(flags) {
   return 0;
 }
 
+function workflowCommand(flags) {
+  const sub = flags._[0] ?? "list";
+  const packDir = resolve(
+    flags.pack ?? join(baseRoot, "benchmarks", "workflow", "packs", "pilot"),
+  );
+  const { pack, errors } = loadWorkflowPack(packDir);
+  if (sub === "validate") {
+    if (flags.json) {
+      console.log(JSON.stringify({ pack: pack?.id ?? null, tasks: pack?.tasks ?? [], errors }, null, 2));
+    } else if (errors.length > 0) {
+      for (const error of errors) console.error(`  ✗ ${error}`);
+    } else {
+      console.log(
+        `workflow pack ${pack.id}@${pack.version} (${pack.protocol}): ${pack.tasks.length} tasks`,
+      );
+    }
+    return errors.length > 0 ? 1 : 0;
+  }
+  if (sub === "list") {
+    if (!pack) {
+      for (const error of errors) console.error(`  ✗ ${error}`);
+      return 1;
+    }
+    console.log(`workflow pack ${pack.id}@${pack.version} (${pack.protocol})`);
+    for (const id of pack.tasks) console.log(`  ${id}`);
+    return errors.length > 0 ? 1 : 0;
+  }
+  if (sub === "run") {
+    console.log(
+      "workflow run is agent-driven: copy a task's input/ into a clean project, run the workflow, score against key.md, and record it with `base run start/finish`.",
+    );
+    return 0;
+  }
+  console.error("usage: benchmark workflow list|validate|run [--pack <dir>] [--json]");
+  return 2;
+}
+
 const USAGE = `usage: benchmark <command> [options]
 
   run       run a pack against explicit models (paid; needs --budget-usd)
@@ -411,7 +489,8 @@ const USAGE = `usage: benchmark <command> [options]
       --reference-model <s>     price-band reference (default: the slot's binding)
       --price-band <n>          maximum input/output price ratio (default 2; 0 disables)
       --prices <file>           { "provider/model": { "input", "output" } } per 1M
-      --samples <n>             v1 supports 1; repeat the run instead
+      --samples <n>             repeated samples per task, 1-5 (default 1)
+      --repeat <n>              alias for --samples; 2+ raises confidence to high
       --max-tokens <n>          output budget (default 1200)
       --retries <n>             extra attempts per task (default 0)
       --timeout <ms>            per-call timeout (default 60000)
@@ -424,6 +503,10 @@ const USAGE = `usage: benchmark <command> [options]
       --protocol <name>         default ${PROTOCOL}
       --reference-model <s>     unique/agreement baseline (default: the slot's binding)
       --stale-days <n>          default 180
+      --json
+
+  workflow  list, validate or run the workflow regression pack (agent-driven)
+      --pack <dir>              default benchmarks/workflow/packs/pilot
       --json
 
   validate  check a pack, its files and its keys (free)
@@ -447,6 +530,8 @@ export function runBenchmarkCommand(argv = []) {
       return reportCommand(flags);
     case "validate":
       return validateCommand(flags);
+    case "workflow":
+      return workflowCommand(flags);
     case "promote":
       return promoteCommand(flags);
     default:

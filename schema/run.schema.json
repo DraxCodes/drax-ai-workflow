@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://drax-ai-workflow.local/schema/run.schema.json",
+  "title": "drax-ai-workflow run record",
+  "description": "One immutable event in .scratch/runs/runs.jsonl. Later events with the same id update the folded record.",
+  "type": "object",
+  "required": ["schemaVersion", "id", "kind", "status", "startedAt", "base", "project"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "id": { "type": "string", "minLength": 1 },
+    "kind": {
+      "enum": [
+        "benchmark",
+        "visual-review",
+        "hillclimb",
+        "council",
+        "security",
+        "probe",
+        "docs",
+        "workflow"
+      ]
+    },
+    "status": {
+      "enum": ["started", "passed", "failed", "skipped", "dry-run"]
+    },
+    "startedAt": { "type": "string", "minLength": 1 },
+    "endedAt": { "type": "string" },
+    "base": {
+      "type": "object",
+      "required": ["version"],
+      "properties": {
+        "name": { "type": "string" },
+        "version": { "type": "string", "minLength": 1 },
+        "commit": { "type": ["string", "null"] }
+      }
+    },
+    "project": { "type": "string", "minLength": 1 },
+    "task": { "type": ["string", "null"] },
+    "commit": { "type": ["string", "null"] },
+    "rubric": { "type": ["string", "null"] },
+    "protocol": { "type": ["string", "null"] },
+    "pack": { "type": ["string", "null"] },
+    "models": { "type": "array", "items": { "type": "string" } },
+    "verdict": { "type": ["string", "null"] },
+    "scores": { "type": "object" },
+    "usage": {
+      "type": "object",
+      "properties": {
+        "inputTokens": { "type": ["number", "null"] },
+        "outputTokens": { "type": ["number", "null"] },
+        "costUsd": { "type": ["number", "null"] },
+        "latencyMs": { "type": ["number", "null"] }
+      }
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["path"],
+        "properties": {
+          "path": { "type": "string" },
+          "sha256": { "type": ["string", "null"] },
+          "kind": { "type": "string" },
+          "note": { "type": "string" }
+        }
+      }
+    },
+    "operator": { "type": ["string", "null"] },
+    "notes": { "type": ["string", "null"] }
+  },
+  "additionalProperties": true
+}

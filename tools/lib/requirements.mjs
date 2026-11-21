@@ -78,6 +78,92 @@ export function bindingFor(slot, seam, config) {
   return { file: "(unknown)", label: slot.id, value: undefined };
 }
 
+const MODEL_FAMILIES = [
+  [/^(?:claude|sonnet|opus|haiku)/, "claude"],
+  [/^(?:gpt|chatgpt|codex|o[134])/, "gpt"],
+  [/^(?:gemini|gemma)/, "gemini"],
+  [/^glm/, "glm"],
+  [/^deepseek/, "deepseek"],
+  [/^qwen/, "qwen"],
+  [/^(?:kimi|moonshot)/, "kimi"],
+  [/^llama/, "llama"],
+  [/^(?:mistral|mixtral|codestral)/, "mistral"],
+  [/^grok/, "grok"],
+  [/^command/, "cohere"],
+  [/^phi/, "phi"],
+];
+
+/**
+ * The model family, not the provider, is the lineage: two providers serving
+ * the same family share the family's blind spots. An unknown model falls back
+ * to its first identifier segment, so two genuinely different ids still count
+ * as different lineages.
+ */
+export function lineageOf(value) {
+  let modelID = null;
+  if (typeof value === "string") {
+    const match = /^[^/#]+\/([^#]+)/.exec(value.trim());
+    if (match) modelID = match[1];
+  } else if (value && typeof value === "object") {
+    if (typeof value.model === "string") modelID = value.model;
+  }
+  if (!modelID) return null;
+  const id = modelID.toLowerCase().replace(/^[^/]+\//, "");
+  for (const [re, family] of MODEL_FAMILIES) {
+    if (re.test(id)) return family;
+  }
+  return id.split(/[-_./:]/)[0] || id;
+}
+
+function boundSelector(slot, seam, config) {
+  const value = bindingFor(slot, seam, config).value;
+  if (typeof value === "string") {
+    const trimmed = value.trim();
+    return trimmed && !/^<.*>$/.test(trimmed) ? trimmed : null;
+  }
+  if (value && typeof value === "object" && typeof value.model === "string") {
+    return `${value.providerID ?? "unknown"}/${value.model}`;
+  }
+  return null;
+}
+
+/**
+ * Council seats and the visual blindspot are independent opinions only when
+ * they span more than one model family. Warn, never error: a project may have
+ * a deliberate reason, but the drift should be visible.
+ */
+export function checkLineageDiversity({ seam, config, slots, warnings, notes }) {
+  if (!config) return;
+  const bound = new Map();
+  for (const slot of slots) {
+    const selector = boundSelector(slot, seam, config);
+    if (!selector) continue;
+    const lineage = lineageOf(selector);
+    if (lineage) bound.set(slot.id, { selector, lineage });
+  }
+
+  const council = [...bound.entries()].filter(([id]) => id.startsWith("council."));
+  if (council.length >= 2) {
+    const lineages = new Set(council.map(([, info]) => info.lineage));
+    if (lineages.size < 2) {
+      const names = council.map(([id, info]) => `${id}=${info.selector}`).join(", ");
+      warnings.push(
+        `lineage: council seats all use the ${[...lineages][0]} family (${names}); aim for at least two lineages`,
+      );
+    } else {
+      notes.push(`lineage: council spans ${lineages.size} model lineages`);
+    }
+  }
+
+  const blindspot = bound.get("hillclimb.blindspot");
+  const experience = bound.get("council.experience");
+  if (blindspot && experience && blindspot.lineage === experience.lineage) {
+    warnings.push(
+      `lineage: hillclimb.blindspot and council.experience both use the ${blindspot.lineage} family; two opinions from one lineage are one opinion`,
+    );
+  }
+}
+
 export function modalityLabel(slot) {
   const modality = slot.needs?.modality;
   return Array.isArray(modality) && modality.length > 0

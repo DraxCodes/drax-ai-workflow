@@ -10,6 +10,11 @@ concrete, ordered plan, and the gates the `quality-gatekeeper` will enforce.
 
 ## Inputs
 
+Expect a brief in the `workflow-base` skill's `references/delegation.md` shape:
+objective, fixed point and paths, the claims to test, the output envelope and a
+budget. If the objective or the fixed point is missing, ask for it rather than
+reading the repository to guess.
+
 Expect an objective, and optionally the artifact, the selected rubric, a target score
 and constraints. Read that rubric at the `hillclimb` skill's
 `references/rubrics/<name>.md`, plus the project addendum named by the seam, before
@@ -44,6 +49,13 @@ planning; quote them, do not paraphrase the levels.
 An artifact with no human-facing surface is not a reason to drop the gate: route it
 to `performance` when the target is a number, or `completeness` when the target is a
 decision.
+
+## Report
+
+Use the common envelope from `references/delegation.md` (verdict, evidence,
+findings, routing, confidence, not checked), then add the rubric, target, evidence
+plan, baseline flaws, floor, ordered iterations and stop conditions. A plan without
+its evidence and stop conditions is incomplete.
 
 ## Rules
 

@@ -1,6 +1,7 @@
 # 0002 — Generate a `.github/` bridge for VS Code Copilot Chat
 
-**Status:** accepted (2026-11-17)
+**Status:** superseded by [0004](0004-opencode-only.md) (2026-11-21). Kept as the
+historical record of why the bridge existed.
 **Context:** the workflow should start and run from the same one-paste prompt in
 VS Code Copilot Chat as in OpenCode and T3 Code, without a second authored copy
 and without changing the existing OpenCode tree.

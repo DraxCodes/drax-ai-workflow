@@ -1,4 +1,4 @@
 #!/usr/bin/env node
 import { run } from "./lib/cli.mjs";
 
-process.exitCode = run();
+process.exitCode = await run();

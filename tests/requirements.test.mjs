@@ -191,6 +191,63 @@ test("base requirements reports each slot's state, key and needs", () => {
   assert.match(text.stdout, /needs text \+ image input/);
 });
 
+test("doctor warns when the council seats share one model lineage", () => {
+  const base = fixtureBase();
+  const project = tempDir("wb-lineage-");
+  const home = tempDir("wb-home-");
+  const tool = join(base, "tools", "base.mjs");
+
+  const init = run(tool, ["init", project, "--from", base, "--project", "demo"]);
+  assert.equal(init.status, 0, init.stdout + init.stderr);
+  initProject(project);
+
+  const config = {
+    model: "test/base",
+    agents: {
+      "task-orchestrator": { model: "test/claude-sonnet-4" },
+      "plan-architect": { model: "test/claude-haiku-4" },
+      "quality-gatekeeper": { model: "test/claude-opus-4" },
+      "security-auditor": { model: "test/claude-sonnet-5" },
+    },
+  };
+  writeFileSync(join(project, "opencode.json"), `${JSON.stringify(config, null, 2)}\n`);
+
+  const result = run(tool, ["doctor", project, "--home", home]);
+  assert.match(result.stdout, /council seats all use the claude family/);
+});
+
+test("doctor accepts a council that spans lineages and flags a blindspot collision", () => {
+  const base = fixtureBase();
+  const project = tempDir("wb-lineage-ok-");
+  const home = tempDir("wb-home-");
+  const tool = join(base, "tools", "base.mjs");
+
+  const init = run(tool, ["init", project, "--from", base, "--project", "demo"]);
+  assert.equal(init.status, 0, init.stdout + init.stderr);
+  initProject(project);
+
+  const config = {
+    model: "test/base",
+    agents: {
+      "task-orchestrator": { model: "test/gpt-5.2" },
+      "plan-architect": { model: "test/claude-sonnet-4" },
+      "quality-gatekeeper": { model: "test/gemini-2.5-pro" },
+      "security-auditor": { model: "test/deepseek-v4" },
+    },
+  };
+  writeFileSync(join(project, "opencode.json"), `${JSON.stringify(config, null, 2)}\n`);
+
+  const seamFile = join(project, ".opencode", "workflow.json");
+  const seam = JSON.parse(readFileSync(seamFile, "utf8"));
+  seam.visualReview = { model: "test/gemini-2.5-flash" };
+  writeFileSync(seamFile, `${JSON.stringify(seam, null, 2)}\n`);
+
+  const distinct = run(tool, ["doctor", project, "--home", home]);
+  assert.match(distinct.stdout, /council spans 4 model lineages/);
+  assert.doesNotMatch(distinct.stdout, /council seats all use/);
+  assert.match(distinct.stdout, /blindspot and council\.experience both use the gemini family/);
+});
+
 test("the seam accepts visualReview and rejects an empty model", () => {
   const seam = {
     schemaVersion: 1,

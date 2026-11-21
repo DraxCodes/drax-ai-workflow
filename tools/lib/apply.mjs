@@ -18,8 +18,8 @@ function stamp() {
 
 /**
  * Remove the emptied ancestor directories of deleted files, stopping at the
- * project root. This keeps a `--no-copilot` update from leaving a skeleton
- * `.github/skills/` tree behind.
+ * project root. This keeps an update from leaving a skeleton directory tree
+ * behind when a release retires files.
  */
 function pruneEmptyParents(projectDir, deleted) {
   for (const rel of deleted) {

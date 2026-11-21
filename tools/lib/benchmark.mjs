@@ -1176,6 +1176,8 @@ export function aggregateRecords({
     const scored = groupRecords.filter((record) => record.ok !== false);
     const failed = groupRecords.filter((record) => record.ok === false);
     const tasks = new Set(scored.map((record) => record.task));
+    const failedTasks = new Set(failed.map((record) => record.task)).size;
+    const samples = Math.max(...scored.map((record) => record.samples ?? 1), 1);
     const minTasks = Math.max(MEASURED_MIN_TASKS, first.minTasks ?? MEASURED_MIN_TASKS);
     const weightedTotal = scored.reduce((sum, record) => sum + (record.weightedTotal ?? 0), 0);
     const weightedCaught = scored.reduce((sum, record) => sum + (record.weightedCaught ?? 0), 0);
@@ -1205,6 +1207,7 @@ export function aggregateRecords({
       ? Math.max(0, (now.getTime() - Date.parse(`${firstDate}T00:00:00Z`)) / 86400000)
       : null;
     const measured = tasks.size >= minTasks && failed.length === 0;
+    const confidence = !measured ? "low" : samples >= 2 ? "high" : "medium";
     rows.push({
       slot: first.slot ?? "unknown",
       model: first.model,
@@ -1219,7 +1222,9 @@ export function aggregateRecords({
       minTasks,
       scored: tasks.size,
       failed: failed.length,
-      samples: Math.max(...scored.map((record) => record.samples ?? 1), 1),
+      failedTasks,
+      samples,
+      confidence,
       keyDefects: scored.reduce((sum, record) => sum + (record.keyDefects ?? 0), 0),
       caught: caughtCount,
       missed: scored.reduce((sum, record) => sum + (record.missed?.length ?? 0), 0),
@@ -1246,6 +1251,7 @@ export function aggregateRecords({
       stale: ageDays !== null && ageDays > staleDays,
       tier: measured ? "measured" : tasks.size > 0 ? "pilot" : "incomplete",
       uniqueCatch: null,
+      costPerUniqueCatch: null,
       agreement: null,
       referenceModel: null,
     });
@@ -1282,7 +1288,9 @@ export function aggregateRecords({
         ) {
           continue;
         }
-        byModel.set(record.task, new Set(record.caught ?? []));
+        const current = byModel.get(record.task) ?? new Set();
+        for (const id of record.caught ?? []) current.add(id);
+        byModel.set(record.task, current);
       }
       const byReference = new Map();
       for (const record of records) {
@@ -1300,7 +1308,9 @@ export function aggregateRecords({
         ) {
           continue;
         }
-        byReference.set(record.task, new Set(record.caught ?? []));
+        const current = byReference.get(record.task) ?? new Set();
+        for (const id of record.caught ?? []) current.add(id);
+        byReference.set(record.task, current);
       }
       let shared = 0;
       let unique = 0;
@@ -1318,6 +1328,8 @@ export function aggregateRecords({
       }
       const total = shared + unique + referenceUnique;
       row.uniqueCatch = unique;
+      row.costPerUniqueCatch =
+        unique > 0 && row.costUsd !== null ? round6(row.costUsd / unique) : null;
       row.referenceModel = referenceModel;
       row.agreement = total > 0 ? shared / total : 1;
     }
@@ -1353,7 +1365,7 @@ export function formatReport(rows, { slot = null, protocol = PROTOCOL } = {}) {
   const header = `${slotLabel} — ${rows[0].protocol} (pack ${rows[0].pack}@${rows[0].packVersion} #${hash}, max ${rows[0].maxTokens ?? "?"}, retries ${rows[0].retries ?? "?"}, temp ${rows[0].temperature ?? 0})`;
   const lines = [header];
   lines.push(
-    "  rank model                          tier      catch  prec   unique  FP  SM/KM  $/task   p50ms  tested",
+    "  rank model                          tier      conf    catch  prec   unique  FP  SM/KM  $/task   $/uniq   p50ms  tested",
   );
   for (const row of rows) {
     const catchText = `${Math.round(row.catch * 100)}%`.padEnd(6);
@@ -1363,11 +1375,13 @@ export function formatReport(rows, { slot = null, protocol = PROTOCOL } = {}) {
       row.costUsd === null
         ? "n/a"
         : `$${(row.costUsd / Math.max(1, row.scored)).toFixed(4)}`;
+    const uniqueCostText =
+      row.costPerUniqueCatch === null ? "n/a" : `$${row.costPerUniqueCatch.toFixed(4)}`;
     const latencyText = row.p50LatencyMs === null ? "n/a" : String(row.p50LatencyMs);
     const flags = [row.tier, row.stale ? "stale" : null].filter(Boolean).join(",");
     const mismatch = `${row.severityMismatches}/${row.kindMismatches}`;
     lines.push(
-      `  ${String(row.rank).padEnd(4)} ${row.model.padEnd(30)} ${flags.padEnd(9)} ${catchText} ${precisionText.padEnd(6)} ${uniqueText.padEnd(7)} ${String(row.falsePositives).padEnd(3)} ${mismatch.padEnd(5)} ${costText.padEnd(8)} ${latencyText.padEnd(6)} ${row.lastDate ?? "never"}`,
+      `  ${String(row.rank).padEnd(4)} ${row.model.padEnd(30)} ${flags.padEnd(9)} ${row.confidence.padEnd(7)} ${catchText} ${precisionText.padEnd(6)} ${uniqueText.padEnd(7)} ${String(row.falsePositives).padEnd(3)} ${mismatch.padEnd(5)} ${costText.padEnd(8)} ${uniqueCostText.padEnd(8)} ${latencyText.padEnd(6)} ${row.lastDate ?? "never"}`,
     );
   }
   return lines.join("\n");

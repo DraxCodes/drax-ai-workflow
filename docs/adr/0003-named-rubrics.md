@@ -82,5 +82,3 @@ quoted.
   implied green.
 - New rubrics are a base release (a new file), but a project can add a local file
   and point `rubrics.default` at it without waiting.
-- The Copilot bridge copies the rubric files automatically, because they live under
-  the skill's `references/` tree.

@@ -21,7 +21,8 @@ Objective: $ARGUMENTS
 
 If the objective is vague, first use the `grilling` skill to sharpen it into
 settled decisions (skip this when the target and flaws are already clear, to keep
-costs down). Then use the `plan-architect` subagent to produce the rubric, the
+costs down). Then use the `plan-architect` subagent with a brief in the
+`workflow-base` skill's `references/delegation.md` shape to produce the rubric, the
 target score, the evidence plan, the ordered flaws, the floor and the stop
 conditions — and, for `performance`, the budget table before any measurement. The
 target is 8 unless the objective says `Target score: 10`.
@@ -48,4 +49,6 @@ hand the gatekeeper both findings sets. One extra run is allowed when the gate i
 a skipped run is recorded, never replaced by another seat's model.
 
 Keep each accepted iteration as its own atomic commit, and revert any iteration the
-score does not improve.
+score does not improve. Record the run in the ledger (`base run start` / `base run
+finish`, see the `workflow-base` skill's `references/runs.md`) with the rubric,
+target, score, verdict and evidence paths.

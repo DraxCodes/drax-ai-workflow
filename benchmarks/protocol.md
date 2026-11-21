@@ -35,8 +35,9 @@ the base's recommendations.
 3. Declare prices and a budget. A real run refuses without both.
 4. Every model runs every task blind: the brief and the files, never the key.
 5. One call per task per sample, `temperature: 0`, a fixed `max_tokens`. Protocol v1
-   supports one sample; repeat the run instead. `max_tokens`, `retries` and
-   `temperature` are recorded and group the evidence.
+   supports one to five samples; `--samples 2` is a repeated measurement, not a second
+   task. `samples`, `max_tokens`, `retries` and `temperature` are recorded and group
+   the evidence.
 6. A malformed or failed answer is a failed task, not a repaired one. The answer
    must be one JSON object: a code fence or prose prefix fails. The model is
    incomplete until the task is re-run.
@@ -68,6 +69,12 @@ positives.
 - **Cost** — tokens from the provider's usage block times the declared list price,
   including failed and retried attempts. An invoice is the truth; the record says
   `null` when the price is unknown.
+- **Cost per unique catch** — total cost divided by the key ids this model caught and
+  the reference missed. It answers the seat question — what does the second opinion
+  cost? — better than a raw token bill. `null` when there is no reference or no unique
+  catch.
+- **Failed tasks** — distinct tasks with at least one failed record. Failed records are
+  visible and charged; they are not silently dropped.
 
 ## Promotion
 
@@ -75,6 +82,11 @@ A model is **measured** for a slot only when it has at least ten distinct scored
 tasks and no failed tasks. A pack may set a lower `minTasks` for a pilot, but the
 measured floor never drops below ten. Otherwise it is a **pilot**: it can justify
 one more run, never a permanent assignment.
+
+Within measured evidence, **confidence** is `medium` with one sample and `high` with
+two or more; a pilot or incomplete group is `low`. A high-confidence row is a repeated
+measurement, not a larger task pack. A close ranking between a medium and a high row
+says to repeat the run before moving the seat.
 
 Evidence is grouped by protocol, pack, pack version, pack hash, `max_tokens` and
 `retries`; different groups never rank in one table. The group is **stale** when its

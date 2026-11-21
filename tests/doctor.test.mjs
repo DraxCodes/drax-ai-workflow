@@ -9,6 +9,93 @@ function run(script, args) {
   return spawnSync(process.execPath, [script, ...args], { encoding: "utf8" });
 }
 
+test("doctor scans docs, AGENTS.md and local scratch for secrets", () => {
+  const base = fixtureBase();
+  const home = tempDir("wb-home-");
+  const tool = join(base, "tools", "base.mjs");
+  const token = ["ghp", "B".repeat(36)].join("_");
+
+  const docsProject = tempDir("wb-doctor-docs-");
+  const initDocs = run(tool, ["init", docsProject, "--from", base, "--project", "demo"]);
+  assert.equal(initDocs.status, 0, initDocs.stdout + initDocs.stderr);
+  mkdirSync(join(docsProject, "docs", "notes"), { recursive: true });
+  mkdirSync(join(docsProject, "docs", "adr"), { recursive: true });
+  writeFileSync(join(docsProject, "docs", "notes", "leak.md"), `token: ${token}\n`);
+
+  const docsResult = run(tool, ["doctor", docsProject, "--home", home]);
+  assert.equal(docsResult.status, 1, docsResult.stdout + docsResult.stderr);
+  assert.match(docsResult.stdout, /docs\/notes\/leak\.md: looks like a GitHub token/);
+
+  const agentsProject = tempDir("wb-doctor-agents-");
+  const initAgents = run(tool, ["init", agentsProject, "--from", base, "--project", "demo"]);
+  assert.equal(initAgents.status, 0, initAgents.stdout + initAgents.stderr);
+  mkdirSync(join(agentsProject, ".scratch"), { recursive: true });
+  mkdirSync(join(agentsProject, "docs", "adr"), { recursive: true });
+  writeFileSync(
+    join(agentsProject, "AGENTS.md"),
+    `${readFileSync(join(agentsProject, "AGENTS.md"), "utf8")}\n${token}\n`,
+  );
+
+  const agentsResult = run(tool, ["doctor", agentsProject, "--home", home]);
+  assert.equal(agentsResult.status, 1, agentsResult.stdout + agentsResult.stderr);
+  assert.match(agentsResult.stdout, /AGENTS\.md: looks like a GitHub token/);
+
+  const scratchProject = tempDir("wb-doctor-scratch-");
+  const initScratch = run(tool, ["init", scratchProject, "--from", base, "--project", "demo"]);
+  assert.equal(initScratch.status, 0, initScratch.stdout + initScratch.stderr);
+  mkdirSync(join(scratchProject, ".scratch"), { recursive: true });
+  mkdirSync(join(scratchProject, "docs", "adr"), { recursive: true });
+  writeFileSync(join(scratchProject, ".scratch", "spec.md"), `token: ${token}\n`);
+
+  const scratchResult = run(tool, ["doctor", scratchProject, "--home", home]);
+  assert.match(scratchResult.stdout, /\.scratch\/spec\.md: possible GitHub token/);
+  assert.equal(scratchResult.status, 0, scratchResult.stdout + scratchResult.stderr);
+});
+
+test("doctor reports permission drift for the role matrix", () => {
+  const base = fixtureBase();
+  const project = tempDir("wb-doctor-perms-");
+  const home = tempDir("wb-home-");
+  const tool = join(base, "tools", "base.mjs");
+
+  const init = run(tool, ["init", project, "--from", base, "--project", "demo"]);
+  assert.equal(init.status, 0, init.stdout + init.stderr);
+  mkdirSync(join(project, ".scratch"), { recursive: true });
+  mkdirSync(join(project, "docs", "adr"), { recursive: true });
+
+  const config = {
+    agents: {
+      "task-orchestrator": {
+        permissions: [{ action: "edit", resource: "*", effect: "deny" }],
+      },
+      "plan-architect": {
+        permissions: [
+          { action: "edit", resource: "*", effect: "deny" },
+          { action: "bash", resource: "*", effect: "allow" },
+        ],
+      },
+      "quality-gatekeeper": {
+        permissions: [{ action: "edit", resource: "*", effect: "deny" }],
+      },
+      "security-auditor": {
+        permissions: [
+          { action: "edit", resource: "*", effect: "deny" },
+          { action: "bash", resource: "*", effect: "deny" },
+          { action: "webfetch", resource: "*", effect: "deny" },
+        ],
+      },
+    },
+  };
+  writeFileSync(join(project, "opencode.json"), `${JSON.stringify(config, null, 2)}\n`);
+
+  const result = run(tool, ["doctor", project, "--home", home]);
+  assert.match(result.stdout, /task-orchestrator has an edit-deny/);
+  assert.match(result.stdout, /plan-architect can run bash/);
+  assert.match(result.stdout, /security-auditor cannot fetch the web/);
+  assert.match(result.stdout, /security-auditor cannot run the checks/);
+  assert.match(result.stdout, /role matrix checked/);
+});
+
 test("doctor scans the vendored tools and the root config for secrets", () => {
   const base = fixtureBase();
   const project = tempDir("wb-doctor-");

@@ -10,7 +10,7 @@ below.
 - **`GLOSSARY-MAP.md`** at the repo root if it exists: it points at one `GLOSSARY.md` per context. Read each one relevant to the topic.
 - **`docs/adr/`** (or the seam's `docs.adr`): read ADRs that touch the area you're about to work in. In multi-context repos, also check `src/<context>/docs/adr/` for context-scoped decisions.
 
-If any of these files don't exist, **proceed silently**. Don't flag their absence; don't suggest creating them upfront. The `/domain-modeling` skill (reached via `/grill-with-docs` and `/improve-codebase-architecture`) creates them lazily when terms or decisions actually get resolved.
+If any of these files don't exist, **proceed silently**. Don't flag their absence; don't suggest creating them upfront. The `domain-modeling` skill (`/domain-modeling`, also reached from `/grill-me` when a term or decision is settled) creates them lazily when terms or decisions actually get resolved.
 
 ## File structure
 
@@ -51,3 +51,12 @@ If the concept you need isn't in the glossary yet, that's a signal: either you'r
 If your output contradicts an existing ADR, surface it explicitly rather than silently overriding:
 
 > _Contradicts ADR-0007 (event-sourced orders), but worth reopening because…_
+
+## Project memory vs. session memory
+
+These docs are the project's memory: they are committed, reviewable and shared. A tool's
+local memory is session memory: an index that helps this run continue. It is not a fourth
+doc kind and never the only home for a decision, a requirement, a domain term or a trap.
+When a session settles something durable, write it here — an ADR for a decision, the
+glossary for a term, `docs/notes` for a tool or environment fact — before relying on any
+local memory.

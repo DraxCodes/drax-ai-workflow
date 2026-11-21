@@ -26,4 +26,7 @@ Then:
 - Do not scaffold the stack, install dependencies, or write app code. Stop and ask
   me to approve the spec.
 
-After approval, start task 1 and prove it with the seam's checks.
+After approval, start task 1 and prove it with the seam's checks. If the effort
+has more than one blocking question or will span more than one session, propose
+`/wayfinder plan <effort>` before starting; if it is a single work item, use
+`/checkpoint` at the end of each session.
