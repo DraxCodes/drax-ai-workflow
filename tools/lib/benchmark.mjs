@@ -1,12 +1,22 @@
 import { existsSync, mkdirSync, readFileSync, realpathSync, writeFileSync } from "node:fs";
-import { basename, dirname, isAbsolute, join, relative, resolve } from "node:path";
+import { basename, dirname, extname, isAbsolute, join, relative, resolve } from "node:path";
 import { sha256 } from "./hash.mjs";
 import { bindingFor, loadProjectRequirements } from "./requirements.mjs";
 import { loadSeam } from "./seam.mjs";
-import { callProvider, resolveReviewer } from "./visual-review.mjs";
+import {
+  callProvider,
+  resolveReviewer,
+  buildPrompt as buildVisualPrompt,
+  tokens as visualTokens,
+  validateFindings as validateVisualFindings,
+} from "./visual-review.mjs";
 
 export const PROTOCOL = "security-review-v1";
 export const COUNCIL_PROTOCOL = "council-seat-v1";
+export const VISUAL_PROTOCOL = "visual-review-v1";
+export const VISUAL_KINDS = ["defect", "observation", "question"];
+const IMAGE_TOKEN_ESTIMATE = 1500;
+const IMAGE_MIME = { ".png": "image/png", ".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".webp": "image/webp" };
 export const COUNCIL_SEATS = ["chair", "shape", "experience"];
 export const SCHEMA_VERSION = 1;
 export const MEASURED_MIN_TASKS = 10;
@@ -112,8 +122,8 @@ export function loadPack(packDir) {
     errors.push(`${manifestFile}: schemaVersion must be ${SCHEMA_VERSION}`);
   }
   const kind = manifest.kind ?? "code";
-  if (kind !== "code" && kind !== "council") {
-    errors.push(`${manifestFile}: kind "${manifest.kind}" is not supported (code or council)`);
+  if (!["code", "council", "visual"].includes(kind)) {
+    errors.push(`${manifestFile}: kind "${manifest.kind}" is not supported (code, council or visual)`);
   }
   for (const field of ["id", "protocol", "slot"]) {
     if (!nonEmpty(manifest[field])) errors.push(`${manifestFile}: ${field} is required`);
@@ -124,6 +134,10 @@ export function loadPack(packDir) {
     }
     if (manifest.protocol !== COUNCIL_PROTOCOL) {
       errors.push(`${manifestFile}: council packs use protocol "${COUNCIL_PROTOCOL}"`);
+    }
+  } else if (kind === "visual") {
+    if (manifest.protocol !== VISUAL_PROTOCOL) {
+      errors.push(`${manifestFile}: visual packs use protocol "${VISUAL_PROTOCOL}"`);
     }
   } else if (manifest.protocol !== PROTOCOL) {
     errors.push(`${manifestFile}: code packs use protocol "${PROTOCOL}"`);
@@ -136,6 +150,15 @@ export function loadPack(packDir) {
   }
   if (kind === "code" && (!isInteger(manifest.lineWindow) || manifest.lineWindow < 0)) {
     errors.push(`${manifestFile}: lineWindow must be a non-negative integer`);
+  }
+  if (
+    kind === "visual" &&
+    manifest.regionThreshold !== undefined &&
+    (!Number.isFinite(manifest.regionThreshold) ||
+      manifest.regionThreshold < 0 ||
+      manifest.regionThreshold > 1)
+  ) {
+    errors.push(`${manifestFile}: regionThreshold must be between 0 and 1`);
   }
   if (!Array.isArray(manifest.tasks) || manifest.tasks.length === 0) {
     errors.push(`${manifestFile}: tasks must be a non-empty array`);
@@ -157,6 +180,119 @@ export function loadPack(packDir) {
     ids.add(entry.id);
     if (!nonEmpty(entry.brief)) errors.push(`${at}.brief is required`);
     if (!nonEmpty(entry.keyFile)) errors.push(`${at}.keyFile is required`);
+    if (kind === "visual") {
+      if (!nonEmpty(entry.brief) || !nonEmpty(entry.keyFile)) continue;
+      if (!Array.isArray(entry.shots) || entry.shots.length === 0) {
+        errors.push(`${at}.shots must be a non-empty array`);
+        continue;
+      }
+      const briefFile = resolve(root, entry.brief);
+      if (!existsSync(briefFile)) {
+        errors.push(`${at}.brief "${entry.brief}" is missing`);
+        continue;
+      }
+      const briefInside = insidePack(realRoot, briefFile, `${at}.brief`);
+      if (briefInside.error) {
+        errors.push(briefInside.error);
+        continue;
+      }
+      const brief = readText(briefInside.path);
+      hashParts.push(sha256(brief));
+
+      const shots = [];
+      const shotIds = new Set();
+      for (const [si, shot] of entry.shots.entries()) {
+        const sAt = `${at}.shots[${si}]`;
+        if (!shot || !nonEmpty(shot.id) || !nonEmpty(shot.file)) {
+          errors.push(`${sAt}: id and file are required`);
+          continue;
+        }
+        if (shotIds.has(shot.id)) errors.push(`${sAt}.id "${shot.id}" is duplicated`);
+        shotIds.add(shot.id);
+        const abs = resolve(root, shot.file);
+        if (!existsSync(abs)) {
+          errors.push(`${sAt}.file "${shot.file}" is missing`);
+          continue;
+        }
+        const inside = insidePack(realRoot, abs, `${sAt}.file`);
+        if (inside.error) {
+          errors.push(inside.error);
+          continue;
+        }
+        const mime = IMAGE_MIME[extname(inside.path).toLowerCase()];
+        if (!mime) {
+          errors.push(`${sAt}.file: expected .png, .jpg, .jpeg or .webp`);
+          continue;
+        }
+        const bytes = readFileSync(inside.path);
+        const base64 = bytes.toString("base64");
+        const meta = {
+          id: shot.id,
+          name: basename(inside.path),
+          file: toPosix(relative(root, inside.path)),
+          screen: shot.screen,
+          state: shot.state,
+          width: shot.width,
+          theme: shot.theme,
+          mime,
+          base64,
+        };
+        shots.push(meta);
+        hashParts.push(sha256(base64));
+      }
+      if (shots.length === 0) continue;
+
+      const keyFile = resolve(root, entry.keyFile);
+      const keyInside = insidePack(realRoot, keyFile, `${at}.keyFile`);
+      if (keyInside.error) {
+        errors.push(keyInside.error);
+        continue;
+      }
+      const { value: key, error: keyError } = readJson(keyInside.path);
+      if (keyError) {
+        errors.push(`${at}.keyFile "${entry.keyFile}": ${keyError.message}`);
+        continue;
+      }
+      if (!key || !Array.isArray(key.defects)) {
+        errors.push(`${at}.keyFile: expected a defects array`);
+        continue;
+      }
+      const defectIds = new Set();
+      const defects = [];
+      for (const [di, defect] of key.defects.entries()) {
+        const dAt = `${at}.key.defects[${di}]`;
+        if (!defect || !nonEmpty(defect.id)) {
+          errors.push(`${dAt}.id is required`);
+          continue;
+        }
+        if (defectIds.has(defect.id)) errors.push(`${dAt}.id "${defect.id}" is duplicated`);
+        defectIds.add(defect.id);
+        if (!shotIds.has(defect.shot)) {
+          errors.push(`${dAt}.shot "${defect.shot}" is not one of the task shots`);
+        }
+        if (!nonEmpty(defect.region)) errors.push(`${dAt}.region is required`);
+        if (!VISUAL_KINDS.includes(defect.kind)) {
+          errors.push(`${dAt}.kind must be one of ${VISUAL_KINDS.join(", ")}`);
+        }
+        if (!SEVERITIES.includes(defect.severity)) {
+          errors.push(`${dAt}.severity must be one of ${SEVERITIES.join(", ")}`);
+        }
+        if (!nonEmpty(defect.summary)) errors.push(`${dAt}.summary is required`);
+        defects.push({ ...defect });
+      }
+      hashParts.push(sha256(JSON.stringify(key)));
+      tasks.push({
+        id: entry.id,
+        brief,
+        briefFile,
+        shots,
+        key: { defects },
+        keyFile,
+        prompt: `${buildVisualPrompt({ brief, shots: shots.map((shot) => shot) })}\n\nFor this benchmark, emit a separate finding for each shot where the issue is visible. Do not fold several shots into one finding.`,
+      });
+      continue;
+    }
+
     if (kind === "council") {
       if (!nonEmpty(entry.input)) {
         errors.push(`${at}.input is required for a council task`);
@@ -834,6 +970,78 @@ export function scoreCouncilTask({ task, output }) {
   };
 }
 
+/**
+ * Coverage is directional: every key term must appear in the finding's region,
+ * but the finding may add detail. That keeps a verbose but correct region from
+ * losing to a short key without rewarding a bare generic word.
+ */
+function regionCoverage(findingRegion, defectRegion) {
+  const defect = visualTokens(defectRegion);
+  const finding = visualTokens(findingRegion);
+  if (defect.size === 0) return 0;
+  let shared = 0;
+  for (const token of defect) if (finding.has(token)) shared += 1;
+  return shared / defect.size;
+}
+
+/**
+ * A visual finding catches a key defect when it names the same shot and its
+ * region covers the keyed location. The same greedy one-to-one pairing as the
+ * code pack keeps an earlier loose region from stealing an exact later match.
+ */
+export function scoreVisualTask({ task, findings, threshold = 0.7 }) {
+  const candidates = [];
+  for (const [di, defect] of task.key.defects.entries()) {
+    for (const [fi, finding] of findings.entries()) {
+      if (finding.shot !== defect.shot) continue;
+      const similarity = regionCoverage(finding.region, defect.region);
+      if (similarity < threshold) continue;
+      candidates.push({
+        di,
+        fi,
+        defect,
+        finding,
+        similarity,
+        exactKind: finding.kind === defect.kind ? 0 : 1,
+      });
+    }
+  }
+  candidates.sort(
+    (a, b) =>
+      b.similarity - a.similarity ||
+      a.exactKind - b.exactKind ||
+      a.di - b.di ||
+      a.fi - b.fi,
+  );
+  const usedDefects = new Set();
+  const usedFindings = new Set();
+  const pairs = [];
+  for (const candidate of candidates) {
+    if (usedDefects.has(candidate.di) || usedFindings.has(candidate.fi)) continue;
+    usedDefects.add(candidate.di);
+    usedFindings.add(candidate.fi);
+    pairs.push(candidate);
+  }
+  const caught = pairs.map((pair) => pair.defect.id);
+  const caughtSet = new Set(caught);
+  const missed = task.key.defects
+    .filter((defect) => !caughtSet.has(defect.id))
+    .map((defect) => defect.id);
+  return {
+    pairs,
+    caught,
+    missed,
+    falsePositives: findings.length - pairs.length,
+    severityMismatches: pairs.filter(
+      (pair) =>
+        Math.abs(SEVERITY_RANK[pair.finding.severity] - SEVERITY_RANK[pair.defect.severity]) >= 2,
+    ).length,
+    kindMismatches: pairs.filter((pair) => !pair.exactKind).length,
+    weightedCaught: pairs.reduce((sum, pair) => sum + weightOf(pair.defect.severity), 0),
+    weightedTotal: task.key.defects.reduce((sum, defect) => sum + weightOf(defect.severity), 0),
+  };
+}
+
 function councilOutputSchema(seat) {
   if (seat === "chair") {
     return [
@@ -1017,7 +1225,10 @@ export function estimateRun({ tasks, models, prices, samples = 1, maxTokens = 12
       const prompt = prompts.get(task.id);
       // Conservative: one token per character plus overhead. It overestimates a
       // normal tokenizer, which is the point of a budget reservation.
-      const inputTokens = Math.ceil(prompt.length * 1.2) + 200;
+      const inputTokens =
+        Math.ceil(prompt.length * 1.2) +
+        200 +
+        (Array.isArray(task.shots) ? task.shots.length * IMAGE_TOKEN_ESTIMATE : 0);
       const cost = price
         ? (inputTokens * price.input + maxTokens * price.output) / 1e6
         : null;
@@ -1259,6 +1470,7 @@ export async function runBenchmark({
     }
   }
   const records = [];
+  const isVisual = pack.kind === "visual";
   let spent = 0;
   let stopped = null;
 
@@ -1275,12 +1487,30 @@ export async function runBenchmark({
           stopped = { code: "budget", spentUsd: round6(spent) };
           break outer;
         }
-        const body = {
-          model: reviewer.model,
-          max_tokens: maxTokens,
-          temperature: 0,
-          messages: [{ role: "user", content: prompts.get(task.id) }],
-        };
+        const body = isVisual
+          ? {
+              model: reviewer.model,
+              max_tokens: maxTokens,
+              temperature: 0,
+              messages: [
+                {
+                  role: "user",
+                  content: [
+                    { type: "text", text: prompts.get(task.id) },
+                    ...task.shots.map((shot) => ({
+                      type: "image_url",
+                      image_url: { url: `data:${shot.mime};base64,${shot.base64}` },
+                    })),
+                  ],
+                },
+              ],
+            }
+          : {
+              model: reviewer.model,
+              max_tokens: maxTokens,
+              temperature: 0,
+              messages: [{ role: "user", content: prompts.get(task.id) }],
+            };
         let last = null;
         let response = null;
         let attempts = 0;
@@ -1343,9 +1573,11 @@ export async function runBenchmark({
             continue;
           }
           const isCouncil = pack.kind === "council";
-          const validated = isCouncil
-            ? validateCouncilOutput({ seat: pack.seat, value: parsed.value })
-            : validateFindings(parsed.value, task);
+          const validated = isVisual
+            ? validateVisualFindings(parsed.value, new Set(task.shots.map((shot) => shot.id)))
+            : isCouncil
+              ? validateCouncilOutput({ seat: pack.seat, value: parsed.value })
+              : validateFindings(parsed.value, task);
           if (validated.errors.length > 0) {
             last = {
               code: "invalid",
@@ -1354,9 +1586,15 @@ export async function runBenchmark({
             };
             continue;
           }
-          const score = isCouncil
-            ? scoreCouncilTask({ task, output: validated.value })
-            : scoreTask({ task, findings: validated.findings, lineWindow: pack.lineWindow });
+          const score = isVisual
+            ? scoreVisualTask({
+                task,
+                findings: validated.findings,
+                threshold: pack.regionThreshold ?? 0.7,
+              })
+            : isCouncil
+              ? scoreCouncilTask({ task, output: validated.value })
+              : scoreTask({ task, findings: validated.findings, lineWindow: pack.lineWindow });
           records.push({
             schemaVersion: SCHEMA_VERSION,
             protocol: pack.protocol,

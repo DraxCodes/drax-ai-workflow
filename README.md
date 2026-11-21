@@ -215,10 +215,16 @@ viable shape and reversibility, and the experience seat on five observable thesi
 markers. Each pack ships with ten tasks at pack version 2; a smaller local pack is
 allowed but is a pilot, not measured evidence.
 
+The visual blindspot uses protocol `visual-review-v1`: a brief plus screenshots,
+and a key of visual defects by shot and region. `visual-project-list` is a
+one-task pilot with a generated project-list fixture; a ten-task pack is needed
+before the blindspot evidence can be measured.
+
 ```sh
 node .opencode/tools/base.mjs benchmark validate
 node .opencode/tools/base.mjs benchmark report --slot council.risk
 node .opencode/tools/base.mjs benchmark report --protocol council-seat-v1 --slot council.chair
+node .opencode/tools/base.mjs benchmark report --protocol visual-review-v1 --slot hillclimb.blindspot
 ```
 
 A model is **measured** only with at least ten distinct scored tasks and no failed

@@ -227,7 +227,7 @@ function stem(token) {
   return token;
 }
 
-const tokens = (text) =>
+export const tokens = (text) =>
   new Set((String(text ?? "").toLowerCase().match(/[a-z0-9]+/g) ?? []).map(stem));
 
 /**

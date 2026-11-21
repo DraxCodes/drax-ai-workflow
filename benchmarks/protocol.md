@@ -103,6 +103,28 @@ exhaustive key of weighted criteria. `council-seat-v1` covers `council.chair`,
   experience). Unique catch and cost per unique catch compare criterion ids against
   the reference model, the same way the security protocol compares key ids.
 
+## Visual protocol (`visual-review-v1`)
+
+The blindspot seat needs an image task, not a code slice. A visual pack declares
+`kind: "visual"` and `slot: "hillclimb.blindspot"`. A task is a brief plus one or
+more shots; the key lists visual defects with a shot id, a region description, a
+kind (`defect`, `observation` or `question`) and a severity.
+
+- The model receives the brief and the images, never the key. It returns strict
+  JSON: `{"findings":[{shot,region,kind,observed,expected,condition,severity,confidence,evidence}]}`.
+- A finding catches a key defect when it is on the same shot and its region
+  covers the keyed terms at or above the pack's `regionThreshold` (default 0.6).
+  Coverage is directional, so a detailed but correct region still matches a short
+  key. Pairing is one-to-one and greedy, as in the code pack.
+- Unmatched findings are false positives; unmatched key defects are misses.
+  Severity weighting, kind mismatches and precision work as in the code pack.
+- Image input is charged at a conservative 1,500 tokens per shot in the preflight
+  estimate; the provider usage block is the authority at run time.
+- The measured floor is still ten distinct tasks with no failed task. The shipped
+  `visual-project-list` pack is a **one-task pilot**; a ten-task visual pack is
+  the next step before this evidence can rank as measured.
+- Report with `--protocol visual-review-v1 --slot hillclimb.blindspot`.
+
 ## Promotion
 
 A model is **measured** for a slot only when it has at least ten distinct scored

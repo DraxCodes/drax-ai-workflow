@@ -328,6 +328,7 @@ function validateCommand(flags) {
   }
   const { pack, tasks, packHash } = loaded;
   const council = pack.kind === "council";
+  const visual = pack.kind === "visual";
   const defects = tasks.reduce(
     (sum, task) => sum + (council ? task.key.criteria.length : task.key.defects.length),
     0,
@@ -341,7 +342,9 @@ function validateCommand(flags) {
     console.log(
       council
         ? `    ${task.id}: ${task.key.criteria.length} criteria (${task.key.forbidden.length} forbidden)`
-        : `    ${task.id}: ${task.files.length} file(s), ${task.key.defects.length} defect(s)`,
+        : visual
+          ? `    ${task.id}: ${task.shots.length} shot(s), ${task.key.defects.length} defect(s)`
+          : `    ${task.id}: ${task.files.length} file(s), ${task.key.defects.length} defect(s)`,
     );
   }
   if (tasks.length < pack.minTasks) {

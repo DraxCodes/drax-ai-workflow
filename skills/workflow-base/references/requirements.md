@@ -98,7 +98,10 @@ The first shipped pack is `security-review` (ten code slices, protocol
 `security-review-v1`) for `council.risk`. The council-seat packs
 (`council-chair`, `council-shape`, `council-experience`) use protocol
 `council-seat-v1`: a brief, a fixed input slice and an exhaustive criteria key.
-They ship with ten tasks at pack version 2; a smaller local pack is a pilot. A
+They ship with ten tasks at pack version 2; a smaller local pack is a pilot.
+`visual-project-list` uses `visual-review-v1` for `hillclimb.blindspot`: a brief
+and screenshots with a key of visual defects by shot and region. It is a one-task
+pilot today; ten visual tasks are needed before the blindspot can be measured. A
 model is **measured**
 only after at least ten distinct tasks with no failed task; fewer is a **pilot**,
 which may justify one more run but never a permanent assignment. A measured row is

@@ -1,0 +1,180 @@
+{
+  "defects": [
+    {
+      "id": "D1-375-light",
+      "shot": "375-light",
+      "region": "header subtitle",
+      "kind": "defect",
+      "severity": "major",
+      "summary": "subtitle contrast is below 4.5:1"
+    },
+    {
+      "id": "D1-900-light",
+      "shot": "900-light",
+      "region": "header subtitle",
+      "kind": "defect",
+      "severity": "major",
+      "summary": "subtitle contrast is below 4.5:1"
+    },
+    {
+      "id": "D1-375-dark",
+      "shot": "375-dark",
+      "region": "header subtitle",
+      "kind": "defect",
+      "severity": "major",
+      "summary": "subtitle contrast is below 4.5:1"
+    },
+    {
+      "id": "D1-900-dark",
+      "shot": "900-dark",
+      "region": "header subtitle",
+      "kind": "defect",
+      "severity": "major",
+      "summary": "subtitle contrast is below 4.5:1"
+    },
+    {
+      "id": "D2-375-light",
+      "shot": "375-light",
+      "region": "row 1 title",
+      "kind": "defect",
+      "severity": "major",
+      "summary": "long project name is clipped without an ellipsis"
+    },
+    {
+      "id": "D2-375-dark",
+      "shot": "375-dark",
+      "region": "row 1 title",
+      "kind": "defect",
+      "severity": "major",
+      "summary": "long project name is clipped without an ellipsis"
+    },
+    {
+      "id": "D3-375-light",
+      "shot": "375-light",
+      "region": "row 1 path line",
+      "kind": "defect",
+      "severity": "blocker",
+      "summary": "status badge overlaps the path text"
+    },
+    {
+      "id": "D3-900-light",
+      "shot": "900-light",
+      "region": "row 1 path line",
+      "kind": "defect",
+      "severity": "blocker",
+      "summary": "status badge overlaps the path text"
+    },
+    {
+      "id": "D3-375-dark",
+      "shot": "375-dark",
+      "region": "row 1 path line",
+      "kind": "defect",
+      "severity": "blocker",
+      "summary": "status badge overlaps the path text"
+    },
+    {
+      "id": "D3-900-dark",
+      "shot": "900-dark",
+      "region": "row 1 path line",
+      "kind": "defect",
+      "severity": "blocker",
+      "summary": "status badge overlaps the path text"
+    },
+    {
+      "id": "D4-375-light",
+      "shot": "375-light",
+      "region": "action buttons right",
+      "kind": "defect",
+      "severity": "minor",
+      "summary": "Open and More buttons do not share a baseline"
+    },
+    {
+      "id": "D4-900-light",
+      "shot": "900-light",
+      "region": "action buttons right",
+      "kind": "defect",
+      "severity": "minor",
+      "summary": "Open and More buttons do not share a baseline"
+    },
+    {
+      "id": "D4-375-dark",
+      "shot": "375-dark",
+      "region": "action buttons right",
+      "kind": "defect",
+      "severity": "minor",
+      "summary": "Open and More buttons do not share a baseline"
+    },
+    {
+      "id": "D4-900-dark",
+      "shot": "900-dark",
+      "region": "action buttons right",
+      "kind": "defect",
+      "severity": "minor",
+      "summary": "Open and More buttons do not share a baseline"
+    },
+    {
+      "id": "D5-375-light",
+      "shot": "375-light",
+      "region": "gap above third row",
+      "kind": "defect",
+      "severity": "minor",
+      "summary": "the gap above the third row is larger than the other row gaps"
+    },
+    {
+      "id": "D5-900-light",
+      "shot": "900-light",
+      "region": "gap above third row",
+      "kind": "defect",
+      "severity": "minor",
+      "summary": "the gap above the third row is larger than the other row gaps"
+    },
+    {
+      "id": "D5-375-dark",
+      "shot": "375-dark",
+      "region": "gap above third row",
+      "kind": "defect",
+      "severity": "minor",
+      "summary": "the gap above the third row is larger than the other row gaps"
+    },
+    {
+      "id": "D5-900-dark",
+      "shot": "900-dark",
+      "region": "gap above third row",
+      "kind": "defect",
+      "severity": "minor",
+      "summary": "the gap above the third row is larger than the other row gaps"
+    },
+    {
+      "id": "D6-375-light",
+      "shot": "375-light",
+      "region": "row 2 3 second third",
+      "kind": "defect",
+      "severity": "major",
+      "summary": "rows 2 and 3 have no status badge"
+    },
+    {
+      "id": "D6-900-light",
+      "shot": "900-light",
+      "region": "row 2 3 second third",
+      "kind": "defect",
+      "severity": "major",
+      "summary": "rows 2 and 3 have no status badge"
+    },
+    {
+      "id": "D6-375-dark",
+      "shot": "375-dark",
+      "region": "row 2 3 second third",
+      "kind": "defect",
+      "severity": "major",
+      "summary": "rows 2 and 3 have no status badge"
+    },
+    {
+      "id": "D6-900-dark",
+      "shot": "900-dark",
+      "region": "row 2 3 second third",
+      "kind": "defect",
+      "severity": "major",
+      "summary": "rows 2 and 3 have no status badge"
+    }
+  ]
+}

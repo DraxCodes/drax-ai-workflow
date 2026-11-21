@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 1,
+  "id": "visual-project-list",
+  "version": 1,
+  "protocol": "visual-review-v1",
+  "kind": "visual",
+  "slot": "hillclimb.blindspot",
+  "minTasks": 1,
+  "exhaustive": true,
+  "regionThreshold": 0.6,
+  "tasks": [
+    {
+      "id": "01-project-list",
+      "brief": "tasks/01-project-list/brief.md",
+      "shots": [
+        {
+          "id": "375-light",
+          "file": "tasks/01-project-list/shots/375-light.png",
+          "screen": "project-list",
+          "state": "default",
+          "width": 375,
+          "theme": "light"
+        },
+        {
+          "id": "900-light",
+          "file": "tasks/01-project-list/shots/900-light.png",
+          "screen": "project-list",
+          "state": "default",
+          "width": 900,
+          "theme": "light"
+        },
+        {
+          "id": "375-dark",
+          "file": "tasks/01-project-list/shots/375-dark.png",
+          "screen": "project-list",
+          "state": "default",
+          "width": 375,
+          "theme": "dark"
+        },
+        {
+          "id": "900-dark",
+          "file": "tasks/01-project-list/shots/900-dark.png",
+          "screen": "project-list",
+          "state": "default",
+          "width": 900,
+          "theme": "dark"
+        }
+      ],
+      "keyFile": "tasks/01-project-list/key.json"
+    }
+  ]
+}
