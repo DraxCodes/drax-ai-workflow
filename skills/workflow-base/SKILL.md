@@ -81,7 +81,9 @@ in place for the project.
 2. Plan with the base's CLI: `node <base>/tools/base.mjs update . --from <base> --check`.
    The project's vendored copy predates the release, so only the base's CLI can list
    the model slots that release adds.
-3. Apply with the project's CLI: `node .opencode/tools/base.mjs update . --from <base>`.
+3. Apply with the base's CLI: `node <base>/tools/base.mjs update . --from <base>`.
+   For 0.7.x this matters: a 0.6.x vendored CLI would regenerate the Copilot bridge
+   that 0.7.0 removes. After 0.7.0, either CLI applies the same plan.
 4. Run `node .opencode/tools/base.mjs requirements .` and bind any unbound slot — ask
    the user first, and probe the chosen model once. `doctor` keeps reporting the
    unbound ones.

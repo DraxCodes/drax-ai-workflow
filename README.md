@@ -90,13 +90,20 @@ Update this project's vendored Drax AI Workflow, then tell me what needs configu
    (or use $env:WORKFLOW_BASE when it is set); call that path <base>.
 2. Plan with the base's own CLI, so the release's new requirements are listed:
    node <base>/tools/base.mjs update . --from <base> --check
-3. Apply with this project's vendored CLI:
-   node .opencode/tools/base.mjs update . --from <base>
-   If it refuses on locally modified files, list them and stop. Do not use --force
-   without asking me.
+3. Apply with the base's CLI, not the project's vendored 0.6.x CLI:
+   node <base>/tools/base.mjs update . --from <base>
+   The vendored 0.6.x CLI still generates the Copilot bridge that 0.7.0 removes;
+   the base CLI applies the current tree and deletes the manifest-owned `.github`
+   files. If it refuses on locally modified files, list them and stop. Do not use
+   --force without asking me.
 4. Run: node .opencode/tools/base.mjs doctor .
    and: node .opencode/tools/base.mjs requirements .
-5. Report: old -> new version, files changed, and every unbound or placeholder slot.
+   and: node .opencode/tools/base.mjs docs check .
+   and: node .opencode/tools/base.mjs ci .
+   If `docs/notes` or `docs/adr/README.md` is missing, copy the matching file from
+   `<base>/templates/docs/` before deleting the clone.
+5. Report: old -> new version, files changed, the Copilot bridge removal (if any),
+   and every unbound or placeholder slot.
 6. For each unbound slot, ask me which model to bind — ranked options with modality,
    price and lineage, plus "assign later". Do not bind a model without my answer.
    Probe the model you bound with `base probe <slot> .` and record the result.
@@ -440,21 +447,28 @@ in `skills/workflow-base/references/seam.md` and `schema/workflow.schema.json`.
 From the project root, point at the base checkout:
 
 ```sh
-git -C <base> checkout v0.7.0
+git -C <base> checkout v0.7.1
 node <base>/tools/base.mjs update . --from <base> --check   # plan, and this release's new slots
-node .opencode/tools/base.mjs update . --from <base>        # apply, with the project's own CLI
+node <base>/tools/base.mjs update . --from <base>            # apply, with the base's CLI
 ```
 
 `--from` (or the `WORKFLOW_BASE` environment variable) is required when the base
 is not the current directory. Plan with the base's CLI: the code that knows a
 release's new requirements arrives *with* the update, so the project's vendored
-copy cannot announce them for that same release. Apply with the vendored CLI, the
-code the project already runs.
+copy cannot announce them for that same release.
+
+Apply with the base's CLI for 0.7.x. A project still on 0.6.x carries a vendored
+CLI that generates the Copilot bridge; applying with it would recreate the tree
+that 0.7.0 removes. The base CLI applies the current tree and deletes the
+manifest-owned `.github` files. For an ordinary release after 0.7.0, either CLI
+applies the same plan; the vendored CLI remains the code the project already runs.
 
 The update stages, validates and replaces; a write failure restores the old tree
 from `.opencode/.workflow-backup/<timestamp>/`. Review the diff, run the seam's
 floor, and commit the vendored tree, the manifest, the seam version and the
-`AGENTS.md` block together.
+`AGENTS.md` block together. 0.7.x also ships doc templates; copy
+`templates/docs/` into a project that wants the notes/ADR scaffold, because
+`update` never overwrites project-owned docs.
 
 `update` never merges new seam keys into an existing project — the seam belongs to the
 project. When a release introduces an optional one, add it yourself. Since 0.5.2 that is
