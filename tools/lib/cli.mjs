@@ -1,5 +1,5 @@
 import { spawnSync } from "node:child_process";
-import { copyFileSync, existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { copyFileSync, existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { basename, dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { applyPlan } from "./apply.mjs";
@@ -731,16 +731,25 @@ function ciCommand(flags) {
   runStep("doctor", ["doctor", target]);
 
   if (!flags.noBenchmark) {
-    const pack = join(
+    const packsDir = join(
       dirname(fileURLToPath(import.meta.url)),
+      "..",
       "..",
       "benchmarks",
       "packs",
-      "security-review",
-      "pack.json",
     );
-    if (existsSync(pack)) runStep("benchmark", ["benchmark", "validate"]);
-    else steps.push({ name: "benchmark", status: 0, skipped: "pack not installed" });
+    const packDirs = existsSync(packsDir)
+      ? readdirSync(packsDir, { withFileTypes: true })
+          .filter((entry) => entry.isDirectory())
+          .map((entry) => join(packsDir, entry.name))
+      : [];
+    if (packDirs.length === 0) {
+      steps.push({ name: "benchmark", status: 0, skipped: "pack not installed" });
+    } else {
+      for (const dir of packDirs) {
+        runStep(`benchmark:${basename(dir)}`, ["benchmark", "validate", "--pack", dir]);
+      }
+    }
   }
 
   if (flags.withProjectChecks) {

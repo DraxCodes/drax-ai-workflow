@@ -1,0 +1,14 @@
+{
+  "criteria": [
+    { "id": "C1", "weight": 4, "description": "lists all three options", "path": "options", "match": "minItems", "min": 3 },
+    { "id": "C2", "weight": 8, "description": "recommends the authenticated endpoint (B) or no endpoint (C)", "path": "recommendation.option", "match": "equals", "accept": ["B", "C"] },
+    { "id": "C3", "weight": 4, "description": "rejects the public endpoint (A) on exposure", "path": "rejected", "match": "containsObject", "contains": { "option": "A", "why": "expos" } },
+    { "id": "C4", "weight": 2, "description": "captures the risk dissent about metadata exposure", "path": "dissent", "match": "containsObject", "contains": { "seat": "risk", "point": "expos" } },
+    { "id": "C5", "weight": 2, "description": "captures the shape preference for no endpoint", "path": "dissent", "match": "containsObject", "contains": { "seat": "shape", "point": "no endpoint" } },
+    { "id": "C6", "weight": 2, "description": "captures the experience preference for a read-only path", "path": "dissent", "match": "containsObject", "contains": { "seat": "experience", "point": "read-only" } }
+  ],
+  "forbidden": [
+    { "id": "F1", "weight": 4, "description": "claims the council was unanimous", "path": "recommendation.why", "terms": ["all seats agree", "the council agreed unanimously", "there was no dissent"] }
+  ],
+  "claims": { "path": "options[].id", "allowed": ["A", "B", "C"] }
+}

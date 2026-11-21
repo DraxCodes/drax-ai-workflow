@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+  "id": "council-experience",
+  "version": 2,
+  "protocol": "council-seat-v1",
+  "kind": "council",
+  "seat": "experience",
+  "slot": "council.experience",
+  "minTasks": 10,
+  "exhaustive": true,
+  "tasks": [
+    {
+      "id": "01-empty-state",
+      "brief": "tasks/01-empty-state/brief.md",
+      "input": "tasks/01-empty-state/input.md",
+      "keyFile": "tasks/01-empty-state/key.json"
+    },
+    {
+      "id": "02-loading-state",
+      "brief": "tasks/02-loading-state/brief.md",
+      "input": "tasks/02-loading-state/input.md",
+      "keyFile": "tasks/02-loading-state/key.json"
+    },
+    {
+      "id": "03-delete-confirmation",
+      "brief": "tasks/03-delete-confirmation/brief.md",
+      "input": "tasks/03-delete-confirmation/input.md",
+      "keyFile": "tasks/03-delete-confirmation/key.json"
+    },
+    {
+      "id": "04-error-state",
+      "brief": "tasks/04-error-state/brief.md",
+      "input": "tasks/04-error-state/input.md",
+      "keyFile": "tasks/04-error-state/key.json"
+    },
+    {
+      "id": "05-composer",
+      "brief": "tasks/05-composer/brief.md",
+      "input": "tasks/05-composer/input.md",
+      "keyFile": "tasks/05-composer/key.json"
+    },
+    {
+      "id": "06-disconnect-confirmation",
+      "brief": "tasks/06-disconnect-confirmation/brief.md",
+      "input": "tasks/06-disconnect-confirmation/input.md",
+      "keyFile": "tasks/06-disconnect-confirmation/key.json"
+    },
+    {
+      "id": "07-settings-page",
+      "brief": "tasks/07-settings-page/brief.md",
+      "input": "tasks/07-settings-page/input.md",
+      "keyFile": "tasks/07-settings-page/key.json"
+    },
+    {
+      "id": "08-first-project",
+      "brief": "tasks/08-first-project/brief.md",
+      "input": "tasks/08-first-project/input.md",
+      "keyFile": "tasks/08-first-project/key.json"
+    },
+    {
+      "id": "09-test-results-table",
+      "brief": "tasks/09-test-results-table/brief.md",
+      "input": "tasks/09-test-results-table/input.md",
+      "keyFile": "tasks/09-test-results-table/key.json"
+    },
+    {
+      "id": "10-stale-live-update",
+      "brief": "tasks/10-stale-live-update/brief.md",
+      "input": "tasks/10-stale-live-update/input.md",
+      "keyFile": "tasks/10-stale-live-update/key.json"
+    }
+  ]
+}

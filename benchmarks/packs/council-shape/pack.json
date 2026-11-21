@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+  "id": "council-shape",
+  "version": 2,
+  "protocol": "council-seat-v1",
+  "kind": "council",
+  "seat": "shape",
+  "slot": "council.shape",
+  "minTasks": 10,
+  "exhaustive": true,
+  "tasks": [
+    {
+      "id": "01-status-page",
+      "brief": "tasks/01-status-page/brief.md",
+      "input": "tasks/01-status-page/input.md",
+      "keyFile": "tasks/01-status-page/key.json"
+    },
+    {
+      "id": "02-read-only-list",
+      "brief": "tasks/02-read-only-list/brief.md",
+      "input": "tasks/02-read-only-list/input.md",
+      "keyFile": "tasks/02-read-only-list/key.json"
+    },
+    {
+      "id": "03-per-thread-drafts",
+      "brief": "tasks/03-per-thread-drafts/brief.md",
+      "input": "tasks/03-per-thread-drafts/input.md",
+      "keyFile": "tasks/03-per-thread-drafts/key.json"
+    },
+    {
+      "id": "04-background-refresh",
+      "brief": "tasks/04-background-refresh/brief.md",
+      "input": "tasks/04-background-refresh/input.md",
+      "keyFile": "tasks/04-background-refresh/key.json"
+    },
+    {
+      "id": "05-landing-cache",
+      "brief": "tasks/05-landing-cache/brief.md",
+      "input": "tasks/05-landing-cache/input.md",
+      "keyFile": "tasks/05-landing-cache/key.json"
+    },
+    {
+      "id": "06-import-projects",
+      "brief": "tasks/06-import-projects/brief.md",
+      "input": "tasks/06-import-projects/input.md",
+      "keyFile": "tasks/06-import-projects/key.json"
+    },
+    {
+      "id": "07-settings-page",
+      "brief": "tasks/07-settings-page/brief.md",
+      "input": "tasks/07-settings-page/input.md",
+      "keyFile": "tasks/07-settings-page/key.json"
+    },
+    {
+      "id": "08-delete-project",
+      "brief": "tasks/08-delete-project/brief.md",
+      "input": "tasks/08-delete-project/input.md",
+      "keyFile": "tasks/08-delete-project/key.json"
+    },
+    {
+      "id": "09-sqlite-migration",
+      "brief": "tasks/09-sqlite-migration/brief.md",
+      "input": "tasks/09-sqlite-migration/input.md",
+      "keyFile": "tasks/09-sqlite-migration/key.json"
+    },
+    {
+      "id": "10-test-results-table",
+      "brief": "tasks/10-test-results-table/brief.md",
+      "input": "tasks/10-test-results-table/input.md",
+      "keyFile": "tasks/10-test-results-table/key.json"
+    }
+  ]
+}

@@ -95,11 +95,16 @@ node .opencode/tools/base.mjs benchmark report --slot council.risk
 ```
 
 The first shipped pack is `security-review` (ten code slices, protocol
-`security-review-v1`) for `council.risk`. A model is **measured** only after at
-least ten distinct tasks with no failed task; fewer is a **pilot**, which may
-justify one more run but never a permanent assignment. A measured row is `medium`
-confidence with one sample and `high` with two or more (`--samples 2`); a pilot is
-`low`. Evidence older than 180 days is stale and ranks below fresh measured evidence.
+`security-review-v1`) for `council.risk`. The council-seat packs
+(`council-chair`, `council-shape`, `council-experience`) use protocol
+`council-seat-v1`: a brief, a fixed input slice and an exhaustive criteria key.
+They ship with ten tasks at pack version 2; a smaller local pack is a pilot. A
+model is **measured**
+only after at least ten distinct tasks with no failed task; fewer is a **pilot**,
+which may justify one more run but never a permanent assignment. A measured row is
+`medium` confidence with one sample; `high` needs repeated samples, and the runner
+currently refuses `--samples 2`, so `high` is unavailable. A pilot is `low`.
+Evidence older than 180 days is stale and ranks below fresh measured evidence.
 Unique catch, agreement and cost per unique catch need a `--reference-model`; without
 one the table still ranks catch, precision, false positives, cost and latency.
 

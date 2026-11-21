@@ -1,0 +1,48 @@
+{
+  "criteria": [
+    {
+      "id": "C1",
+      "weight": 4,
+      "description": "reuses the existing list port",
+      "path": "shape",
+      "match": "containsAny",
+      "terms": ["reuse", "existing", "port"]
+    },
+    {
+      "id": "C2",
+      "weight": 4,
+      "description": "names the port and render seams",
+      "path": "seams",
+      "match": "includesAll",
+      "terms": ["port", "render"]
+    },
+    {
+      "id": "C3",
+      "weight": 2,
+      "description": "defers server-side search and pagination",
+      "path": "deferred",
+      "match": "includesAll",
+      "terms": ["search", "pagination"]
+    },
+    {
+      "id": "C4",
+      "weight": 2,
+      "description": "describes a reversible removal",
+      "path": "reversible.how",
+      "match": "containsAny",
+      "terms": ["remove", "revert", "delete"]
+    },
+    {
+      "id": "C5",
+      "weight": 2,
+      "description": "keeps one folder-scoped path",
+      "path": "why",
+      "match": "containsAny",
+      "terms": ["one", "existing", "folder"]
+    }
+  ],
+  "claims": {
+    "path": "newDependencies",
+    "allowed": []
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "criteria": [
+    { "id": "C1", "weight": 4, "description": "the three-second read finds the test status", "path": "thesis.threeSecondRead", "match": "containsAny", "terms": ["test", "pass", "fail"] },
+    { "id": "C2", "weight": 4, "description": "names sort, filter or row expansion as the first-run path", "path": "thesis.firstRunPath", "match": "containsAny", "terms": ["sort", "filter", "row"] },
+    { "id": "C3", "weight": 2, "description": "column labels are nouns in sentence case", "path": "thesis.copyVoice", "match": "containsAny", "terms": ["column", "label", "sentence"] },
+    { "id": "C4", "weight": 2, "description": "a row expands without a layout jump", "path": "thesis.goodMoment", "match": "containsAny", "terms": ["no jump", "row", "expand"] },
+    { "id": "C5", "weight": 2, "description": "avoids horizontal scroll and colour-only status", "path": "thesis.frictionAvoided", "match": "containsAny", "terms": ["horizontal", "scroll", "colour-only"] },
+    { "id": "C6", "weight": 2, "description": "gives at least two observable evidence points", "path": "evidence", "match": "minItems", "min": 2 },
+    { "id": "C7", "weight": 2, "description": "names at least one non-goal", "path": "nonGoals", "match": "minItems", "min": 1 }
+  ],
+  "forbidden": [
+    { "id": "F1", "weight": 4, "description": "uses a banned adjective", "terms": ["delightful", "seamless", "magical"] }
+  ]
+}

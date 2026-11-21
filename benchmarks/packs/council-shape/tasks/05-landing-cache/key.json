@@ -1,0 +1,10 @@
+{
+  "criteria": [
+    { "id": "C1", "weight": 4, "description": "uses an in-memory cache over the existing module", "path": "shape", "match": "containsAny", "terms": ["memory", "existing", "cache"] },
+    { "id": "C2", "weight": 4, "description": "names the data and render seams", "path": "seams", "match": "includesAll", "terms": ["data", "render"] },
+    { "id": "C3", "weight": 2, "description": "defers persistence and restart survival", "path": "deferred", "match": "includesAll", "terms": ["persistence", "restart"] },
+    { "id": "C4", "weight": 2, "description": "describes a reversible removal", "path": "reversible.how", "match": "containsAny", "terms": ["remove", "revert", "delete"] },
+    { "id": "C5", "weight": 2, "description": "bounds the cache and keeps one path", "path": "why", "match": "containsAny", "terms": ["bound", "one", "memory"] }
+  ],
+  "claims": { "path": "newDependencies", "allowed": [] }
+}

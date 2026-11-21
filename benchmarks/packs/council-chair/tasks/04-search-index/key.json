@@ -1,0 +1,14 @@
+{
+  "criteria": [
+    { "id": "C1", "weight": 4, "description": "lists all three options", "path": "options", "match": "minItems", "min": 3 },
+    { "id": "C2", "weight": 8, "description": "recommends the in-memory index (A)", "path": "recommendation.option", "match": "equals", "accept": ["A"] },
+    { "id": "C3", "weight": 4, "description": "captures the risk dissent about persistence", "path": "dissent", "match": "containsObject", "contains": { "seat": "risk", "point": "persistence" } },
+    { "id": "C4", "weight": 2, "description": "captures the experience dissent about stale results", "path": "dissent", "match": "containsObject", "contains": { "seat": "experience", "point": "stale" } },
+    { "id": "C5", "weight": 2, "description": "names B as rejected for being an on-disk store or leak", "path": "rejected", "match": "containsObject", "contains": { "option": "B", "why": "disk" } },
+    { "id": "C6", "weight": 2, "description": "names C as rejected for a service or dependency", "path": "rejected", "match": "containsObject", "contains": { "option": "C", "why": "service" } }
+  ],
+  "forbidden": [
+    { "id": "F1", "weight": 4, "description": "claims the council was unanimous", "path": "recommendation.why", "terms": ["all seats agree", "the council agreed unanimously", "there was no dissent"] }
+  ],
+  "claims": { "path": "options[].id", "allowed": ["A", "B", "C"] }
+}

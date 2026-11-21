@@ -1,0 +1,88 @@
+{
+  "criteria": [
+    {
+      "id": "C1",
+      "weight": 4,
+      "description": "lists all three options A, B and C",
+      "path": "options",
+      "match": "minItems",
+      "min": 3
+    },
+    {
+      "id": "C2",
+      "weight": 8,
+      "description": "recommends dual-read (A) or the adapter (C)",
+      "path": "recommendation.option",
+      "match": "equals",
+      "accept": [
+        "A",
+        "C"
+      ]
+    },
+    {
+      "id": "C3",
+      "weight": 4,
+      "description": "captures the risk dissent about rollback",
+      "path": "dissent",
+      "match": "containsObject",
+      "contains": {
+        "seat": "risk",
+        "point": "rollback"
+      }
+    },
+    {
+      "id": "C4",
+      "weight": 2,
+      "description": "captures the experience dissent about a blank transcript",
+      "path": "dissent",
+      "match": "containsObject",
+      "contains": {
+        "seat": "experience",
+        "point": "blank"
+      }
+    },
+    {
+      "id": "C5",
+      "weight": 2,
+      "description": "names B as rejected because it cannot be rolled back",
+      "path": "rejected",
+      "match": "containsObject",
+      "contains": {
+        "option": "B",
+        "why": "rollback"
+      }
+    },
+    {
+      "id": "C6",
+      "weight": 2,
+      "description": "describes A as dual-write or dual-read",
+      "path": "options",
+      "match": "containsObject",
+      "contains": {
+        "id": "A",
+        "shape": "dual"
+      }
+    }
+  ],
+  "forbidden": [
+    {
+      "id": "F1",
+      "weight": 4,
+      "description": "claims the council was unanimous",
+      "path": "recommendation.why",
+      "terms": [
+        "all seats agree",
+        "the council agreed unanimously",
+        "there was no dissent"
+      ]
+    }
+  ],
+  "claims": {
+    "path": "options[].id",
+    "allowed": [
+      "A",
+      "B",
+      "C"
+    ]
+  }
+}

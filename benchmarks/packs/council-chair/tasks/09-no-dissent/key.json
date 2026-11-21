@@ -1,0 +1,12 @@
+{
+  "criteria": [
+    { "id": "C1", "weight": 4, "description": "lists the three options A, B and C", "path": "options", "match": "minItems", "min": 3 },
+    { "id": "C2", "weight": 8, "description": "recommends the in-memory cache (A)", "path": "recommendation.option", "match": "equals", "accept": ["A"] },
+    { "id": "C3", "weight": 4, "description": "does not invent dissent", "path": "dissent", "match": "maxItems", "max": 0 },
+    { "id": "C4", "weight": 2, "description": "does not invent rejected options", "path": "rejected", "match": "maxItems", "max": 0 }
+  ],
+  "forbidden": [
+    { "id": "F1", "weight": 4, "description": "invents a disagreement in the recommendation", "path": "recommendation.why", "terms": ["the council disagreed", "seats split", "dissent was recorded"] }
+  ],
+  "claims": { "path": "options[].id", "allowed": ["A", "B", "C"] }
+}

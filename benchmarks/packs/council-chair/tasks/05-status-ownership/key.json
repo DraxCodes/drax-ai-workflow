@@ -1,0 +1,14 @@
+{
+  "criteria": [
+    { "id": "C1", "weight": 4, "description": "lists all three options", "path": "options", "match": "minItems", "min": 3 },
+    { "id": "C2", "weight": 8, "description": "recommends host ownership (A)", "path": "recommendation.option", "match": "equals", "accept": ["A"] },
+    { "id": "C3", "weight": 4, "description": "captures the risk dissent about transport authority", "path": "dissent", "match": "containsObject", "contains": { "seat": "risk", "point": "transport" } },
+    { "id": "C4", "weight": 2, "description": "captures the shape warning about a duplicated copy", "path": "dissent", "match": "containsObject", "contains": { "seat": "shape", "point": "copy" } },
+    { "id": "C5", "weight": 2, "description": "names B as rejected for a second source of truth", "path": "rejected", "match": "containsObject", "contains": { "option": "B", "why": "source" } },
+    { "id": "C6", "weight": 2, "description": "names C as rejected for duplication", "path": "rejected", "match": "containsObject", "contains": { "option": "C", "why": "duplicat" } }
+  ],
+  "forbidden": [
+    { "id": "F1", "weight": 4, "description": "claims the council was unanimous", "path": "recommendation.why", "terms": ["all seats agree", "the council agreed unanimously", "there was no dissent"] }
+  ],
+  "claims": { "path": "options[].id", "allowed": ["A", "B", "C"] }
+}

@@ -34,10 +34,10 @@ the base's recommendations.
    claim something the run did not test.
 3. Declare prices and a budget. A real run refuses without both.
 4. Every model runs every task blind: the brief and the files, never the key.
-5. One call per task per sample, `temperature: 0`, a fixed `max_tokens`. Protocol v1
-   supports one to five samples; `--samples 2` is a repeated measurement, not a second
-   task. `samples`, `max_tokens`, `retries` and `temperature` are recorded and group
-   the evidence.
+5. One call per task, `temperature: 0`, a fixed `max_tokens`. The runner currently
+   supports one sample; `--samples 2` is refused until the protocol and runner are
+   extended. `samples`, `max_tokens`, `retries` and `temperature` are recorded and
+   group the evidence.
 6. A malformed or failed answer is a failed task, not a repaired one. The answer
    must be one JSON object: a code fence or prose prefix fails. The model is
    incomplete until the task is re-run.
@@ -76,6 +76,33 @@ positives.
 - **Failed tasks** — distinct tasks with at least one failed record. Failed records are
   visible and charged; they are not silently dropped.
 
+## Council seat protocol (`council-seat-v1`)
+
+The security pack measures a reviewer against file/line keys. A council seat needs a
+different task: a short brief plus a fixed input slice, a strict JSON answer, and an
+exhaustive key of weighted criteria. `council-seat-v1` covers `council.chair`,
+`council.shape` and `council.experience`; the visual blindspot stays a pilot until a
+`kind: "visual"` pack is implemented.
+
+- A council pack declares `kind: "council"` and a `seat`. A task has a `brief.md`, an
+  `input.md` (the proposals or context) and a `key.json`; it has no code files.
+- The output is one JSON object for the seat. Chair: `options`, `recommendation`,
+  `dissent`, `rejected`. Shape: `shape`, `newFiles`, `newDependencies`, `seams`,
+  `deferred`, `reversible`, `why`, `whatWouldChangeMyMind`. Experience: `thesis`
+  (five observable markers), `evidence`, `nonGoals`.
+- A key is a list of weighted `criteria`; each criterion names a path, a match
+  operator and an accepted value. `forbidden` entries are false claims; `claims` can
+  reject an invented option id or a new dependency. The key is never in the prompt.
+- **Catch** is weighted criteria met divided by total weight. **Precision** is met
+  criteria over met plus false claims and invented claims. A schema error is a
+  failed task, not a miss.
+- The measured floor is still ten distinct tasks with no failed task. A three-task
+  pilot pack is valid but is a **pilot**, not measured. One sample gives `medium`
+  confidence; the runner currently refuses `--samples 2`, so `high` is unavailable.
+- Report with `--protocol council-seat-v1 --slot council.chair` (or shape or
+  experience). Unique catch and cost per unique catch compare criterion ids against
+  the reference model, the same way the security protocol compares key ids.
+
 ## Promotion
 
 A model is **measured** for a slot only when it has at least ten distinct scored
@@ -83,10 +110,11 @@ tasks and no failed tasks. A pack may set a lower `minTasks` for a pilot, but th
 measured floor never drops below ten. Otherwise it is a **pilot**: it can justify
 one more run, never a permanent assignment.
 
-Within measured evidence, **confidence** is `medium` with one sample and `high` with
-two or more; a pilot or incomplete group is `low`. A high-confidence row is a repeated
-measurement, not a larger task pack. A close ranking between a medium and a high row
-says to repeat the run before moving the seat.
+Within measured evidence, **confidence** is `medium` with one sample; `high` needs
+repeated samples, which the current runner does not yet support. A pilot or
+incomplete group is `low`. A high-confidence row would be a repeated measurement,
+not a larger task pack. A close ranking between medium rows says to repeat the run
+before moving the seat.
 
 Evidence is grouped by protocol, pack, pack version, pack hash, `max_tokens` and
 `retries`; different groups never rank in one table. The group is **stale** when its

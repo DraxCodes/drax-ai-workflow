@@ -452,8 +452,9 @@ export async function runReview({
   timeoutMs = 60000,
   env = process.env,
   fetchImpl = globalThis.fetch,
+  selector = null,
 }) {
-  const reviewer = resolveReviewer(projectDir, env);
+  const reviewer = resolveReviewer(projectDir, env, selector);
   if (reviewer.error) {
     recordReview(projectDir, {
       status: "skipped",

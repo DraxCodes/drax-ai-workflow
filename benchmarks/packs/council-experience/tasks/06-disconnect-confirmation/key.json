@@ -1,0 +1,14 @@
+{
+  "criteria": [
+    { "id": "C1", "weight": 4, "description": "the three-second read names the connection being stopped", "path": "thesis.threeSecondRead", "match": "containsAny", "terms": ["disconnect", "connection", "stop"] },
+    { "id": "C2", "weight": 4, "description": "cancel is the default and holds focus", "path": "thesis.firstRunPath", "match": "containsAny", "terms": ["cancel", "default", "focus"] },
+    { "id": "C3", "weight": 2, "description": "copy is sentence case and names the connection", "path": "thesis.copyVoice", "match": "containsAny", "terms": ["sentence", "name", "no are you sure"] },
+    { "id": "C4", "weight": 2, "description": "the row stays in place and the list does not jump", "path": "thesis.goodMoment", "match": "containsAny", "terms": ["no jump", "row", "update"] },
+    { "id": "C5", "weight": 2, "description": "avoids a second confirmation, a modal stack or typing", "path": "thesis.frictionAvoided", "match": "containsAny", "terms": ["second", "modal", "typed"] },
+    { "id": "C6", "weight": 2, "description": "gives at least two observable evidence points", "path": "evidence", "match": "minItems", "min": 2 },
+    { "id": "C7", "weight": 2, "description": "names at least one non-goal", "path": "nonGoals", "match": "minItems", "min": 1 }
+  ],
+  "forbidden": [
+    { "id": "F1", "weight": 4, "description": "uses a banned adjective", "terms": ["delightful", "seamless", "magical"] }
+  ]
+}

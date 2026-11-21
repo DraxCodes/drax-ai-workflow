@@ -1,0 +1,10 @@
+{
+  "criteria": [
+    { "id": "C1", "weight": 4, "description": "reuses the existing renderer and config file", "path": "shape", "match": "containsAny", "terms": ["existing", "renderer", "config"] },
+    { "id": "C2", "weight": 4, "description": "names the render and config seams", "path": "seams", "match": "includesAll", "terms": ["render", "config"] },
+    { "id": "C3", "weight": 2, "description": "defers multi-user settings and auth", "path": "deferred", "match": "includesAll", "terms": ["multi-user", "auth"] },
+    { "id": "C4", "weight": 2, "description": "describes a reversible removal", "path": "reversible.how", "match": "containsAny", "terms": ["remove", "revert", "delete"] },
+    { "id": "C5", "weight": 2, "description": "keeps one config and one path", "path": "why", "match": "containsAny", "terms": ["one", "config", "existing"] }
+  ],
+  "claims": { "path": "newDependencies", "allowed": [] }
+}

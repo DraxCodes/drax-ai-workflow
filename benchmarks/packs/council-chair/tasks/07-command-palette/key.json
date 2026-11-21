@@ -1,0 +1,14 @@
+{
+  "criteria": [
+    { "id": "C1", "weight": 4, "description": "lists all three options", "path": "options", "match": "minItems", "min": 3 },
+    { "id": "C2", "weight": 8, "description": "recommends extending the existing palette (A)", "path": "recommendation.option", "match": "equals", "accept": ["A"] },
+    { "id": "C3", "weight": 4, "description": "captures the risk dissent about destructive confirmations", "path": "dissent", "match": "containsObject", "contains": { "seat": "risk", "point": "confirm" } },
+    { "id": "C4", "weight": 2, "description": "captures the experience point about reusing visible labels", "path": "dissent", "match": "containsObject", "contains": { "seat": "experience", "point": "label" } },
+    { "id": "C5", "weight": 2, "description": "names B as rejected for a duplicate command list", "path": "rejected", "match": "containsObject", "contains": { "option": "B", "why": "duplicate" } },
+    { "id": "C6", "weight": 2, "description": "names C as rejected for not giving a keyboard path", "path": "rejected", "match": "containsObject", "contains": { "option": "C", "why": "keyboard" } }
+  ],
+  "forbidden": [
+    { "id": "F1", "weight": 4, "description": "claims the council was unanimous", "path": "recommendation.why", "terms": ["all seats agree", "the council agreed unanimously", "there was no dissent"] }
+  ],
+  "claims": { "path": "options[].id", "allowed": ["A", "B", "C"] }
+}

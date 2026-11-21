@@ -1,0 +1,10 @@
+{
+  "criteria": [
+    { "id": "C1", "weight": 4, "description": "uses an adapter or dual-read migration", "path": "shape", "match": "containsAny", "terms": ["adapter", "dual", "migration"] },
+    { "id": "C2", "weight": 4, "description": "names the store and read seams", "path": "seams", "match": "includesAll", "terms": ["store", "read"] },
+    { "id": "C3", "weight": 2, "description": "defers sync and compression", "path": "deferred", "match": "includesAll", "terms": ["sync", "compression"] },
+    { "id": "C4", "weight": 2, "description": "describes a rollback path", "path": "reversible.how", "match": "containsAny", "terms": ["rollback", "revert", "flag"] },
+    { "id": "C5", "weight": 2, "description": "keeps one interface and a rollback", "path": "why", "match": "containsAny", "terms": ["one", "adapter", "rollback"] }
+  ],
+  "claims": { "path": "newDependencies", "allowed": [] }
+}

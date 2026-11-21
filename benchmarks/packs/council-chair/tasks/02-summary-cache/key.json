@@ -1,0 +1,98 @@
+{
+  "criteria": [
+    {
+      "id": "C1",
+      "weight": 4,
+      "description": "lists all three options A, B and C",
+      "path": "options",
+      "match": "minItems",
+      "min": 3
+    },
+    {
+      "id": "C2",
+      "weight": 8,
+      "description": "recommends the in-memory map (A)",
+      "path": "recommendation.option",
+      "match": "equals",
+      "accept": [
+        "A"
+      ]
+    },
+    {
+      "id": "C3",
+      "weight": 4,
+      "description": "captures the risk dissent about persistence across restarts",
+      "path": "dissent",
+      "match": "containsObject",
+      "contains": {
+        "seat": "risk",
+        "point": "persistence"
+      }
+    },
+    {
+      "id": "C4",
+      "weight": 2,
+      "description": "captures the experience dissent about a visible stale read",
+      "path": "dissent",
+      "match": "containsObject",
+      "contains": {
+        "seat": "experience",
+        "point": "stale"
+      }
+    },
+    {
+      "id": "C5",
+      "weight": 2,
+      "description": "names B as rejected because it is a file or second store",
+      "path": "rejected",
+      "match": "containsObject",
+      "contains": {
+        "option": "B",
+        "why": "file"
+      }
+    },
+    {
+      "id": "C6",
+      "weight": 2,
+      "description": "names C as rejected because it adds SQLite or a new store",
+      "path": "rejected",
+      "match": "containsObject",
+      "contains": {
+        "option": "C",
+        "why": "sqlite"
+      }
+    },
+    {
+      "id": "C7",
+      "weight": 2,
+      "description": "describes A as an in-memory map",
+      "path": "options",
+      "match": "containsObject",
+      "contains": {
+        "id": "A",
+        "shape": "memory"
+      }
+    }
+  ],
+  "forbidden": [
+    {
+      "id": "F1",
+      "weight": 4,
+      "description": "claims the council was unanimous",
+      "path": "recommendation.why",
+      "terms": [
+        "all seats agree",
+        "the council agreed unanimously",
+        "there was no dissent"
+      ]
+    }
+  ],
+  "claims": {
+    "path": "options[].id",
+    "allowed": [
+      "A",
+      "B",
+      "C"
+    ]
+  }
+}

@@ -207,15 +207,25 @@ positives, severity mismatches, tokens, estimated cost and latency. Two models o
 the same pack also get **unique catch** and **agreement**: what one caught that the
 other missed, which is the question a second seat exists to answer.
 
+The council-seat packs (`council-chair`, `council-shape`, `council-experience`)
+use protocol `council-seat-v1`: a short brief, a fixed input slice and an
+exhaustive key of weighted criteria. A task's answer is strict JSON; the chair is
+scored on its options table, recommendation and dissent, the shape on the smallest
+viable shape and reversibility, and the experience seat on five observable thesis
+markers. Each pack ships with ten tasks at pack version 2; a smaller local pack is
+allowed but is a pilot, not measured evidence.
+
 ```sh
 node .opencode/tools/base.mjs benchmark validate
 node .opencode/tools/base.mjs benchmark report --slot council.risk
+node .opencode/tools/base.mjs benchmark report --protocol council-seat-v1 --slot council.chair
 ```
 
 A model is **measured** only with at least ten distinct scored tasks and no failed
 task. Fewer is a **pilot**: it can justify one more run, never a permanent
 assignment. Evidence older than 180 days is stale and ranks below fresh measured
-evidence.
+evidence. `--samples 2` is currently refused, so measured rows are `medium`
+confidence until repeated samples are supported.
 
 Benchmarks are paid work, so the harness defaults to refusing spend. A real run
 needs an explicit model list, a `--budget-usd` cap, and a declared price for every

@@ -1,0 +1,48 @@
+{
+  "criteria": [
+    {
+      "id": "C1",
+      "weight": 4,
+      "description": "keeps the draft page-local",
+      "path": "shape",
+      "match": "containsAny",
+      "terms": ["page-local", "vscode.setState", "existing"]
+    },
+    {
+      "id": "C2",
+      "weight": 4,
+      "description": "names the composer and page-state seams",
+      "path": "seams",
+      "match": "includesAll",
+      "terms": ["composer", "state"]
+    },
+    {
+      "id": "C3",
+      "weight": 2,
+      "description": "defers cross-device sync",
+      "path": "deferred",
+      "match": "includesAll",
+      "terms": ["cross-device", "sync"]
+    },
+    {
+      "id": "C4",
+      "weight": 2,
+      "description": "describes a reversible removal",
+      "path": "reversible.how",
+      "match": "containsAny",
+      "terms": ["remove", "revert", "delete"]
+    },
+    {
+      "id": "C5",
+      "weight": 2,
+      "description": "keys the draft to the thread",
+      "path": "why",
+      "match": "containsAny",
+      "terms": ["one", "key", "thread"]
+    }
+  ],
+  "claims": {
+    "path": "newDependencies",
+    "allowed": []
+  }
+}

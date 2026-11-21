@@ -1,0 +1,68 @@
+{
+  "criteria": [
+    {
+      "id": "C1",
+      "weight": 4,
+      "description": "the three-second read says which thread is loading",
+      "path": "thesis.threeSecondRead",
+      "match": "containsAny",
+      "terms": ["loading", "reading", "thread"]
+    },
+    {
+      "id": "C2",
+      "weight": 4,
+      "description": "names wait, switch or retry as the first-run path",
+      "path": "thesis.firstRunPath",
+      "match": "containsAny",
+      "terms": ["wait", "switch", "retry"]
+    },
+    {
+      "id": "C3",
+      "weight": 2,
+      "description": "keeps the copy to a verb and a sentence",
+      "path": "thesis.copyVoice",
+      "match": "containsAny",
+      "terms": ["verb", "sentence", "thread"]
+    },
+    {
+      "id": "C4",
+      "weight": 2,
+      "description": "content replaces the loading state without a jump",
+      "path": "thesis.goodMoment",
+      "match": "containsAny",
+      "terms": ["no jump", "replace", "content"]
+    },
+    {
+      "id": "C5",
+      "weight": 2,
+      "description": "avoids fake progress, a spinner or a skeleton",
+      "path": "thesis.frictionAvoided",
+      "match": "containsAny",
+      "terms": ["progress", "spinner", "skeleton"]
+    },
+    {
+      "id": "C6",
+      "weight": 2,
+      "description": "gives at least two observable evidence points",
+      "path": "evidence",
+      "match": "minItems",
+      "min": 2
+    },
+    {
+      "id": "C7",
+      "weight": 2,
+      "description": "names at least one non-goal",
+      "path": "nonGoals",
+      "match": "minItems",
+      "min": 1
+    }
+  ],
+  "forbidden": [
+    {
+      "id": "F1",
+      "weight": 4,
+      "description": "uses a banned adjective",
+      "terms": ["delightful", "seamless", "magical"]
+    }
+  ]
+}

@@ -1,0 +1,87 @@
+{
+  "criteria": [
+    {
+      "id": "C1",
+      "weight": 4,
+      "description": "lists all three options A, B and C",
+      "path": "options",
+      "match": "minItems",
+      "min": 3
+    },
+    {
+      "id": "C2",
+      "weight": 8,
+      "description": "recommends the in-pane list (B)",
+      "path": "recommendation.option",
+      "match": "equals",
+      "accept": [
+        "B"
+      ]
+    },
+    {
+      "id": "C3",
+      "weight": 4,
+      "description": "captures the risk dissent about the held run",
+      "path": "dissent",
+      "match": "containsObject",
+      "contains": {
+        "seat": "risk",
+        "point": "held run"
+      }
+    },
+    {
+      "id": "C4",
+      "weight": 2,
+      "description": "captures the experience dissent about focus",
+      "path": "dissent",
+      "match": "containsObject",
+      "contains": {
+        "seat": "experience",
+        "point": "focus"
+      }
+    },
+    {
+      "id": "C5",
+      "weight": 2,
+      "description": "names A as rejected because it moves the title",
+      "path": "rejected",
+      "match": "containsObject",
+      "contains": {
+        "option": "A",
+        "why": "title"
+      }
+    },
+    {
+      "id": "C6",
+      "weight": 2,
+      "description": "names C as rejected because it hides the list",
+      "path": "rejected",
+      "match": "containsObject",
+      "contains": {
+        "option": "C",
+        "why": "list"
+      }
+    }
+  ],
+  "forbidden": [
+    {
+      "id": "F1",
+      "weight": 4,
+      "description": "claims the council was unanimous",
+      "path": "recommendation.why",
+      "terms": [
+        "all seats agree",
+        "the council agreed unanimously",
+        "there was no dissent"
+      ]
+    }
+  ],
+  "claims": {
+    "path": "options[].id",
+    "allowed": [
+      "A",
+      "B",
+      "C"
+    ]
+  }
+}

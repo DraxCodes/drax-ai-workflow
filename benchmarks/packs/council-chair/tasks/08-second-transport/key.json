@@ -1,0 +1,14 @@
+{
+  "criteria": [
+    { "id": "C1", "weight": 4, "description": "lists all three options", "path": "options", "match": "minItems", "min": 3 },
+    { "id": "C2", "weight": 8, "description": "recommends polling the existing transport (B) or no live updates (C)", "path": "recommendation.option", "match": "equals", "accept": ["B", "C"] },
+    { "id": "C3", "weight": 4, "description": "rejects the second transport (A) on the one-path constraint", "path": "rejected", "match": "containsObject", "contains": { "option": "A", "why": "second" } },
+    { "id": "C4", "weight": 2, "description": "captures the shape dissent for no live updates", "path": "dissent", "match": "containsObject", "contains": { "seat": "shape", "point": "no live" } },
+    { "id": "C5", "weight": 2, "description": "captures the risk warning about a second process", "path": "dissent", "match": "containsObject", "contains": { "seat": "risk", "point": "process" } },
+    { "id": "C6", "weight": 2, "description": "captures the experience goal of lower latency", "path": "dissent", "match": "containsObject", "contains": { "seat": "experience", "point": "latency" } }
+  ],
+  "forbidden": [
+    { "id": "F1", "weight": 4, "description": "claims the council was unanimous", "path": "recommendation.why", "terms": ["all seats agree", "the council agreed unanimously", "there was no dissent"] }
+  ],
+  "claims": { "path": "options[].id", "allowed": ["A", "B", "C"] }
+}

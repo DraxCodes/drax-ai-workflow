@@ -1,0 +1,10 @@
+{
+  "criteria": [
+    { "id": "C1", "weight": 4, "description": "reuses the existing interval or a request-time TTL", "path": "shape", "match": "containsAny", "terms": ["existing", "interval", "request"] },
+    { "id": "C2", "weight": 4, "description": "names the render and data seams", "path": "seams", "match": "includesAll", "terms": ["render", "data"] },
+    { "id": "C3", "weight": 2, "description": "defers hourly freshness and the worker", "path": "deferred", "match": "includesAll", "terms": ["hourly", "worker"] },
+    { "id": "C4", "weight": 2, "description": "describes a reversible removal", "path": "reversible.how", "match": "containsAny", "terms": ["remove", "revert", "delete"] },
+    { "id": "C5", "weight": 2, "description": "keeps one process and one path", "path": "why", "match": "containsAny", "terms": ["one", "process", "request"] }
+  ],
+  "claims": { "path": "newDependencies", "allowed": [] }
+}

@@ -198,6 +198,27 @@ test("a valid review writes the envelope with a null score", async () => {
   assert.match(written.manifestHash, /^sha256:/);
 });
 
+test("a review selector overrides the seam model without rebinding", async () => {
+  const { project, manifest, brief, out } = makeProject();
+  let seenModel = null;
+  const result = await runReview({
+    projectDir: project,
+    manifestPath: manifest,
+    briefPath: brief,
+    outDir: out,
+    env,
+    selector: "surplus/other-model",
+    fetchImpl: async (_url, init) => {
+      seenModel = JSON.parse(init.body).model;
+      return reply(JSON.stringify({ findings: [] }));
+    },
+  });
+  assert.equal(result.ok, true, result.message);
+  assert.equal(seenModel, "other-model");
+  const written = JSON.parse(readFileSync(result.file, "utf8"));
+  assert.equal(written.reviewer.model, "surplus/other-model");
+});
+
 test("a 5xx is retried once, and a 4xx is not retried", async () => {
   const { project, manifest, brief, out } = makeProject();
   let calls = 0;

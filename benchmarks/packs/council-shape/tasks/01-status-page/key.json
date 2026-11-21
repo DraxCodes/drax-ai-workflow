@@ -1,0 +1,48 @@
+{
+  "criteria": [
+    {
+      "id": "C1",
+      "weight": 4,
+      "description": "reuses the existing renderer",
+      "path": "shape",
+      "match": "containsAny",
+      "terms": ["reuse", "existing", "renderer"]
+    },
+    {
+      "id": "C2",
+      "weight": 4,
+      "description": "names the route and renderer seams",
+      "path": "seams",
+      "match": "includesAll",
+      "terms": ["route", "render"]
+    },
+    {
+      "id": "C3",
+      "weight": 2,
+      "description": "defers live updates and analytics",
+      "path": "deferred",
+      "match": "includesAll",
+      "terms": ["live", "analytics"]
+    },
+    {
+      "id": "C4",
+      "weight": 2,
+      "description": "describes a reversible removal",
+      "path": "reversible.how",
+      "match": "containsAny",
+      "terms": ["remove", "revert", "delete"]
+    },
+    {
+      "id": "C5",
+      "weight": 2,
+      "description": "keeps one data path",
+      "path": "why",
+      "match": "containsAny",
+      "terms": ["one data path", "existing", "server"]
+    }
+  ],
+  "claims": {
+    "path": "newDependencies",
+    "allowed": []
+  }
+}

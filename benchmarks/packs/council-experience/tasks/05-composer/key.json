@@ -1,0 +1,14 @@
+{
+  "criteria": [
+    { "id": "C1", "weight": 4, "description": "the three-second read finds the composer and send action", "path": "thesis.threeSecondRead", "match": "containsAny", "terms": ["composer", "message", "send"] },
+    { "id": "C2", "weight": 4, "description": "names type, send or attach as the first-run path", "path": "thesis.firstRunPath", "match": "containsAny", "terms": ["type", "send", "attach"] },
+    { "id": "C3", "weight": 2, "description": "the placeholder is a verb in sentence case", "path": "thesis.copyVoice", "match": "containsAny", "terms": ["placeholder", "verb", "sentence"] },
+    { "id": "C4", "weight": 2, "description": "send clears the draft without moving focus", "path": "thesis.goodMoment", "match": "containsAny", "terms": ["clears", "focus", "no jump"] },
+    { "id": "C5", "weight": 2, "description": "avoids a modal, a lost draft or a disabled composer", "path": "thesis.frictionAvoided", "match": "containsAny", "terms": ["modal", "lost draft", "disabled"] },
+    { "id": "C6", "weight": 2, "description": "gives at least two observable evidence points", "path": "evidence", "match": "minItems", "min": 2 },
+    { "id": "C7", "weight": 2, "description": "names at least one non-goal", "path": "nonGoals", "match": "minItems", "min": 1 }
+  ],
+  "forbidden": [
+    { "id": "F1", "weight": 4, "description": "uses a banned adjective", "terms": ["delightful", "seamless", "magical"] }
+  ]
+}

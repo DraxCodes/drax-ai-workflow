@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+  "id": "council-chair",
+  "version": 2,
+  "protocol": "council-seat-v1",
+  "kind": "council",
+  "seat": "chair",
+  "slot": "council.chair",
+  "minTasks": 10,
+  "exhaustive": true,
+  "tasks": [
+    {
+      "id": "01-switching-threads",
+      "brief": "tasks/01-switching-threads/brief.md",
+      "input": "tasks/01-switching-threads/input.md",
+      "keyFile": "tasks/01-switching-threads/key.json"
+    },
+    {
+      "id": "02-summary-cache",
+      "brief": "tasks/02-summary-cache/brief.md",
+      "input": "tasks/02-summary-cache/input.md",
+      "keyFile": "tasks/02-summary-cache/key.json"
+    },
+    {
+      "id": "03-storage-migration",
+      "brief": "tasks/03-storage-migration/brief.md",
+      "input": "tasks/03-storage-migration/input.md",
+      "keyFile": "tasks/03-storage-migration/key.json"
+    },
+    {
+      "id": "04-search-index",
+      "brief": "tasks/04-search-index/brief.md",
+      "input": "tasks/04-search-index/input.md",
+      "keyFile": "tasks/04-search-index/key.json"
+    },
+    {
+      "id": "05-status-ownership",
+      "brief": "tasks/05-status-ownership/brief.md",
+      "input": "tasks/05-status-ownership/input.md",
+      "keyFile": "tasks/05-status-ownership/key.json"
+    },
+    {
+      "id": "06-warning-placement",
+      "brief": "tasks/06-warning-placement/brief.md",
+      "input": "tasks/06-warning-placement/input.md",
+      "keyFile": "tasks/06-warning-placement/key.json"
+    },
+    {
+      "id": "07-command-palette",
+      "brief": "tasks/07-command-palette/brief.md",
+      "input": "tasks/07-command-palette/input.md",
+      "keyFile": "tasks/07-command-palette/key.json"
+    },
+    {
+      "id": "08-second-transport",
+      "brief": "tasks/08-second-transport/brief.md",
+      "input": "tasks/08-second-transport/input.md",
+      "keyFile": "tasks/08-second-transport/key.json"
+    },
+    {
+      "id": "09-no-dissent",
+      "brief": "tasks/09-no-dissent/brief.md",
+      "input": "tasks/09-no-dissent/input.md",
+      "keyFile": "tasks/09-no-dissent/key.json"
+    },
+    {
+      "id": "10-admin-endpoint",
+      "brief": "tasks/10-admin-endpoint/brief.md",
+      "input": "tasks/10-admin-endpoint/input.md",
+      "keyFile": "tasks/10-admin-endpoint/key.json"
+    }
+  ]
+}

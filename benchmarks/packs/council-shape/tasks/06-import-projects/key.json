@@ -1,0 +1,10 @@
+{
+  "criteria": [
+    { "id": "C1", "weight": 4, "description": "uses a one-shot admin import", "path": "shape", "match": "containsAny", "terms": ["one-shot", "admin", "import"] },
+    { "id": "C2", "weight": 4, "description": "names the admin and data seams", "path": "seams", "match": "includesAll", "terms": ["admin", "data"] },
+    { "id": "C3", "weight": 2, "description": "defers sync and a watcher", "path": "deferred", "match": "includesAll", "terms": ["sync", "watch"] },
+    { "id": "C4", "weight": 2, "description": "describes a reversible removal", "path": "reversible.how", "match": "containsAny", "terms": ["remove", "revert", "delete"] },
+    { "id": "C5", "weight": 2, "description": "keeps one module and one path", "path": "why", "match": "containsAny", "terms": ["one", "existing", "module"] }
+  ],
+  "claims": { "path": "newDependencies", "allowed": [] }
+}

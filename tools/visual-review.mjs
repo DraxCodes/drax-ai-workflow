@@ -43,6 +43,7 @@ const USAGE = `usage: visual-review --manifest <file> --brief <file> --out <dir>
   --run <n>          run number for the artifact (default 1)
   --max-tokens <n>   output budget (default 2000)
   --timeout <ms>     per-call timeout (default 60000)
+  --model <selector> override the seam model for a benchmark; does not rebind
   --dry-run          resolve the reviewer and prompt without calling the provider`;
 
 const flags = parseFlags(process.argv.slice(2));
@@ -61,7 +62,7 @@ if (!manifestPath || !briefPath || !outDir) {
   process.exit(2);
 }
 
-const reviewer = resolveReviewer(projectDir);
+const reviewer = resolveReviewer(projectDir, process.env, flags.model ?? null);
 if (reviewer.error) {
   // Unbound is a skip, not a failure: the gate proceeds single-judge and the
   // artifact records why.
@@ -102,6 +103,7 @@ const result = await runReview({
   run: Number.parseInt(flags.run ?? "1", 10) || 1,
   maxTokens: Number.parseInt(flags.maxTokens ?? "2000", 10) || 2000,
   timeoutMs: Number.parseInt(flags.timeout ?? "60000", 10) || 60000,
+  selector: flags.model ?? null,
 });
 
 if (result.ok) {

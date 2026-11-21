@@ -327,13 +327,21 @@ function validateCommand(flags) {
     return 1;
   }
   const { pack, tasks, packHash } = loaded;
-  const defects = tasks.reduce((sum, task) => sum + task.key.defects.length, 0);
+  const council = pack.kind === "council";
+  const defects = tasks.reduce(
+    (sum, task) => sum + (council ? task.key.criteria.length : task.key.defects.length),
+    0,
+  );
   console.log(`pack ${pack.id}@${pack.version} (${pack.protocol}) — slot ${pack.slot}`);
   console.log(`  hash: ${packHash}`);
-  console.log(`  tasks: ${tasks.length} (minTasks ${pack.minTasks}), defects: ${defects}`);
+  console.log(
+    `  tasks: ${tasks.length} (minTasks ${pack.minTasks}), ${council ? "criteria" : "defects"}: ${defects}`,
+  );
   for (const task of tasks) {
     console.log(
-      `    ${task.id}: ${task.files.length} file(s), ${task.key.defects.length} defect(s)`,
+      council
+        ? `    ${task.id}: ${task.key.criteria.length} criteria (${task.key.forbidden.length} forbidden)`
+        : `    ${task.id}: ${task.files.length} file(s), ${task.key.defects.length} defect(s)`,
     );
   }
   if (tasks.length < pack.minTasks) {
@@ -489,8 +497,8 @@ const USAGE = `usage: benchmark <command> [options]
       --reference-model <s>     price-band reference (default: the slot's binding)
       --price-band <n>          maximum input/output price ratio (default 2; 0 disables)
       --prices <file>           { "provider/model": { "input", "output" } } per 1M
-      --samples <n>             repeated samples per task, 1-5 (default 1)
-      --repeat <n>              alias for --samples; 2+ raises confidence to high
+      --samples <n>             repeated samples per task (currently 1; 2+ is refused)
+      --repeat <n>              alias for --samples
       --max-tokens <n>          output budget (default 1200)
       --retries <n>             extra attempts per task (default 0)
       --timeout <ms>            per-call timeout (default 60000)
