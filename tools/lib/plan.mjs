@@ -14,7 +14,7 @@ import {
 import { sha256 } from "./hash.mjs";
 import { SEAM_REL } from "./seam.mjs";
 
-const BASE_DIRS = ["agents", "commands", "skills", "tools", "packs"];
+const BASE_DIRS = ["agents", "commands", "skills", "tools", "packs", "benchmarks"];
 
 function walkFiles(root, dir = root) {
   const out = [];

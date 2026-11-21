@@ -1,0 +1,72 @@
+{
+  "schemaVersion": 1,
+  "id": "security-review",
+  "version": 1,
+  "protocol": "security-review-v1",
+  "slot": "council.risk",
+  "minTasks": 10,
+  "lineWindow": 5,
+  "exhaustive": true,
+  "tasks": [
+    {
+      "id": "01-sql-injection",
+      "brief": "tasks/01-sql-injection/brief.md",
+      "files": ["tasks/01-sql-injection/files/server.js"],
+      "keyFile": "tasks/01-sql-injection/key.json"
+    },
+    {
+      "id": "02-path-traversal",
+      "brief": "tasks/02-path-traversal/brief.md",
+      "files": ["tasks/02-path-traversal/files/server.js"],
+      "keyFile": "tasks/02-path-traversal/key.json"
+    },
+    {
+      "id": "03-idor",
+      "brief": "tasks/03-idor/brief.md",
+      "files": ["tasks/03-idor/files/server.js"],
+      "keyFile": "tasks/03-idor/key.json"
+    },
+    {
+      "id": "04-jwt",
+      "brief": "tasks/04-jwt/brief.md",
+      "files": ["tasks/04-jwt/files/auth.js"],
+      "keyFile": "tasks/04-jwt/key.json"
+    },
+    {
+      "id": "05-ssrf",
+      "brief": "tasks/05-ssrf/brief.md",
+      "files": ["tasks/05-ssrf/files/server.js"],
+      "keyFile": "tasks/05-ssrf/key.json"
+    },
+    {
+      "id": "06-command-injection",
+      "brief": "tasks/06-command-injection/brief.md",
+      "files": ["tasks/06-command-injection/files/app.py"],
+      "keyFile": "tasks/06-command-injection/key.json"
+    },
+    {
+      "id": "07-deserialization",
+      "brief": "tasks/07-deserialization/brief.md",
+      "files": ["tasks/07-deserialization/files/app.py"],
+      "keyFile": "tasks/07-deserialization/key.json"
+    },
+    {
+      "id": "08-secret-leak",
+      "brief": "tasks/08-secret-leak/brief.md",
+      "files": ["tasks/08-secret-leak/files/server.js"],
+      "keyFile": "tasks/08-secret-leak/key.json"
+    },
+    {
+      "id": "09-crypto",
+      "brief": "tasks/09-crypto/brief.md",
+      "files": ["tasks/09-crypto/files/app.py"],
+      "keyFile": "tasks/09-crypto/key.json"
+    },
+    {
+      "id": "10-config-exposure",
+      "brief": "tasks/10-config-exposure/brief.md",
+      "files": ["tasks/10-config-exposure/files/server.js"],
+      "keyFile": "tasks/10-config-exposure/key.json"
+    }
+  ]
+}

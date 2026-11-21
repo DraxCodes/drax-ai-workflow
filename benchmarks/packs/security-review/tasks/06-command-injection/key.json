@@ -1,0 +1,31 @@
+{
+  "defects": [
+    {
+      "id": "K1",
+      "file": "app.py",
+      "line": 16,
+      "lineEnd": 16,
+      "kind": "injection",
+      "severity": "blocker",
+      "summary": "the uploaded filename is interpolated into a shell command"
+    },
+    {
+      "id": "K2",
+      "file": "app.py",
+      "line": 13,
+      "lineEnd": 15,
+      "kind": "path",
+      "severity": "major",
+      "summary": "the uploaded filename is joined to the upload directory without a containment check"
+    },
+    {
+      "id": "K3",
+      "file": "app.py",
+      "line": 23,
+      "lineEnd": 24,
+      "kind": "path",
+      "severity": "major",
+      "summary": "the inspect endpoint repeats the unsanitised save path"
+    }
+  ]
+}

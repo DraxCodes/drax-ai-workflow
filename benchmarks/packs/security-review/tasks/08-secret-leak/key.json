@@ -1,0 +1,40 @@
+{
+  "defects": [
+    {
+      "id": "K1",
+      "file": "server.js",
+      "line": 11,
+      "lineEnd": 11,
+      "kind": "secrets",
+      "severity": "major",
+      "summary": "the Authorization header is written to shared logs"
+    },
+    {
+      "id": "K2",
+      "file": "server.js",
+      "line": 19,
+      "lineEnd": 19,
+      "kind": "secrets",
+      "severity": "major",
+      "summary": "the full user record, including credential fields, is logged"
+    },
+    {
+      "id": "K3",
+      "file": "server.js",
+      "line": 24,
+      "lineEnd": 24,
+      "kind": "config",
+      "severity": "minor",
+      "summary": "the stack trace is returned to the client"
+    },
+    {
+      "id": "K4",
+      "file": "server.js",
+      "line": 20,
+      "lineEnd": 20,
+      "kind": "secrets",
+      "severity": "major",
+      "summary": "the full user record, including credential fields, is returned to the caller"
+    }
+  ]
+}

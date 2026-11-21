@@ -1,0 +1,13 @@
+{
+  "defects": [
+    {
+      "id": "K1",
+      "file": "server.js",
+      "line": 6,
+      "lineEnd": 8,
+      "kind": "ssrf",
+      "severity": "blocker",
+      "summary": "an arbitrary user-supplied URL is fetched with no scheme, host or redirect check"
+    }
+  ]
+}

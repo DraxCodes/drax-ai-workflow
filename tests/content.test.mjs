@@ -4,8 +4,17 @@ import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { join, relative } from "node:path";
 import { repoRoot } from "./helpers.mjs";
 
-const TREES = ["agents", "commands", "skills", "packs", "schema", "templates", "tools"];
-const FILES = ["README.md", "AGENTS.base.md"];
+const TREES = [
+  "agents",
+  "commands",
+  "skills",
+  "packs",
+  "schema",
+  "templates",
+  "tools",
+  "benchmarks/packs",
+];
+const FILES = ["README.md", "AGENTS.base.md", "benchmarks/protocol.md"];
 
 function walk(dir) {
   const out = [];

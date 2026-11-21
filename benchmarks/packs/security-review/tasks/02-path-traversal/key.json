@@ -1,0 +1,13 @@
+{
+  "defects": [
+    {
+      "id": "K1",
+      "file": "server.js",
+      "line": 13,
+      "lineEnd": 14,
+      "kind": "path",
+      "severity": "blocker",
+      "summary": "the request path segment is joined to the upload directory without a containment check"
+    }
+  ]
+}

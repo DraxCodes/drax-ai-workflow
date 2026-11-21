@@ -296,10 +296,10 @@ const SECRET_PATTERNS = [
   },
 ];
 
-const SECRET_EXTENSIONS = /\.(md|json|ya?ml|txt|mjs|cjs|js|ts)$/i;
+const SECRET_EXTENSIONS = /\.(md|json|ya?ml|txt|mjs|cjs|js|ts|py)$/i;
 
 function checkSecrets(projectDir, errors, warnings, notes) {
-  const roots = ["agents", "commands", "skills", "packs", "tools"].map((dir) =>
+  const roots = ["agents", "commands", "skills", "packs", "tools", "benchmarks"].map((dir) =>
     join(projectDir, ".opencode", dir),
   );
   roots.push(join(projectDir, ".github", "skills"), join(projectDir, ".github", "agents"));

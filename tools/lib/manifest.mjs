@@ -40,6 +40,7 @@ export function listBaseFiles(baseRoot, packs = []) {
   addTree(entries, baseRoot, "commands", ".opencode/commands");
   addTree(entries, baseRoot, "skills", ".opencode/skills");
   addTree(entries, baseRoot, "tools", ".opencode/tools");
+  addTree(entries, baseRoot, "benchmarks", ".opencode/benchmarks");
 
   for (const pack of packs) {
     addTree(entries, baseRoot, `packs/${pack}`, `.opencode/packs/${pack}`);

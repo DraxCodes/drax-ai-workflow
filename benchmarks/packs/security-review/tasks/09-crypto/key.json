@@ -1,0 +1,31 @@
+{
+  "defects": [
+    {
+      "id": "K1",
+      "file": "app.py",
+      "line": 12,
+      "lineEnd": 12,
+      "kind": "crypto",
+      "severity": "major",
+      "summary": "passwords are stored with a fast unsalted MD5 digest"
+    },
+    {
+      "id": "K2",
+      "file": "app.py",
+      "line": 19,
+      "lineEnd": 19,
+      "kind": "crypto",
+      "severity": "major",
+      "summary": "reset tokens are generated with a predictable PRNG"
+    },
+    {
+      "id": "K3",
+      "file": "app.py",
+      "line": 20,
+      "lineEnd": 20,
+      "kind": "secrets",
+      "severity": "minor",
+      "summary": "the reset token is stored in plaintext"
+    }
+  ]
+}

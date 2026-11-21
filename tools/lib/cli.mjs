@@ -701,6 +701,7 @@ Usage:
   base eject [target]              remove the base-owned files and the AGENTS block
   base print-config [target]       print the opencode.json fragment to merge
   base requirements [target]       list the model slots and their binding state
+  base benchmark run|report|validate   model benchmark harness (see tools/benchmark.mjs)
   base pack install <name> [target]
   base version
 
@@ -748,6 +749,11 @@ export function run(argv = process.argv.slice(2)) {
         return ejectCommand(flags);
       case "requirements":
         return requirementsCommand(flags);
+      case "benchmark": {
+        const script = join(dirname(fileURLToPath(import.meta.url)), "..", "benchmark.mjs");
+        const result = spawnSync(process.execPath, [script, ...rest], { stdio: "inherit" });
+        return result.status ?? 1;
+      }
       case "print-config":
         return printConfigCommand(flags);
       case "pack":

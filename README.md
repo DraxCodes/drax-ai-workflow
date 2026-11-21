@@ -29,9 +29,10 @@ agents/        task-orchestrator, plan-architect, quality-gatekeeper, security-a
 commands/      council, start-project, hillclimb, grill-me, handoff
 skills/        council, hillclimb (+ four rubrics), grilling, handoff, workflow-base, find-skills, context-engineering
 packs/         engineering (optional third-party skills)
+benchmarks/    model benchmark protocol, task packs and measured records
 schema/        the seam JSON Schema
 templates/     a starter seam and the copy-paste prompts
-tools/         the `base` CLI and the visual review script (vendored into every project)
+tools/         the `base` CLI, visual review and benchmark scripts (vendored into every project)
 AGENTS.base.md the managed block injected into a project AGENTS.md
 VERSION        the release version; git tags are the immutable store
 ```
@@ -74,7 +75,8 @@ Set up this folder with Drax AI Workflow, then start the project.
    options with modality, price and lineage, plus "assign later". Do not bind one
    without my answer. Probe the model you bound with one one-token call.
 5. If this folder is not a git repo, run git init, add the stack's .gitignore
-   and commit the baseline. Delete the temp clone.
+   (include .scratch/ for local specs and benchmark runs) and commit the baseline.
+   Delete the temp clone.
 6. Do not write app code yet. Tell me to restart the session so the new agents,
    skills and commands load, then run /start-project <my idea>.
 ```
@@ -194,6 +196,55 @@ findings survive verification.
 Estimates in a UI usually price tokens at list rates. A discounted provider can bill a
 fraction of that, so treat a displayed figure as an upper bound and check the invoice
 before concluding a model is expensive.
+
+## Model benchmarks
+
+A slot recommendation is only as good as its evidence. The measured tier now ships
+a protocol, task packs and records, all base-owned and hashed with the release, so
+every project that updates sees the same evidence.
+
+The first pack is `security-review` for `council.risk`: ten short, self-contained
+code slices with an exhaustive key. Each model reviews the slice blind — the brief
+and the files, never the key — and the harness scores caught defects, misses, false
+positives, severity mismatches, tokens, estimated cost and latency. Two models on
+the same pack also get **unique catch** and **agreement**: what one caught that the
+other missed, which is the question a second seat exists to answer.
+
+```sh
+node .opencode/tools/base.mjs benchmark validate
+node .opencode/tools/base.mjs benchmark report --slot council.risk
+```
+
+A model is **measured** only with at least ten distinct scored tasks and no failed
+task. Fewer is a **pilot**: it can justify one more run, never a permanent
+assignment. Evidence older than 180 days is stale and ranks below fresh measured
+evidence.
+
+Benchmarks are paid work, so the harness defaults to refusing spend. A real run
+needs an explicit model list, a `--budget-usd` cap, and a declared price for every
+model (`opencode.json` model `cost`, or `--prices`); `--price-band` (default 2×)
+refuses a candidate priced far above the reference instead of silently dropping it.
+Preflight prints the worst-case estimate, the run stops at the cap, and retries
+default to zero. `--dry-run` makes no provider call.
+
+```sh
+node .opencode/tools/benchmark.mjs run \
+  --models provider/model-a,provider/model-b \
+  --reference-model provider/model-a \
+  --budget-usd 1 --prices prices.json --dry-run
+```
+
+A run writes a record fragment under `.scratch/` (keep it out of git; the start
+prompt adds `.scratch/` to the project `.gitignore`). In a base
+checkout, an explicit `benchmark promote <run-dir>` merges it into
+`benchmarks/records.json`; the command refuses in a project, so a project never
+writes base evidence. The full protocol and pack shape are in
+[`benchmarks/protocol.md`](benchmarks/protocol.md). The visual pack is deferred
+until the provider image quota allows it; the same protocol and scoring apply.
+
+The report groups by pack hash, `max_tokens` and retry count, so a changed fixture
+or a different output budget cannot silently rank as the same evidence. A malformed
+answer is a failed task, not a repaired one; the key is never shown to the model.
 
 ## Docs for the next agent
 
@@ -383,6 +434,9 @@ Run from the project root; the CLI is vendored at `.opencode/tools/base.mjs`.
 | `base eject .` | Remove manifest-owned clean files, the managed block and the manifest; leave the seam. |
 | `base print-config .` | Print the `opencode.json` fragment to merge. |
 | `base requirements .` | List the model slots, their binding state and exact key; `--json` for scripts. |
+| `base benchmark report --slot <id>` | Rank measured benchmark evidence for a slot; free, `--json` for scripts. |
+| `base benchmark validate` | Check the shipped task pack, its files and its keys; free. |
+| `base benchmark run ...` | Run a pack against explicit models; paid, and refuses without a budget and prices. |
 | `base pack install <name> .` | Run `packs/<name>/install.mjs` with the project as cwd. |
 | `base version` | Print the base version; falls back to the manifest in a consumer. |
 
@@ -453,7 +507,8 @@ files, a seam default, a project-path rubric and an unresolved-name failure), th
 preset scope (`checks-*`, aliases, and no stack scaffold),
 `doctor --fix`, and an end-to-end init → check → doctor → update → pack → eject
 run in temp directories. It also checks seat model selectors against the provider's
-declared catalogue and variant lists.
+declared catalogue and variant lists, and the benchmark pack, scoring, price band,
+budget stop, record ranking and both benchmark CLI entry points.
 
 ## Windows
 

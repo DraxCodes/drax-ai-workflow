@@ -7,8 +7,10 @@ import { repoRoot, tempDir } from "./helpers.mjs";
 import {
   assignIds,
   buildPrompt,
+  callProvider,
   mergeFindings,
   regionSimilarity,
+  resolveReviewer,
   runReview,
   validateFindings,
 } from "../tools/lib/visual-review.mjs";
@@ -330,6 +332,59 @@ test("the CLI dry run resolves the reviewer without a network call", () => {
   assert.equal(result.status, 0, result.stdout + result.stderr);
   assert.match(result.stdout, /visual review \(dry run\): surplus\/glm-5\.3-flash/);
   assert.match(result.stdout, /shots: 2/);
+});
+
+test("a benchmark selector overrides the seam and callProvider captures usage", async () => {
+  const { project } = makeProject();
+  const reviewer = resolveReviewer(project, env, "surplus/other-model");
+  assert.equal(reviewer.error, null);
+  assert.equal(reviewer.selector, "surplus/other-model");
+  assert.equal(reviewer.model, "other-model");
+
+  const result = await callProvider({
+    fetchImpl: async () => ({
+      ok: true,
+      status: 200,
+      text: async () =>
+        JSON.stringify({
+          choices: [{ message: { content: "hello" } }],
+          usage: { prompt_tokens: 3, completion_tokens: 2 },
+        }),
+    }),
+    baseURL: reviewer.baseURL,
+    apiKey: reviewer.apiKey,
+    body: { model: reviewer.model },
+    timeoutMs: 1000,
+  });
+  assert.equal(result.content, "hello");
+  assert.deepEqual(result.usage, { prompt_tokens: 3, completion_tokens: 2 });
+  assert.ok(result.latencyMs >= 0);
+
+  const envelope = JSON.stringify({
+    choices: [{ message: { content: "with a BOM" } }],
+    usage: { prompt_tokens: 1, completion_tokens: 1 },
+  });
+  const bom = await callProvider({
+    fetchImpl: async () => ({ ok: true, status: 200, text: async () => `\uFEFF${envelope}` }),
+    baseURL: reviewer.baseURL,
+    apiKey: reviewer.apiKey,
+    body: {},
+    timeoutMs: 1000,
+  });
+  assert.equal(bom.content, "with a BOM");
+
+  const prose = await callProvider({
+    fetchImpl: async () => ({
+      ok: true,
+      status: 200,
+      text: async () => `Here is the response:\n${envelope}`,
+    }),
+    baseURL: reviewer.baseURL,
+    apiKey: reviewer.apiKey,
+    body: {},
+    timeoutMs: 1000,
+  });
+  assert.equal(prose.content, "with a BOM");
 });
 
 test("the CLI reports an unbound reviewer as skipped", () => {

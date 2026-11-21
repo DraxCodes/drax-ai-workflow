@@ -1,0 +1,22 @@
+{
+  "defects": [
+    {
+      "id": "K1",
+      "file": "app.py",
+      "line": 10,
+      "lineEnd": 10,
+      "kind": "deserialization",
+      "severity": "blocker",
+      "summary": "pickle.loads runs on a user-controlled request body"
+    },
+    {
+      "id": "K2",
+      "file": "app.py",
+      "line": 15,
+      "lineEnd": 15,
+      "kind": "deserialization",
+      "severity": "major",
+      "summary": "yaml.load uses the unsafe Loader on a request body"
+    }
+  ]
+}

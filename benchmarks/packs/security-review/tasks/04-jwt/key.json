@@ -1,0 +1,22 @@
+{
+  "defects": [
+    {
+      "id": "K1",
+      "file": "auth.js",
+      "line": 20,
+      "lineEnd": 20,
+      "kind": "authz",
+      "severity": "blocker",
+      "summary": "the token is decoded without verifying its signature"
+    },
+    {
+      "id": "K2",
+      "file": "auth.js",
+      "line": 8,
+      "lineEnd": 8,
+      "kind": "secrets",
+      "severity": "major",
+      "summary": "a hardcoded development secret is used when JWT_SECRET is absent"
+    }
+  ]
+}

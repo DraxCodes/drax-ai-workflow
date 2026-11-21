@@ -138,8 +138,10 @@ After `base update`, run `node .opencode/tools/base.mjs doctor .` and
 model to bind — offer ranked options with the modality and work shape the slot needs, and
 always include "assign later". Never bind a model without the user's answer. Probe the
 chosen model with one one-token call and record the result. A capability whose slot stays
-unbound is skipped and noted, not silently run on another seat's model. The ranking rules
-are in the `workflow-base` skill's `references/requirements.md`.
+unbound is skipped and noted, not silently run on another seat's model. Run
+`node .opencode/tools/base.mjs benchmark report --slot <id>` before the ask: measured
+evidence outranks asserted and derived, and a pilot or stale row says so. The ranking
+rules are in the `workflow-base` skill's `references/requirements.md`.
 
 ### Docs for the next agent
 

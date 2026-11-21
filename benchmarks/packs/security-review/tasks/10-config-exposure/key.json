@@ -1,0 +1,31 @@
+{
+  "defects": [
+    {
+      "id": "K1",
+      "file": "server.js",
+      "line": 13,
+      "lineEnd": 13,
+      "kind": "secrets",
+      "severity": "blocker",
+      "summary": "the debug endpoint returns the entire process environment"
+    },
+    {
+      "id": "K2",
+      "file": "server.js",
+      "line": 5,
+      "lineEnd": 5,
+      "kind": "config",
+      "severity": "major",
+      "summary": "CORS allows any origin with credentials"
+    },
+    {
+      "id": "K3",
+      "file": "server.js",
+      "line": 17,
+      "lineEnd": 20,
+      "kind": "secrets",
+      "severity": "major",
+      "summary": "the debug config endpoint returns database and storage credentials"
+    }
+  ]
+}

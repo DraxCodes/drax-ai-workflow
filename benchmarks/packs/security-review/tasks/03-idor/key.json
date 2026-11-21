@@ -1,0 +1,22 @@
+{
+  "defects": [
+    {
+      "id": "K1",
+      "file": "server.js",
+      "line": 10,
+      "lineEnd": 10,
+      "kind": "authz",
+      "severity": "major",
+      "summary": "the invoice is fetched by id without checking the user's tenant"
+    },
+    {
+      "id": "K2",
+      "file": "server.js",
+      "line": 16,
+      "lineEnd": 16,
+      "kind": "authz",
+      "severity": "major",
+      "summary": "the invoice is deleted by id without checking the user's tenant"
+    }
+  ]
+}

@@ -12,6 +12,7 @@ Set up this folder with Drax AI Workflow, then start the project.
    options with modality, price and lineage, plus "assign later". Do not bind one
    without my answer. Probe the model you bound with one one-token call.
 5. If this folder is not a git repo, run git init, add the stack's .gitignore
-   and commit the baseline. Delete the temp clone.
+   (include .scratch/ for local specs and benchmark runs) and commit the baseline.
+   Delete the temp clone.
 6. Do not write app code yet. Tell me to restart the session so the new agents,
    skills and commands load, then run /start-project <my idea>.

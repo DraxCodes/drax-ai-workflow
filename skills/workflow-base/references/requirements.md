@@ -67,10 +67,44 @@ answer.
   or in `visualReview.notes`. A listed model can still fail to route.
 - Never claim a model works because it is in the catalogue.
 
-## Benchmark hook
+## Benchmark evidence
 
-Not shipped yet. When the base ships benchmark data it is a base-owned file, hashed
-with the release, so every project that updates gets the same evidence. Each record
-carries the model, the task id, the protocol version, the sample count, the date and
-the harness that produced it. Nothing writes back from a project to the base yet; a
-human carries findings home.
+The base ships benchmark records and packs, hashed with the release, so every
+project that updates gets the same evidence. Each record carries the model, the task
+id, the protocol version, the sample count, the date and the harness that produced
+it. Nothing writes back from a project to the base yet; a human carries findings
+home.
+
+Read the ranking before writing the ask:
+
+```sh
+node .opencode/tools/base.mjs benchmark report --slot council.risk
+```
+
+The first shipped pack is `security-review` (ten code slices, protocol
+`security-review-v1`) for `council.risk`. A model is **measured** only after at
+least ten distinct tasks with no failed task; fewer is a **pilot**, which may
+justify one more run but never a permanent assignment. Evidence older than 180
+days is stale and ranks below fresh measured evidence. Unique catch and agreement
+need a `--reference-model`; without one the table still ranks catch, precision,
+false positives, cost and latency.
+
+A paid run is explicit:
+
+```sh
+node .opencode/tools/benchmark.mjs run \
+  --models <provider/model>,<provider/model> \
+  --budget-usd 1 --reference-model <provider/model> \
+  --prices prices.json --out .scratch/benchmarks/<date>
+```
+
+It refuses without a budget, without a declared price for every model, or when a
+candidate is outside the `--price-band` (default 2× input or output) around the
+reference. Preflight prints the worst-case estimate; the run stops at the cap.
+`--dry-run` makes no call. A run writes a record fragment under `--out`; in a base
+checkout, `benchmark promote <run-dir>` merges it at release time, after reviewing
+the diff. The command refuses in a project, so evidence flows one way.
+
+The protocol and task-pack shape are in the base's `benchmarks/protocol.md`; the
+command details are in its usage text. The visual pack is deferred until the image
+quota allows it; the same protocol and scoring rules apply.

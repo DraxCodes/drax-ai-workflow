@@ -269,21 +269,30 @@ function resolveRef(value, projectDir, env) {
   return { value: value, error: null };
 }
 
-/** The seam names the model; opencode.json names the endpoint and the credential. */
-export function resolveReviewer(projectDir, env = process.env) {
-  const seamFile = join(projectDir, ".opencode", "workflow.json");
-  const { value: seam, error: seamError } = readJson(seamFile);
-  if (seamError) return { error: `${seamFile}: ${seamError.message}` };
-  const selector = seam?.visualReview?.model;
-  if (!nonEmpty(selector)) {
-    return {
-      error:
-        ".opencode/workflow.json: visualReview.model is unbound; the blindspot pass is skipped",
-    };
+/**
+ * The seam names the model; opencode.json names the endpoint and the credential.
+ * A benchmark may name its own selector, which is why the override exists.
+ */
+export function resolveReviewer(projectDir, env = process.env, selectorOverride = null) {
+  let selector;
+  if (nonEmpty(selectorOverride)) {
+    selector = selectorOverride.trim();
+  } else {
+    const seamFile = join(projectDir, ".opencode", "workflow.json");
+    const { value: seam, error: seamError } = readJson(seamFile);
+    if (seamError) return { error: `${seamFile}: ${seamError.message}` };
+    selector = seam?.visualReview?.model;
+    if (!nonEmpty(selector)) {
+      return {
+        error:
+          ".opencode/workflow.json: visualReview.model is unbound; the blindspot pass is skipped",
+      };
+    }
   }
   const match = /^([^/#]+)\/([^#]+)(?:#(.+))?$/.exec(selector.trim());
   if (!match) {
-    return { error: `visualReview.model "${selector}" is not a provider/model selector` };
+    const label = nonEmpty(selectorOverride) ? "model" : "visualReview.model";
+    return { error: `${label} "${selector}" is not a provider/model selector` };
   }
   const configFile = join(projectDir, "opencode.json");
   const { value: config, error: configError } = readJson(configFile);
@@ -330,9 +339,43 @@ function buildBody({ model, prompt, shots, manifestDir, maxTokens }) {
   };
 }
 
-async function callProvider({ fetchImpl, baseURL, apiKey, body, timeoutMs }) {
+/**
+ * The provider envelope is normally one JSON object, but a BOM or a prose prefix
+ * survives in the wild. Try the whole text first; the fallback must not treat a
+ * fenced answer inside `content` as the envelope.
+ */
+function envelopeValue(text) {
+  const raw = String(text ?? "").replace(/^\uFEFF/, "").trim();
+  if (raw.length === 0) return null;
+  try {
+    return JSON.parse(raw);
+  } catch {
+    /* fall through */
+  }
+  const fenced = /```(?:json)?\s*([\s\S]*?)```/i.exec(raw);
+  if (fenced) {
+    try {
+      return JSON.parse(fenced[1].trim());
+    } catch {
+      /* fall through */
+    }
+  }
+  const start = raw.indexOf("{");
+  const end = raw.lastIndexOf("}");
+  if (start !== -1 && end > start) {
+    try {
+      return JSON.parse(raw.slice(start, end + 1));
+    } catch {
+      /* fall through */
+    }
+  }
+  return null;
+}
+
+export async function callProvider({ fetchImpl, baseURL, apiKey, body, timeoutMs }) {
   const headers = { "Content-Type": "application/json" };
   if (apiKey) headers.Authorization = `Bearer ${apiKey}`;
+  const started = Date.now();
   const response = await fetchImpl(`${baseURL}/chat/completions`, {
     method: "POST",
     headers,
@@ -340,17 +383,28 @@ async function callProvider({ fetchImpl, baseURL, apiKey, body, timeoutMs }) {
     signal: AbortSignal.timeout(timeoutMs),
   });
   const text = await response.text();
-  return { status: response.status, ok: response.ok, text };
+  const value = envelopeValue(text);
+  return {
+    status: response.status,
+    ok: response.ok,
+    text,
+    content: contentFromValue(value),
+    usage: value?.usage ?? null,
+    latencyMs: Date.now() - started,
+  };
 }
 
-function providerText(payload) {
-  const { value } = parseRaw(payload);
+function contentFromValue(value) {
   const content = value?.choices?.[0]?.message?.content;
   if (typeof content === "string") return content;
   if (Array.isArray(content)) {
     return content.map((part) => part?.text ?? "").join("");
   }
   return null;
+}
+
+function providerText(payload) {
+  return contentFromValue(envelopeValue(payload));
 }
 
 /**

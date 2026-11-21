@@ -1,0 +1,22 @@
+{
+  "defects": [
+    {
+      "id": "K1",
+      "file": "server.js",
+      "line": 14,
+      "lineEnd": 15,
+      "kind": "injection",
+      "severity": "blocker",
+      "summary": "the search term is interpolated into SQL and executed"
+    },
+    {
+      "id": "K2",
+      "file": "server.js",
+      "line": 21,
+      "lineEnd": 21,
+      "kind": "injection",
+      "severity": "major",
+      "summary": "the user insert interpolates name and email into SQL"
+    }
+  ]
+}
