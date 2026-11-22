@@ -1,0 +1,68 @@
+{
+  "defects": [
+    {
+      "id": "K1-375-dark",
+      "shot": "375-dark",
+      "region": "card label",
+      "kind": "defect",
+      "severity": "major",
+      "summary": "the card label is below 4.5:1 contrast in dark"
+    },
+    {
+      "id": "K1-900-dark",
+      "shot": "900-dark",
+      "region": "card label",
+      "kind": "defect",
+      "severity": "major",
+      "summary": "the card label is below 4.5:1 contrast in dark"
+    },
+    {
+      "id": "K2-375-dark",
+      "shot": "375-dark",
+      "region": "primary button",
+      "kind": "defect",
+      "severity": "major",
+      "summary": "the primary button has low contrast in dark"
+    },
+    {
+      "id": "K2-900-dark",
+      "shot": "900-dark",
+      "region": "primary button",
+      "kind": "defect",
+      "severity": "major",
+      "summary": "the primary button has low contrast in dark"
+    },
+    {
+      "id": "K3-375-dark",
+      "shot": "375-dark",
+      "region": "status badge",
+      "kind": "defect",
+      "severity": "major",
+      "summary": "the status badge is below 4.5:1 contrast in dark"
+    },
+    {
+      "id": "K3-900-dark",
+      "shot": "900-dark",
+      "region": "status badge",
+      "kind": "defect",
+      "severity": "major",
+      "summary": "the status badge is below 4.5:1 contrast in dark"
+    },
+    {
+      "id": "K4-375-dark",
+      "shot": "375-dark",
+      "region": "card border",
+      "kind": "defect",
+      "severity": "minor",
+      "summary": "the card border is invisible in dark"
+    },
+    {
+      "id": "K4-900-dark",
+      "shot": "900-dark",
+      "region": "card border",
+      "kind": "defect",
+      "severity": "minor",
+      "summary": "the card border is invisible in dark"
+    }
+  ]
+}

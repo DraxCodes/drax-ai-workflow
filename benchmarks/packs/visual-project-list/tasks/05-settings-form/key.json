@@ -1,0 +1,116 @@
+{
+  "defects": [
+    {
+      "id": "S1-375-light",
+      "shot": "375-light",
+      "region": "site title field",
+      "kind": "defect",
+      "severity": "minor",
+      "summary": "the Site title label is separated from its input"
+    },
+    {
+      "id": "S1-900-light",
+      "shot": "900-light",
+      "region": "site title field",
+      "kind": "defect",
+      "severity": "minor",
+      "summary": "the Site title label is separated from its input"
+    },
+    {
+      "id": "S1-375-dark",
+      "shot": "375-dark",
+      "region": "site title field",
+      "kind": "defect",
+      "severity": "minor",
+      "summary": "the Site title label is separated from its input"
+    },
+    {
+      "id": "S1-900-dark",
+      "shot": "900-dark",
+      "region": "site title field",
+      "kind": "defect",
+      "severity": "minor",
+      "summary": "the Site title label is separated from its input"
+    },
+    {
+      "id": "S2-375-light",
+      "shot": "375-light",
+      "region": "accent color control",
+      "kind": "defect",
+      "severity": "major",
+      "summary": "the accent swatch overflows the control at 375"
+    },
+    {
+      "id": "S2-375-dark",
+      "shot": "375-dark",
+      "region": "accent color control",
+      "kind": "defect",
+      "severity": "major",
+      "summary": "the accent swatch overflows the control at 375"
+    },
+    {
+      "id": "S3-375-light",
+      "shot": "375-light",
+      "region": "save button",
+      "kind": "defect",
+      "severity": "major",
+      "summary": "the disabled Save changes button is below 4.5:1 contrast"
+    },
+    {
+      "id": "S3-900-light",
+      "shot": "900-light",
+      "region": "save button",
+      "kind": "defect",
+      "severity": "major",
+      "summary": "the disabled Save changes button is below 4.5:1 contrast"
+    },
+    {
+      "id": "S3-375-dark",
+      "shot": "375-dark",
+      "region": "save button",
+      "kind": "defect",
+      "severity": "major",
+      "summary": "the disabled Save changes button is below 4.5:1 contrast"
+    },
+    {
+      "id": "S3-900-dark",
+      "shot": "900-dark",
+      "region": "save button",
+      "kind": "defect",
+      "severity": "major",
+      "summary": "the disabled Save changes button is below 4.5:1 contrast"
+    },
+    {
+      "id": "S4-375-light",
+      "shot": "375-light",
+      "region": "helper text",
+      "kind": "defect",
+      "severity": "minor",
+      "summary": "the accent helper text is below 4.5:1 contrast"
+    },
+    {
+      "id": "S4-900-light",
+      "shot": "900-light",
+      "region": "helper text",
+      "kind": "defect",
+      "severity": "minor",
+      "summary": "the accent helper text is below 4.5:1 contrast"
+    },
+    {
+      "id": "S4-375-dark",
+      "shot": "375-dark",
+      "region": "helper text",
+      "kind": "defect",
+      "severity": "minor",
+      "summary": "the accent helper text is below 4.5:1 contrast"
+    },
+    {
+      "id": "S4-900-dark",
+      "shot": "900-dark",
+      "region": "helper text",
+      "kind": "defect",
+      "severity": "minor",
+      "summary": "the accent helper text is below 4.5:1 contrast"
+    }
+  ]
+}

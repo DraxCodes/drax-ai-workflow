@@ -1,0 +1,100 @@
+{
+  "defects": [
+    {
+      "id": "T1-375-light",
+      "shot": "375-light",
+      "region": "duration column",
+      "kind": "defect",
+      "severity": "minor",
+      "summary": "the Duration numbers are left-aligned instead of right-aligned"
+    },
+    {
+      "id": "T1-900-light",
+      "shot": "900-light",
+      "region": "duration column",
+      "kind": "defect",
+      "severity": "minor",
+      "summary": "the Duration numbers are left-aligned instead of right-aligned"
+    },
+    {
+      "id": "T1-375-dark",
+      "shot": "375-dark",
+      "region": "duration column",
+      "kind": "defect",
+      "severity": "minor",
+      "summary": "the Duration numbers are left-aligned instead of right-aligned"
+    },
+    {
+      "id": "T1-900-dark",
+      "shot": "900-dark",
+      "region": "duration column",
+      "kind": "defect",
+      "severity": "minor",
+      "summary": "the Duration numbers are left-aligned instead of right-aligned"
+    },
+    {
+      "id": "T2-375-light",
+      "shot": "375-light",
+      "region": "row 1 test name",
+      "kind": "defect",
+      "severity": "major",
+      "summary": "the first test name is clipped without an ellipsis at 375"
+    },
+    {
+      "id": "T2-375-dark",
+      "shot": "375-dark",
+      "region": "row 1 test name",
+      "kind": "defect",
+      "severity": "major",
+      "summary": "the first test name is clipped without an ellipsis at 375"
+    },
+    {
+      "id": "T3-375-light",
+      "shot": "375-light",
+      "region": "status column",
+      "kind": "defect",
+      "severity": "blocker",
+      "summary": "status is shown by colour alone, with no text or icon"
+    },
+    {
+      "id": "T3-900-light",
+      "shot": "900-light",
+      "region": "status column",
+      "kind": "defect",
+      "severity": "blocker",
+      "summary": "status is shown by colour alone, with no text or icon"
+    },
+    {
+      "id": "T3-375-dark",
+      "shot": "375-dark",
+      "region": "status column",
+      "kind": "defect",
+      "severity": "blocker",
+      "summary": "status is shown by colour alone, with no text or icon"
+    },
+    {
+      "id": "T3-900-dark",
+      "shot": "900-dark",
+      "region": "status column",
+      "kind": "defect",
+      "severity": "blocker",
+      "summary": "status is shown by colour alone, with no text or icon"
+    },
+    {
+      "id": "T4-375-light",
+      "shot": "375-light",
+      "region": "when column",
+      "kind": "defect",
+      "severity": "minor",
+      "summary": "the When values wrap onto two lines at 375"
+    },
+    {
+      "id": "T4-375-dark",
+      "shot": "375-dark",
+      "region": "when column",
+      "kind": "defect",
+      "severity": "minor",
+      "summary": "the When values wrap onto two lines at 375"
+    }
+  ]
+}

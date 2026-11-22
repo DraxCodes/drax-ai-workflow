@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
   "id": "visual-project-list",
-  "version": 1,
+  "version": 2,
   "protocol": "visual-review-v1",
   "kind": "visual",
   "slot": "hillclimb.blindspot",
-  "minTasks": 1,
+  "minTasks": 10,
   "exhaustive": true,
   "regionThreshold": 0.6,
   "tasks": [
@@ -47,6 +47,341 @@
         }
       ],
       "keyFile": "tasks/01-project-list/key.json"
+    },
+    {
+      "id": "02-empty-state",
+      "brief": "tasks/02-empty-state/brief.md",
+      "shots": [
+        {
+          "id": "375-light",
+          "file": "tasks/02-empty-state/shots/375-light.png",
+          "screen": "empty",
+          "state": "default",
+          "width": 375,
+          "theme": "light"
+        },
+        {
+          "id": "900-light",
+          "file": "tasks/02-empty-state/shots/900-light.png",
+          "screen": "empty",
+          "state": "default",
+          "width": 900,
+          "theme": "light"
+        },
+        {
+          "id": "375-dark",
+          "file": "tasks/02-empty-state/shots/375-dark.png",
+          "screen": "empty",
+          "state": "default",
+          "width": 375,
+          "theme": "dark"
+        },
+        {
+          "id": "900-dark",
+          "file": "tasks/02-empty-state/shots/900-dark.png",
+          "screen": "empty",
+          "state": "default",
+          "width": 900,
+          "theme": "dark"
+        }
+      ],
+      "keyFile": "tasks/02-empty-state/key.json"
+    },
+    {
+      "id": "03-loading-state",
+      "brief": "tasks/03-loading-state/brief.md",
+      "shots": [
+        {
+          "id": "375-light",
+          "file": "tasks/03-loading-state/shots/375-light.png",
+          "screen": "loading",
+          "state": "default",
+          "width": 375,
+          "theme": "light"
+        },
+        {
+          "id": "900-light",
+          "file": "tasks/03-loading-state/shots/900-light.png",
+          "screen": "loading",
+          "state": "default",
+          "width": 900,
+          "theme": "light"
+        },
+        {
+          "id": "375-dark",
+          "file": "tasks/03-loading-state/shots/375-dark.png",
+          "screen": "loading",
+          "state": "default",
+          "width": 375,
+          "theme": "dark"
+        },
+        {
+          "id": "900-dark",
+          "file": "tasks/03-loading-state/shots/900-dark.png",
+          "screen": "loading",
+          "state": "default",
+          "width": 900,
+          "theme": "dark"
+        }
+      ],
+      "keyFile": "tasks/03-loading-state/key.json"
+    },
+    {
+      "id": "04-error-state",
+      "brief": "tasks/04-error-state/brief.md",
+      "shots": [
+        {
+          "id": "375-light",
+          "file": "tasks/04-error-state/shots/375-light.png",
+          "screen": "error",
+          "state": "default",
+          "width": 375,
+          "theme": "light"
+        },
+        {
+          "id": "900-light",
+          "file": "tasks/04-error-state/shots/900-light.png",
+          "screen": "error",
+          "state": "default",
+          "width": 900,
+          "theme": "light"
+        },
+        {
+          "id": "375-dark",
+          "file": "tasks/04-error-state/shots/375-dark.png",
+          "screen": "error",
+          "state": "default",
+          "width": 375,
+          "theme": "dark"
+        },
+        {
+          "id": "900-dark",
+          "file": "tasks/04-error-state/shots/900-dark.png",
+          "screen": "error",
+          "state": "default",
+          "width": 900,
+          "theme": "dark"
+        }
+      ],
+      "keyFile": "tasks/04-error-state/key.json"
+    },
+    {
+      "id": "05-settings-form",
+      "brief": "tasks/05-settings-form/brief.md",
+      "shots": [
+        {
+          "id": "375-light",
+          "file": "tasks/05-settings-form/shots/375-light.png",
+          "screen": "settings",
+          "state": "default",
+          "width": 375,
+          "theme": "light"
+        },
+        {
+          "id": "900-light",
+          "file": "tasks/05-settings-form/shots/900-light.png",
+          "screen": "settings",
+          "state": "default",
+          "width": 900,
+          "theme": "light"
+        },
+        {
+          "id": "375-dark",
+          "file": "tasks/05-settings-form/shots/375-dark.png",
+          "screen": "settings",
+          "state": "default",
+          "width": 375,
+          "theme": "dark"
+        },
+        {
+          "id": "900-dark",
+          "file": "tasks/05-settings-form/shots/900-dark.png",
+          "screen": "settings",
+          "state": "default",
+          "width": 900,
+          "theme": "dark"
+        }
+      ],
+      "keyFile": "tasks/05-settings-form/key.json"
+    },
+    {
+      "id": "06-test-results-table",
+      "brief": "tasks/06-test-results-table/brief.md",
+      "shots": [
+        {
+          "id": "375-light",
+          "file": "tasks/06-test-results-table/shots/375-light.png",
+          "screen": "table",
+          "state": "default",
+          "width": 375,
+          "theme": "light"
+        },
+        {
+          "id": "900-light",
+          "file": "tasks/06-test-results-table/shots/900-light.png",
+          "screen": "table",
+          "state": "default",
+          "width": 900,
+          "theme": "light"
+        },
+        {
+          "id": "375-dark",
+          "file": "tasks/06-test-results-table/shots/375-dark.png",
+          "screen": "table",
+          "state": "default",
+          "width": 375,
+          "theme": "dark"
+        },
+        {
+          "id": "900-dark",
+          "file": "tasks/06-test-results-table/shots/900-dark.png",
+          "screen": "table",
+          "state": "default",
+          "width": 900,
+          "theme": "dark"
+        }
+      ],
+      "keyFile": "tasks/06-test-results-table/key.json"
+    },
+    {
+      "id": "07-mobile-nav",
+      "brief": "tasks/07-mobile-nav/brief.md",
+      "shots": [
+        {
+          "id": "375-light",
+          "file": "tasks/07-mobile-nav/shots/375-light.png",
+          "screen": "nav",
+          "state": "default",
+          "width": 375,
+          "theme": "light"
+        },
+        {
+          "id": "900-light",
+          "file": "tasks/07-mobile-nav/shots/900-light.png",
+          "screen": "nav",
+          "state": "default",
+          "width": 900,
+          "theme": "light"
+        },
+        {
+          "id": "375-dark",
+          "file": "tasks/07-mobile-nav/shots/375-dark.png",
+          "screen": "nav",
+          "state": "default",
+          "width": 375,
+          "theme": "dark"
+        },
+        {
+          "id": "900-dark",
+          "file": "tasks/07-mobile-nav/shots/900-dark.png",
+          "screen": "nav",
+          "state": "default",
+          "width": 900,
+          "theme": "dark"
+        }
+      ],
+      "keyFile": "tasks/07-mobile-nav/key.json"
+    },
+    {
+      "id": "08-form-validation",
+      "brief": "tasks/08-form-validation/brief.md",
+      "shots": [
+        {
+          "id": "375-light",
+          "file": "tasks/08-form-validation/shots/375-light.png",
+          "screen": "validation",
+          "state": "default",
+          "width": 375,
+          "theme": "light"
+        },
+        {
+          "id": "900-light",
+          "file": "tasks/08-form-validation/shots/900-light.png",
+          "screen": "validation",
+          "state": "default",
+          "width": 900,
+          "theme": "light"
+        },
+        {
+          "id": "375-dark",
+          "file": "tasks/08-form-validation/shots/375-dark.png",
+          "screen": "validation",
+          "state": "default",
+          "width": 375,
+          "theme": "dark"
+        },
+        {
+          "id": "900-dark",
+          "file": "tasks/08-form-validation/shots/900-dark.png",
+          "screen": "validation",
+          "state": "default",
+          "width": 900,
+          "theme": "dark"
+        }
+      ],
+      "keyFile": "tasks/08-form-validation/key.json"
+    },
+    {
+      "id": "09-long-content",
+      "brief": "tasks/09-long-content/brief.md",
+      "shots": [
+        {
+          "id": "375-light",
+          "file": "tasks/09-long-content/shots/375-light.png",
+          "screen": "long",
+          "state": "default",
+          "width": 375,
+          "theme": "light"
+        },
+        {
+          "id": "900-light",
+          "file": "tasks/09-long-content/shots/900-light.png",
+          "screen": "long",
+          "state": "default",
+          "width": 900,
+          "theme": "light"
+        },
+        {
+          "id": "375-dark",
+          "file": "tasks/09-long-content/shots/375-dark.png",
+          "screen": "long",
+          "state": "default",
+          "width": 375,
+          "theme": "dark"
+        },
+        {
+          "id": "900-dark",
+          "file": "tasks/09-long-content/shots/900-dark.png",
+          "screen": "long",
+          "state": "default",
+          "width": 900,
+          "theme": "dark"
+        }
+      ],
+      "keyFile": "tasks/09-long-content/key.json"
+    },
+    {
+      "id": "10-dark-dashboard",
+      "brief": "tasks/10-dark-dashboard/brief.md",
+      "shots": [
+        {
+          "id": "375-dark",
+          "file": "tasks/10-dark-dashboard/shots/375-dark.png",
+          "screen": "dark",
+          "state": "default",
+          "width": 375,
+          "theme": "dark"
+        },
+        {
+          "id": "900-dark",
+          "file": "tasks/10-dark-dashboard/shots/900-dark.png",
+          "screen": "dark",
+          "state": "default",
+          "width": 900,
+          "theme": "dark"
+        }
+      ],
+      "keyFile": "tasks/10-dark-dashboard/key.json"
     }
   ]
 }

@@ -1,0 +1,116 @@
+{
+  "defects": [
+    {
+      "id": "N1-375-light",
+      "shot": "375-light",
+      "region": "mobile header",
+      "kind": "defect",
+      "severity": "major",
+      "summary": "the Menu button overlaps the page title at 375"
+    },
+    {
+      "id": "N1-375-dark",
+      "shot": "375-dark",
+      "region": "mobile header",
+      "kind": "defect",
+      "severity": "major",
+      "summary": "the Menu button overlaps the page title at 375"
+    },
+    {
+      "id": "N2-375-light",
+      "shot": "375-light",
+      "region": "menu items",
+      "kind": "defect",
+      "severity": "major",
+      "summary": "the menu items are only 24px high"
+    },
+    {
+      "id": "N2-900-light",
+      "shot": "900-light",
+      "region": "menu items",
+      "kind": "defect",
+      "severity": "major",
+      "summary": "the menu items are only 24px high"
+    },
+    {
+      "id": "N2-375-dark",
+      "shot": "375-dark",
+      "region": "menu items",
+      "kind": "defect",
+      "severity": "major",
+      "summary": "the menu items are only 24px high"
+    },
+    {
+      "id": "N2-900-dark",
+      "shot": "900-dark",
+      "region": "menu items",
+      "kind": "defect",
+      "severity": "major",
+      "summary": "the menu items are only 24px high"
+    },
+    {
+      "id": "N3-375-light",
+      "shot": "375-light",
+      "region": "active menu item",
+      "kind": "defect",
+      "severity": "major",
+      "summary": "the current page is not visually indicated in the menu"
+    },
+    {
+      "id": "N3-900-light",
+      "shot": "900-light",
+      "region": "active menu item",
+      "kind": "defect",
+      "severity": "major",
+      "summary": "the current page is not visually indicated in the menu"
+    },
+    {
+      "id": "N3-375-dark",
+      "shot": "375-dark",
+      "region": "active menu item",
+      "kind": "defect",
+      "severity": "major",
+      "summary": "the current page is not visually indicated in the menu"
+    },
+    {
+      "id": "N3-900-dark",
+      "shot": "900-dark",
+      "region": "active menu item",
+      "kind": "defect",
+      "severity": "major",
+      "summary": "the current page is not visually indicated in the menu"
+    },
+    {
+      "id": "N4-375-light",
+      "shot": "375-light",
+      "region": "menu panel",
+      "kind": "defect",
+      "severity": "minor",
+      "summary": "the menu panel has no border or shadow and blends into the page"
+    },
+    {
+      "id": "N4-900-light",
+      "shot": "900-light",
+      "region": "menu panel",
+      "kind": "defect",
+      "severity": "minor",
+      "summary": "the menu panel has no border or shadow and blends into the page"
+    },
+    {
+      "id": "N4-375-dark",
+      "shot": "375-dark",
+      "region": "menu panel",
+      "kind": "defect",
+      "severity": "minor",
+      "summary": "the menu panel has no border or shadow and blends into the page"
+    },
+    {
+      "id": "N4-900-dark",
+      "shot": "900-dark",
+      "region": "menu panel",
+      "kind": "defect",
+      "severity": "minor",
+      "summary": "the menu panel has no border or shadow and blends into the page"
+    }
+  ]
+}

@@ -27,7 +27,7 @@ test("the visual pack loads with images and never exposes the key", () => {
   assert.deepEqual(loaded.errors, []);
   assert.equal(loaded.pack.kind, "visual");
   assert.equal(loaded.pack.protocol, "visual-review-v1");
-  assert.equal(loaded.tasks.length, 1);
+  assert.equal(loaded.tasks.length, 10);
   const task = loaded.tasks[0];
   assert.equal(task.shots.length, 4);
   assert.equal(task.key.defects.length, 22);
@@ -99,10 +99,10 @@ test("the visual pack runs through the budgeted runner with image content", asyn
     fetchImpl,
   });
   assert.equal(result.ok, true);
-  assert.equal(result.records.length, 1);
+  assert.equal(result.records.length, 10);
   assert.equal(result.records[0].ok, true);
   assert.equal(result.records[0].keyDefects, 22);
   assert.deepEqual(result.records[0].caught, ["D1-375-light"]);
   assert.equal(result.records[0].falsePositives, 0);
-  assert.equal(imageParts, 4);
+  assert.equal(imageParts, 2);
 });

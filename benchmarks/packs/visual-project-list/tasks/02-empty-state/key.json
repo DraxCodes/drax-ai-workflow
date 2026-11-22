@@ -1,0 +1,100 @@
+{
+  "defects": [
+    {
+      "id": "E1-375-light",
+      "shot": "375-light",
+      "region": "empty state copy",
+      "kind": "defect",
+      "severity": "major",
+      "summary": "the empty-state copy is below 4.5:1 contrast"
+    },
+    {
+      "id": "E1-900-light",
+      "shot": "900-light",
+      "region": "empty state copy",
+      "kind": "defect",
+      "severity": "major",
+      "summary": "the empty-state copy is below 4.5:1 contrast"
+    },
+    {
+      "id": "E1-375-dark",
+      "shot": "375-dark",
+      "region": "empty state copy",
+      "kind": "defect",
+      "severity": "major",
+      "summary": "the empty-state copy is below 4.5:1 contrast"
+    },
+    {
+      "id": "E1-900-dark",
+      "shot": "900-dark",
+      "region": "empty state copy",
+      "kind": "defect",
+      "severity": "major",
+      "summary": "the empty-state copy is below 4.5:1 contrast"
+    },
+    {
+      "id": "E2-375-light",
+      "shot": "375-light",
+      "region": "create project button",
+      "kind": "defect",
+      "severity": "major",
+      "summary": "the Create project button label is clipped at 375"
+    },
+    {
+      "id": "E2-375-dark",
+      "shot": "375-dark",
+      "region": "create project button",
+      "kind": "defect",
+      "severity": "major",
+      "summary": "the Create project button label is clipped at 375"
+    },
+    {
+      "id": "E3-375-light",
+      "shot": "375-light",
+      "region": "empty state card",
+      "kind": "defect",
+      "severity": "minor",
+      "summary": "the empty-state card is off-centre at 375"
+    },
+    {
+      "id": "E3-375-dark",
+      "shot": "375-dark",
+      "region": "empty state card",
+      "kind": "defect",
+      "severity": "minor",
+      "summary": "the empty-state card is off-centre at 375"
+    },
+    {
+      "id": "E4-375-light",
+      "shot": "375-light",
+      "region": "empty state heading",
+      "kind": "defect",
+      "severity": "minor",
+      "summary": "the empty-state heading is the same size as the body text"
+    },
+    {
+      "id": "E4-900-light",
+      "shot": "900-light",
+      "region": "empty state heading",
+      "kind": "defect",
+      "severity": "minor",
+      "summary": "the empty-state heading is the same size as the body text"
+    },
+    {
+      "id": "E4-375-dark",
+      "shot": "375-dark",
+      "region": "empty state heading",
+      "kind": "defect",
+      "severity": "minor",
+      "summary": "the empty-state heading is the same size as the body text"
+    },
+    {
+      "id": "E4-900-dark",
+      "shot": "900-dark",
+      "region": "empty state heading",
+      "kind": "defect",
+      "severity": "minor",
+      "summary": "the empty-state heading is the same size as the body text"
+    }
+  ]
+}

@@ -1,0 +1,132 @@
+{
+  "defects": [
+    {
+      "id": "V1-375-light",
+      "shot": "375-light",
+      "region": "email error",
+      "kind": "defect",
+      "severity": "major",
+      "summary": "the email error text is below 4.5:1 contrast"
+    },
+    {
+      "id": "V1-900-light",
+      "shot": "900-light",
+      "region": "email error",
+      "kind": "defect",
+      "severity": "major",
+      "summary": "the email error text is below 4.5:1 contrast"
+    },
+    {
+      "id": "V1-375-dark",
+      "shot": "375-dark",
+      "region": "email error",
+      "kind": "defect",
+      "severity": "major",
+      "summary": "the email error text is below 4.5:1 contrast"
+    },
+    {
+      "id": "V1-900-dark",
+      "shot": "900-dark",
+      "region": "email error",
+      "kind": "defect",
+      "severity": "major",
+      "summary": "the email error text is below 4.5:1 contrast"
+    },
+    {
+      "id": "V2-375-light",
+      "shot": "375-light",
+      "region": "email input",
+      "kind": "defect",
+      "severity": "blocker",
+      "summary": "the email input shows the error by border colour alone"
+    },
+    {
+      "id": "V2-900-light",
+      "shot": "900-light",
+      "region": "email input",
+      "kind": "defect",
+      "severity": "blocker",
+      "summary": "the email input shows the error by border colour alone"
+    },
+    {
+      "id": "V2-375-dark",
+      "shot": "375-dark",
+      "region": "email input",
+      "kind": "defect",
+      "severity": "blocker",
+      "summary": "the email input shows the error by border colour alone"
+    },
+    {
+      "id": "V2-900-dark",
+      "shot": "900-dark",
+      "region": "email input",
+      "kind": "defect",
+      "severity": "blocker",
+      "summary": "the email input shows the error by border colour alone"
+    },
+    {
+      "id": "V3-375-light",
+      "shot": "375-light",
+      "region": "error summary",
+      "kind": "defect",
+      "severity": "major",
+      "summary": "the error summary is placed after the submit button"
+    },
+    {
+      "id": "V3-900-light",
+      "shot": "900-light",
+      "region": "error summary",
+      "kind": "defect",
+      "severity": "major",
+      "summary": "the error summary is placed after the submit button"
+    },
+    {
+      "id": "V3-375-dark",
+      "shot": "375-dark",
+      "region": "error summary",
+      "kind": "defect",
+      "severity": "major",
+      "summary": "the error summary is placed after the submit button"
+    },
+    {
+      "id": "V3-900-dark",
+      "shot": "900-dark",
+      "region": "error summary",
+      "kind": "defect",
+      "severity": "major",
+      "summary": "the error summary is placed after the submit button"
+    },
+    {
+      "id": "V4-375-light",
+      "shot": "375-light",
+      "region": "sign in button",
+      "kind": "defect",
+      "severity": "minor",
+      "summary": "the Sign in button stays enabled while the form has an error"
+    },
+    {
+      "id": "V4-900-light",
+      "shot": "900-light",
+      "region": "sign in button",
+      "kind": "defect",
+      "severity": "minor",
+      "summary": "the Sign in button stays enabled while the form has an error"
+    },
+    {
+      "id": "V4-375-dark",
+      "shot": "375-dark",
+      "region": "sign in button",
+      "kind": "defect",
+      "severity": "minor",
+      "summary": "the Sign in button stays enabled while the form has an error"
+    },
+    {
+      "id": "V4-900-dark",
+      "shot": "900-dark",
+      "region": "sign in button",
+      "kind": "defect",
+      "severity": "minor",
+      "summary": "the Sign in button stays enabled while the form has an error"
+    }
+  ]
+}

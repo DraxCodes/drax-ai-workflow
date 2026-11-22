@@ -1,0 +1,68 @@
+{
+  "defects": [
+    {
+      "id": "C1-900-light",
+      "shot": "900-light",
+      "region": "project description",
+      "kind": "defect",
+      "severity": "minor",
+      "summary": "the description line length is too long at 900"
+    },
+    {
+      "id": "C1-900-dark",
+      "shot": "900-dark",
+      "region": "project description",
+      "kind": "defect",
+      "severity": "minor",
+      "summary": "the description line length is too long at 900"
+    },
+    {
+      "id": "C2-375-light",
+      "shot": "375-light",
+      "region": "code block",
+      "kind": "defect",
+      "severity": "major",
+      "summary": "the code block is clipped at 375"
+    },
+    {
+      "id": "C2-375-dark",
+      "shot": "375-dark",
+      "region": "code block",
+      "kind": "defect",
+      "severity": "major",
+      "summary": "the code block is clipped at 375"
+    },
+    {
+      "id": "C3-375-light",
+      "shot": "375-light",
+      "region": "section heading",
+      "kind": "defect",
+      "severity": "minor",
+      "summary": "the section heading is smaller than the body text"
+    },
+    {
+      "id": "C3-900-light",
+      "shot": "900-light",
+      "region": "section heading",
+      "kind": "defect",
+      "severity": "minor",
+      "summary": "the section heading is smaller than the body text"
+    },
+    {
+      "id": "C3-375-dark",
+      "shot": "375-dark",
+      "region": "section heading",
+      "kind": "defect",
+      "severity": "minor",
+      "summary": "the section heading is smaller than the body text"
+    },
+    {
+      "id": "C3-900-dark",
+      "shot": "900-dark",
+      "region": "section heading",
+      "kind": "defect",
+      "severity": "minor",
+      "summary": "the section heading is smaller than the body text"
+    }
+  ]
+}

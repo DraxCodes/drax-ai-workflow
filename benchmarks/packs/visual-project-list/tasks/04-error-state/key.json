@@ -1,0 +1,100 @@
+{
+  "defects": [
+    {
+      "id": "X1-375-light",
+      "shot": "375-light",
+      "region": "error code",
+      "kind": "defect",
+      "severity": "major",
+      "summary": "the raw SQLITE_BUSY error code is exposed"
+    },
+    {
+      "id": "X1-900-light",
+      "shot": "900-light",
+      "region": "error code",
+      "kind": "defect",
+      "severity": "major",
+      "summary": "the raw SQLITE_BUSY error code is exposed"
+    },
+    {
+      "id": "X1-375-dark",
+      "shot": "375-dark",
+      "region": "error code",
+      "kind": "defect",
+      "severity": "major",
+      "summary": "the raw SQLITE_BUSY error code is exposed"
+    },
+    {
+      "id": "X1-900-dark",
+      "shot": "900-dark",
+      "region": "error code",
+      "kind": "defect",
+      "severity": "major",
+      "summary": "the raw SQLITE_BUSY error code is exposed"
+    },
+    {
+      "id": "X2-375-light",
+      "shot": "375-light",
+      "region": "error message",
+      "kind": "defect",
+      "severity": "major",
+      "summary": "the error message is below 4.5:1 contrast"
+    },
+    {
+      "id": "X2-900-light",
+      "shot": "900-light",
+      "region": "error message",
+      "kind": "defect",
+      "severity": "major",
+      "summary": "the error message is below 4.5:1 contrast"
+    },
+    {
+      "id": "X2-375-dark",
+      "shot": "375-dark",
+      "region": "error message",
+      "kind": "defect",
+      "severity": "major",
+      "summary": "the error message is below 4.5:1 contrast"
+    },
+    {
+      "id": "X2-900-dark",
+      "shot": "900-dark",
+      "region": "error message",
+      "kind": "defect",
+      "severity": "major",
+      "summary": "the error message is below 4.5:1 contrast"
+    },
+    {
+      "id": "X3-375-light",
+      "shot": "375-light",
+      "region": "error buttons",
+      "kind": "defect",
+      "severity": "minor",
+      "summary": "the Retry and Back to projects buttons do not share a baseline"
+    },
+    {
+      "id": "X3-900-light",
+      "shot": "900-light",
+      "region": "error buttons",
+      "kind": "defect",
+      "severity": "minor",
+      "summary": "the Retry and Back to projects buttons do not share a baseline"
+    },
+    {
+      "id": "X3-375-dark",
+      "shot": "375-dark",
+      "region": "error buttons",
+      "kind": "defect",
+      "severity": "minor",
+      "summary": "the Retry and Back to projects buttons do not share a baseline"
+    },
+    {
+      "id": "X3-900-dark",
+      "shot": "900-dark",
+      "region": "error buttons",
+      "kind": "defect",
+      "severity": "minor",
+      "summary": "the Retry and Back to projects buttons do not share a baseline"
+    }
+  ]
+}

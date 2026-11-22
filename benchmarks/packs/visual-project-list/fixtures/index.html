@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Visual fixture</title>
+<style>
+  :root {
+    --bg: #ffffff;
+    --fg: #1c1c1c;
+    --muted: #6b6b6b;
+    --low: #d6d6d6;
+    --line: #e5e5e5;
+    --accent: #3b6ef5;
+    --danger: #c62828;
+    --panel: #fafafa;
+  }
+  html[data-theme="dark"] {
+    --bg: #1e1e1e;
+    --fg: #f2f2f2;
+    --muted: #a8a8a8;
+    --low: #3a3a3a;
+    --line: #333333;
+    --accent: #7aa2ff;
+    --danger: #ff8a8a;
+    --panel: #242424;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    width: 100%;
+    min-height: 520px;
+    background: var(--bg);
+    color: var(--fg);
+    font: 13px/1.45 system-ui, -apple-system, Segoe UI, sans-serif;
+  }
+  #app { width: 100%; min-height: 520px; padding: 16px; }
+  html[data-width="375"] body, html[data-width="375"] #app { width: 375px; }
+  html[data-width="900"] body, html[data-width="900"] #app { width: 900px; }
+  h1 { margin: 0; font-size: 18px; font-weight: 650; letter-spacing: -.01em; }
+  h2 { margin: 0 0 8px; font-size: 15px; font-weight: 650; }
+  p { margin: 4px 0 0; }
+  .subtitle { color: var(--muted); font-size: 12px; }
+  .top { padding-bottom: 12px; border-bottom: 1px solid var(--line); margin-bottom: 12px; }
+  .card { border: 1px solid var(--line); border-radius: 10px; padding: 14px; background: var(--panel); }
+  .row { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--line); }
+  button { font: inherit; font-size: 11px; padding: 5px 9px; border: 1px solid var(--line); background: transparent; color: var(--fg); border-radius: 5px; }
+  input { font: inherit; font-size: 12px; padding: 6px 8px; border: 1px solid var(--line); background: var(--bg); color: var(--fg); border-radius: 5px; }
+
+  /* 02 empty */
+  .empty { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 340px; gap: 8px; text-align: center; }
+  .empty-heading { font-size: 13px; font-weight: 600; }
+  .empty-copy { color: var(--low); max-width: 240px; }
+  .empty-action { margin-top: 10px; }
+  html[data-width="375"] .empty-card { margin-left: 40px; }
+  html[data-width="375"] .empty-action { width: 64px; overflow: hidden; white-space: nowrap; text-align: left; padding: 5px 6px; }
+
+  /* 03 loading */
+  .loading-wrap { position: relative; min-height: 300px; padding-top: 8px; }
+  .loading-text { position: absolute; left: 50%; top: 132px; transform: translateX(-50%); color: var(--low); font-size: 12px; white-space: nowrap; }
+  .spinner { position: absolute; left: calc(50% - 18px); top: 132px; width: 14px; height: 14px; border: 2px solid var(--line); border-top-color: var(--accent); border-radius: 50%; }
+  .skeleton { padding: 12px 0; border-bottom: 1px solid var(--line); }
+  .bar { height: 12px; border-radius: 4px; background: var(--line); margin: 6px 0; }
+  .bar.title { width: 42%; height: 14px; }
+  .bar.copy { width: 68%; }
+  .skeleton.row2 .bar.copy { width: 30%; }
+
+  /* 04 error */
+  .error-card { border: 1px solid var(--line); border-radius: 10px; padding: 18px; margin-top: 18px; }
+  .error-message { color: var(--low); font-size: 13px; }
+  .error-code { display: block; margin-top: 8px; font: 11px ui-monospace, Consolas, monospace; color: var(--danger); }
+  .error-actions { display: flex; gap: 8px; margin-top: 14px; align-items: flex-start; }
+  .error-actions button:first-child { height: 30px; }
+  .error-actions button:last-child { height: 22px; }
+
+  /* 05 settings */
+  .form { width: 100%; max-width: 520px; }
+  .field { margin: 18px 0; }
+  .field-label { display: block; margin-bottom: 42px; font-weight: 600; }
+  .field-label.tight { margin-bottom: 4px; }
+  .field input { width: 100%; }
+  .accent-control { display: flex; gap: 8px; align-items: center; }
+  .accent-control input { width: 120px; }
+  .swatch { width: 60px; height: 28px; border-radius: 6px; background: var(--accent); }
+  html[data-width="375"] .accent-control { width: 210px; overflow: hidden; }
+  html[data-width="375"] .swatch { width: 90px; flex: 0 0 90px; margin-left: 4px; }
+  .helper { color: var(--low); font-size: 11px; margin-top: 6px; }
+  .save { color: #b0b0b0; border-color: #c8c8c8; }
+  html[data-theme="dark"] .save { color: #4a4a4a; border-color: #333; }
+  .save-row { display: flex; justify-content: flex-end; margin-top: 18px; }
+
+  /* 06 table */
+  table { width: 100%; border-collapse: collapse; }
+  th { text-align: left; padding: 6px 9px; font-size: 11px; color: var(--muted); border-bottom: 1px solid var(--line); }
+  td { padding: 10px 7px; border-bottom: 1px solid var(--line); font-size: 12px; vertical-align: top; }
+  .duration { text-align: left; font-variant-numeric: tabular-nums; }
+  .test-name { font-weight: 600; }
+  html[data-width="375"] .test-name.long { display: block; width: 170px; white-space: nowrap; overflow: hidden; text-overflow: clip; }
+  .status-dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; background: var(--accent); }
+  .status-cell { width: 44px; }
+
+  /* 07 nav */
+  .nav-shell { position: relative; min-height: 420px; }
+  .nav-top { position: relative; }
+  .menu-toggle { position: absolute; right: 16px; top: 14px; }
+  html[data-width="375"] .menu-toggle { left: 0; right: auto; top: 18px; }
+  .menu-panel { margin-top: 14px; border: 0; box-shadow: none; background: var(--bg); padding: 8px 0; }
+  .menu-item { height: 24px; display: flex; align-items: center; padding: 0 8px; color: var(--fg); border-radius: 4px; }
+  .menu-item + .menu-item { margin-top: 2px; }
+  .menu-item.active { color: var(--fg); }
+  html[data-width="900"] .nav-shell { display: grid; grid-template-columns: 220px 1fr; gap: 18px; }
+  html[data-width="900"] .menu-toggle { display: none; }
+  html[data-width="900"] .menu-panel { border-right: 1px solid var(--line); margin-top: 0; }
+
+  /* 08 validation */
+  .signin { max-width: 360px; }
+  .field-row { margin: 14px 0; }
+  .field-row label { display: block; font-weight: 600; margin-bottom: 4px; }
+  .field-row input { width: 100%; }
+  .error-summary { border: 1px solid var(--line); border-radius: 8px; padding: 10px; margin-top: 16px; order: 3; }
+  .error { color: var(--danger); font-size: 11px; margin-top: 4px; }
+  html[data-theme="light"] .error { color: #e0a0a0; }
+  input.invalid { border-color: #e0a0a0; }
+  .submit { width: 100%; margin-top: 14px; }
+  .form-order { display: flex; flex-direction: column; }
+
+  /* 09 long */
+  .description { max-width: none; line-height: 1.6; }
+  html[data-width="375"] .code { white-space: pre; overflow: hidden; width: 100%; }
+  .code { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 10px; font: 11px/1.5 ui-monospace, Consolas, monospace; }
+  .section h3 { font-size: 11px; font-weight: 650; margin: 16px 0 4px; }
+
+  /* 10 dark dashboard */
+  .dash-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 14px; }
+  html[data-width="375"] .dash-grid { grid-template-columns: 1fr; }
+  .dash-card { border: 1px solid var(--line); border-radius: 10px; padding: 14px; background: var(--panel); }
+  html[data-theme="dark"] .dash-card { border-color: #1e1e1e; }
+  .card-label { color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: .04em; }
+  html[data-theme="dark"] .card-label { color: #4a4a4a; }
+  .card-value { font-size: 22px; font-weight: 750; margin-top: 4px; }
+  .primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+  html[data-theme="dark"] .primary { background: #1e1e1e; border-color: #333; color: #6a6a6a; }
+  .status-badge { display: inline-block; border: 1px solid var(--accent); color: var(--accent); border-radius: 999px; padding: 2px 7px; font-size: 10px; }
+  html[data-theme="dark"] .status-badge { border-color: #333; color: #5a5a5a; }
+</style>
+</head>
+<body>
+<main id="app"></main>
+<script>
+const q = new URLSearchParams(location.search);
+const screen = q.get("screen") || "project-list";
+const width = q.get("width") === "900" ? "900" : "375";
+const theme = q.get("theme") === "dark" ? "dark" : "light";
+document.documentElement.dataset.width = width;
+document.documentElement.dataset.theme = theme;
+
+const pageHeader = (title, subtitle) => `<header class="top"><h1>${title}</h1><p class="subtitle">${subtitle}</p></header>`;
+
+const screens = {
+  empty: `${pageHeader("Projects", "Status, coverage and stack at a glance.")}
+    <section class="empty empty-card">
+      <h2 class="empty-heading">No projects yet</h2>
+      <p class="empty-copy">Create the first project to see its status, coverage and stack in one place.</p>
+      <button class="empty-action" type="button">Create project</button>
+    </section>`,
+
+  loading: `${pageHeader("Projects", "Status, coverage and stack at a glance.")}
+    <section class="loading-wrap">
+      <div class="skeleton row1"><div class="bar title"></div><div class="bar copy"></div></div>
+      <div class="skeleton row2"><div class="bar title"></div><div class="bar copy"></div></div>
+      <div class="skeleton row3"><div class="bar title"></div><div class="bar copy"></div></div>
+      <div class="spinner" aria-hidden="true"></div>
+      <div class="loading-text">Loading projects…</div>
+    </section>`,
+
+  error: `${pageHeader("Project", "Backup retention")}
+    <section class="error-card">
+      <h2>Could not load project</h2>
+      <p class="error-message">The project record could not be read. Try again, or go back to the project list.</p>
+      <code class="error-code">SQLITE_BUSY: database is locked</code>
+      <div class="error-actions"><button type="button">Retry</button><button type="button">Back to projects</button></div>
+    </section>`,
+
+  settings: `${pageHeader("Settings", "Site title and accent colour.")}
+    <form class="form">
+      <div class="field"><label class="field-label" for="site-title">Site title</label><input id="site-title" value="Personal site"></div>
+      <div class="field"><label class="field-label tight" for="accent">Accent colour</label>
+        <div class="accent-control"><input id="accent" value="#3b6ef5"><span class="swatch"></span></div>
+        <p class="helper">Used for links, focus rings and the active state.</p>
+      </div>
+      <div class="save-row"><button class="save" type="button" disabled>Save changes</button></div>
+    </form>`,
+
+  table: `${pageHeader("Test results", "Latest run across the suite.")}
+    <table>
+      <thead><tr><th>Test</th><th>Status</th><th>Duration</th><th>When</th></tr></thead>
+      <tbody>
+        <tr><td class="test-name long">authentication migration and legacy token cleanup</td><td class="status-cell"><span class="status-dot"></span></td><td class="duration">1240 ms</td><td>2 min ago</td></tr>
+        <tr><td class="test-name">project list renders</td><td class="status-cell"><span class="status-dot"></span></td><td class="duration">84 ms</td><td>2 min ago</td></tr>
+        <tr><td class="test-name">backup retention</td><td class="status-cell"><span class="status-dot"></span></td><td class="duration">310 ms</td><td>2 min ago</td></tr>
+      </tbody>
+    </table>`,
+
+  nav: `<div class="nav-shell">
+      <div><header class="top nav-top"><h1>Projects</h1><p class="subtitle">Status, coverage and stack at a glance.</p><button class="menu-toggle" type="button">Menu</button></header>
+        <section class="menu-panel">
+          <div class="menu-item active">Overview</div>
+          <div class="menu-item">Projects</div>
+          <div class="menu-item">Runs</div>
+          <div class="menu-item">Settings</div>
+        </section>
+      </div>
+      <div><h2>Project list</h2><p class="subtitle">Select a project to see its status.</p></div>
+    </div>`,
+
+  validation: `${pageHeader("Sign in", "Use your account email.")}
+    <form class="signin form-order">
+      <div class="field-row"><label for="email">Email</label><input id="email" class="invalid" value="joel@example"><p class="error">Enter a valid email address.</p></div>
+      <div class="field-row"><label for="password">Password</label><input id="password" type="password" value="secret"></div>
+      <button class="submit" type="button">Sign in</button>
+      <div class="error-summary"><b>There is one problem with this form.</b><p>Check the email field and try again.</p></div>
+    </form>`,
+
+  long: `${pageHeader("Project detail", "Backup retention")}
+    <p class="description">This project keeps the nightly database backup for thirty days and verifies that every archive can be restored into a scratch database. The retention job runs after the ingest job, writes a manifest, and records the verification result. A failed verification keeps the archive and marks the run as failed so the next run can retry it without deleting the only good copy.</p>
+    <section class="section"><h3>Restore check</h3>
+      <pre class="code">const archive = await openArchive(path);
+const scratch = await createScratchDatabase();
+await restore(archive, scratch);
+const result = await verifyRowCounts(scratch, expectedCounts, { strict: true, allowEmpty: false });</pre>
+    </section>`,
+
+  dark: `${pageHeader("Overview", "Coverage, runs and the current project.")}
+    <div class="dash-grid">
+      <div class="dash-card"><div class="card-label">Projects</div><div class="card-value">12</div><p class="subtitle">4 need attention</p></div>
+      <div class="dash-card"><div class="card-label">Pass rate</div><div class="card-value">96%</div><span class="status-badge">healthy</span></div>
+      <div class="dash-card"><div class="card-label">Last run</div><div class="card-value">2 min</div><p class="subtitle">Backup retention</p></div>
+      <div class="dash-card"><button class="primary" type="button">Run all checks</button></div>
+    </div>`,
+};
+
+document.getElementById("app").innerHTML = screens[screen] || screens["project-list"] || "";
+</script>
+</body>
+</html>
