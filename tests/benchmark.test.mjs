@@ -721,6 +721,43 @@ test("duplicate selectors are deduped and variants are refused", async () => {
   assert.equal(deduped.records.length, 2);
 });
 
+test("repeated samples stay one task and raise confidence", () => {
+  const records = Array.from({ length: 10 }, (_, index) => [
+    validRecord({ task: `t${index + 1}`, samples: 2, sample: 1 }),
+    validRecord({ task: `t${index + 1}`, samples: 2, sample: 2 }),
+  ]).flat();
+  const rows = aggregateRecords({
+    records,
+    now: new Date("2026-11-21T00:00:00Z"),
+  });
+  assert.equal(rows.length, 1);
+  assert.equal(rows[0].scored, 10);
+  assert.equal(rows[0].samples, 2);
+  assert.equal(rows[0].confidence, "high");
+  assert.equal(rows[0].tier, "measured");
+});
+
+test("failed calls stay in the cost total", () => {
+  const rows = aggregateRecords({
+    records: [
+      validRecord({ task: "t1", costUsd: 0.001 }),
+      validRecord({ task: "t2", costUsd: 0.001 }),
+      {
+        ...validRecord({ task: "t3" }),
+        ok: false,
+        error: "http_5xx",
+        caught: [],
+        missed: ["K1"],
+        costUsd: 0.25,
+      },
+    ],
+    now: new Date("2026-11-21T00:00:00Z"),
+  });
+  assert.equal(rows[0].scored, 2);
+  assert.equal(rows[0].failed, 1);
+  assert.equal(rows[0].costUsd, 0.252);
+});
+
 test("a short pack is a pilot and maxTokens separates evidence groups", () => {
   const short = aggregateRecords({
     records: [validRecord({ task: "t1" }), validRecord({ task: "t2" })],

@@ -34,9 +34,9 @@ the base's recommendations.
    claim something the run did not test.
 3. Declare prices and a budget. A real run refuses without both.
 4. Every model runs every task blind: the brief and the files, never the key.
-5. One call per task, `temperature: 0`, a fixed `max_tokens`. The runner currently
-   supports one sample; `--samples 2` is refused until the protocol and runner are
-   extended. `samples`, `max_tokens`, `retries` and `temperature` are recorded and
+5. One call per task per sample, `temperature: 0`, a fixed `max_tokens`. The runner
+   accepts `--samples` from 1 to 5; two or more samples give high confidence.
+   `samples`, `max_tokens`, `retries` and `temperature` are recorded and
    group the evidence.
 6. A malformed or failed answer is a failed task, not a repaired one. The answer
    must be one JSON object: a code fence or prose prefix fails. The model is
@@ -98,7 +98,7 @@ exhaustive key of weighted criteria. `council-seat-v1` covers `council.chair`,
   failed task, not a miss.
 - The measured floor is still ten distinct tasks with no failed task. A three-task
   pilot pack is valid but is a **pilot**, not measured. One sample gives `medium`
-  confidence; the runner currently refuses `--samples 2`, so `high` is unavailable.
+  confidence; two or more samples give `high`.
 - Report with `--protocol council-seat-v1 --slot council.chair` (or shape or
   experience). Unique catch and cost per unique catch compare criterion ids against
   the reference model, the same way the security protocol compares key ids.
@@ -121,8 +121,11 @@ kind (`defect`, `observation` or `question`) and a severity.
 - Image input is charged at a conservative 1,500 tokens per shot in the preflight
   estimate; the provider usage block is the authority at run time.
 - The measured floor is still ten distinct tasks with no failed task. The shipped
-  `visual-project-list` pack is a **one-task pilot**; a ten-task visual pack is
-  the next step before this evidence can rank as measured.
+  `visual-project-list` pack is now **ten tasks and 130 keyed defects**. The
+  measured run completed 10/10 when one retry per task was allowed, at 60% catch /
+  66% precision and 40 false claims; a second model with a valid review is still
+  needed to contest the seat. A retry group is recorded separately from a no-retry
+  group and never ranks with it.
 - Report with `--protocol visual-review-v1 --slot hillclimb.blindspot`.
 
 ## Promotion
@@ -133,7 +136,7 @@ measured floor never drops below ten. Otherwise it is a **pilot**: it can justif
 one more run, never a permanent assignment.
 
 Within measured evidence, **confidence** is `medium` with one sample; `high` needs
-repeated samples, which the current runner does not yet support. A pilot or
+repeated samples. A pilot or
 incomplete group is `low`. A high-confidence row would be a repeated measurement,
 not a larger task pack. A close ranking between medium rows says to repeat the run
 before moving the seat.

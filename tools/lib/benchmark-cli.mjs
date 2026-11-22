@@ -500,7 +500,7 @@ const USAGE = `usage: benchmark <command> [options]
       --reference-model <s>     price-band reference (default: the slot's binding)
       --price-band <n>          maximum input/output price ratio (default 2; 0 disables)
       --prices <file>           { "provider/model": { "input", "output" } } per 1M
-      --samples <n>             repeated samples per task (currently 1; 2+ is refused)
+      --samples <n>             repeated samples per task (1-5; 2+ gives high confidence)
       --repeat <n>              alias for --samples
       --max-tokens <n>          output budget (default 1200)
       --retries <n>             extra attempts per task (default 0)

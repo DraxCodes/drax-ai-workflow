@@ -1394,12 +1394,8 @@ export async function runBenchmark({
   if (!Number.isFinite(budgetUsd) || budgetUsd <= 0) {
     return { ok: false, code: "budget", message: "--budget-usd must be a positive number" };
   }
-  if (samples !== 1) {
-    return {
-      ok: false,
-      code: "usage",
-      message: `${pack.protocol} supports one sample per task; repeat the run instead`,
-    };
+  if (!Number.isFinite(samples) || !Number.isInteger(samples) || samples < 1 || samples > 5) {
+    return { ok: false, code: "usage", message: "--samples must be an integer from 1 to 5" };
   }
   if (!Number.isFinite(maxTokens) || maxTokens < 1) {
     return { ok: false, code: "usage", message: "--max-tokens must be a positive number" };
@@ -1903,9 +1899,9 @@ export function aggregateRecords({
     const precision = exhaustive
       ? (caughtCount + cleanSafe) / Math.max(1, caughtCount + falsePositives + cleanSafe)
       : null;
-    const costValues = scored.map((record) => record.costUsd);
+    const costValues = groupRecords.map((record) => record.costUsd);
     const costComplete =
-      scored.length > 0 && costValues.every((value) => typeof value === "number");
+      groupRecords.length > 0 && costValues.every((value) => typeof value === "number");
     const costUsd = costValues.reduce((sum, value) => sum + (typeof value === "number" ? value : 0), 0);
     const latencies = scored
       .map((record) => record.latencyMs)
