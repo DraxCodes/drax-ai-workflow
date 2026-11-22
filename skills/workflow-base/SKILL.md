@@ -97,8 +97,10 @@ block hash, so a CRLF checkout does not report drift.
 ## References
 
 - `references/seam.md` — the seam schema, field by field.
-- `references/requirements.md` — model slots, binding, benchmark evidence and how to
+- `references/requirements.md` - model slots, binding, benchmark evidence and how to
   recommend a model.
+- `references/options.md` - the discovery brief before a stack, library or language
+  choice: boring default, modern default, wildcard, portfolio check, dated sources.
 - `references/delegation.md` — the brief shape and the shared report envelope.
 - `references/runs.md` — the JSONL run/evidence ledger and the data layering.
 - `../../benchmarks/protocol.md` — the benchmark protocol, scoring and cost guard.

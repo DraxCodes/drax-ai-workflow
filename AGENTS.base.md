@@ -15,9 +15,11 @@ canonical agents, commands and skills are the `.opencode/` tree.
 
 ### Starting a project
 
-A new project starts with `/start-project <idea>`. It writes an approved first spec
-in the issue directory and stops before any code; if at least two council triggers
-hold it asks for `/council` first.
+A new project starts with `/start-project <idea>`. Before the spec it writes a
+short options brief for the skeleton: a boring default, a modern default, a
+wildcard and a minimal option, with a portfolio check and dated sources. It then
+writes an approved first spec in the issue directory and stops before any code;
+if at least two council triggers hold it asks for `/council` first.
 
 ### Hillclimb
 

@@ -38,6 +38,21 @@ test("the shipped base carries no project-specific terms", () => {
   }
 });
 
+test("start-project and council require the options brief", () => {
+  const start = readFileSync(join(repoRoot, "commands", "start-project.md"), "utf8");
+  const council = readFileSync(join(repoRoot, "skills", "council", "SKILL.md"), "utf8");
+  const options = readFileSync(
+    join(repoRoot, "skills", "workflow-base", "references", "options.md"),
+    "utf8",
+  );
+  assert.match(start, /references\/options\.md/);
+  assert.match(council, /options brief/i);
+  assert.match(council, /wildcard/i);
+  assert.match(options, /boring default/i);
+  assert.match(options, /portfolio/i);
+  assert.match(options, /Rust/i);
+});
+
 test("nothing points at the moved rubric path; the pointer is the only exception", () => {
   const pointer = join(
     repoRoot,

@@ -56,10 +56,10 @@ each is read-only.
 
 | Seat | Agent | Lens | Delivers |
 | --- | --- | --- | --- |
-| Chair | `task-orchestrator` | owns the brief, rounds, triage and record | one proposal, the options table, the recommendation, the dissent |
-| Shape | `plan-architect` | simplest viable shape, seams, reversibility | one proposal and what it defers |
-| Experience | `quality-gatekeeper` | the felt read, through the rubric's probes | one proposal and the experience thesis |
-| Risk | `security-auditor` | abuse, exposure, failure modes, local-only posture | one proposal or a constraints-first position, plus the red-team list |
+| Chair | `task-orchestrator` | owns the brief, the options brief, rounds, triage and record | one proposal, the options table, the recommendation, the dissent |
+| Shape | `plan-architect` | simplest viable shape within each option, seams, reversibility | one proposal and what it defers; a dependency is a cost to price, not an automatic rejection |
+| Experience | `quality-gatekeeper` | the felt read, through the rubric's probes; judges the visual probe when two UI options are close | one proposal and the experience thesis |
+| Risk | `security-auditor` | abuse, exposure, failure modes, local-only posture; supply chain and license for each option | one proposal or a constraints-first position, plus the red-team list |
 
 The chair proposes its own option first, so it is not only a switchboard.
 
@@ -120,11 +120,42 @@ The chair writes one brief and every seat receives it verbatim. It must contain:
 - the fixed point (commit) and the constraints that cannot move;
 - non-goals — what is explicitly out of scope;
 - what evidence would settle the decision;
+- an options brief for any stack, skeleton, library or language choice, per
+  `workflow-base/references/options.md`; it names the boring default, the modern
+  default, a wildcard and a minimal option, with dated sources;
 - the trade-off rows each seat must take a position on;
 - the seat brief and output limit.
 
 A vague brief produces generic advice from every model. If the brief cannot name the
 trade-off, stop and sharpen it with the user first.
+
+## The options brief
+
+A stack, skeleton, library or language choice is a council decision when it is
+expensive to reverse or more than one design is credible. It is not a fifth seat;
+it is an input the chair attaches to the brief.
+
+The brief follows `workflow-base/references/options.md` and contains:
+
+- a **boring default**, a **modern default**, a **wildcard** and a **custom/minimal**
+  option;
+- a **portfolio check**: what the last projects used, whether this repeats that
+  stack deliberately, and why. If the last projects were React + shadcn, a
+  non-React/non-shadcn option is required unless the constraints rule it out;
+- the wildcard the user may not know: a different UI library, admin panel,
+  database, framework or language/runtime. If the user names something to try, such
+  as Rust, price it as a real option;
+- dated sources. If live sources are unavailable, mark it `unverified` and ask for
+  a probe; never present memory as current;
+- a default, why not the boring default, why not the wildcard, and what would
+  change the chair's mind.
+
+The **shape** seat evaluates the smallest viable shape *inside each option*. It
+must price a dependency, not reject an option because it has one. The
+**experience** seat may use the one throwaway visual probe to compare two UI
+options. The **risk** seat checks supply chain, license, maintenance and exposure
+for each option. The chair recommends a default and records the user's choice and
+dissent. The council does not decide value or variety for the user.
 
 ## Rounds
 
@@ -184,14 +215,15 @@ Write one file, in the seam's issue directory (default
 `.scratch/<feature>/council.md`):
 
 1. Question, constraints, non-goals.
-2. Proposals — one per seat, unedited.
-3. Critiques.
-4. Experience thesis.
-5. Value trade-off register.
-6. Options table — option, shape, cost, risk, reversibility, what it buys.
-7. Recommendation, with dissent recorded and rejected options named.
-8. Thread-split proposal — lanes with non-overlapping write scopes and their dependencies.
-9. Decision — filled in by the user, with the date.
+2. Options brief, linked, when the decision touches a stack, library or language.
+3. Proposals — one per seat, unedited.
+4. Critiques.
+5. Experience thesis.
+6. Value trade-off register.
+7. Options table — option, shape, cost, risk, reversibility, what it buys.
+8. Recommendation, with dissent recorded and rejected options named.
+9. Thread-split proposal — lanes with non-overlapping write scopes and their dependencies.
+10. Decision — filled in by the user, with the date.
 
 The spec links this file, so the debate is not re-litigated later.
 
@@ -212,4 +244,7 @@ The spec links this file, so the debate is not re-litigated later.
 - Record dissent verbatim. An option that lost for a good reason is more useful next year
   than a consensus that hid the disagreement.
 - Keep cost proportional: a council is cents, but a council on a rename is waste.
+- No stack-by-default. A stack or library recommendation must show the options brief,
+  the portfolio check, and at least one credible alternative when the constraints allow.
+  The user decides value and variety.
 - Never commit the probe, the seeded data, or the key of a field test.
