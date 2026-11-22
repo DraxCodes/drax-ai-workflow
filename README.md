@@ -216,9 +216,9 @@ markers. Each pack ships with ten tasks at pack version 2; a smaller local pack 
 allowed but is a pilot, not measured evidence.
 
 The visual blindspot uses protocol `visual-review-v1`: a brief plus screenshots,
-and a key of visual defects by shot and region. `visual-project-list` is a
-one-task pilot with a generated project-list fixture; a ten-task pack is needed
-before the blindspot evidence can be measured.
+and a key of visual defects by shot and region. `visual-project-list` ships with
+ten tasks and 130 keyed defects; a smaller local pack is a pilot, not measured
+evidence.
 
 ```sh
 node .opencode/tools/base.mjs benchmark validate
@@ -230,8 +230,8 @@ node .opencode/tools/base.mjs benchmark report --protocol visual-review-v1 --slo
 A model is **measured** only with at least ten distinct scored tasks and no failed
 task. Fewer is a **pilot**: it can justify one more run, never a permanent
 assignment. Evidence older than 180 days is stale and ranks below fresh measured
-evidence. `--samples 2` is currently refused, so measured rows are `medium`
-confidence until repeated samples are supported.
+evidence. One sample gives `medium` confidence; `--samples 2` or more gives
+`high` confidence in a separate repeated-sample group.
 
 Benchmarks are paid work, so the harness defaults to refusing spend. A real run
 needs an explicit model list, a `--budget-usd` cap, and a declared price for every

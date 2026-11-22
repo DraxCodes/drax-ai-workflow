@@ -37,7 +37,7 @@ Open `http://localhost:4174/`.
 - `<project>/.scratch/runs/runs.jsonl` for probe spend
 
 The sources for the current report are the measured 16k runs, the 4k pilot runs,
-the ten-task council runs, and the visual-pack final run. If a source is missing,
+the ten-task council runs, and the ten-task visual retry run. If a source is missing,
 the collector prints it and leaves that section empty rather than inventing data.
 
 The `sources` map at the top of `collect.mjs` is the curation point. When a new
@@ -114,7 +114,8 @@ changes.
 - `visual`: candidate row, caught/missed defects, weighted catch
 
 `build.mjs` renders `public/index.html`, `public/seats/<id>.html`,
-`public/runs.html`, `public/method.html`, `public/data.json` and `public/site.css`.
+`public/runs.html`, `public/method.html`, `public/brief.html`, `public/data.json` and
+`public/site.css`.
 Add a page by adding a render function and a `writePage` call.
 
 ## Notes
@@ -123,6 +124,7 @@ Add a page by adding a render function and a `writePage` call.
   `data/findings.json` so a server can rebuild without the project checkout.
 - The report is evidence, not a binding. The base still names no model in a slot.
 - Measured rows need ten distinct tasks and zero failed tasks; one sample is
-  medium confidence. The visual pack is a one-task pilot.
+  medium confidence. The visual pack is ten tasks; the measured run used one retry
+  per task.
 - The risk GLM row used min80 prices and the Qwen row used list; the method page
   states the basis.

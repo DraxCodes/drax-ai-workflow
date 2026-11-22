@@ -2,192 +2,542 @@
   "generatedAt": "2026-11-22",
   "project": "personal-website",
   "sources": {
-    "risk": "present",
-    "risk4k": "present",
-    "chair": "present",
-    "chair10": "present",
-    "shape": "present",
-    "shape10": "present",
-    "experience": "present",
-    "visual": "present"
+    "2026-11-21-chair-10-16k/records.json": "present",
+    "2026-11-22-glmflash-16k-chair/records.json": "present",
+    "2026-11-22-glm53-16k-chair/records.json": "present",
+    "2026-11-21-shape-10-16k/records.json": "present",
+    "2026-11-22-glmflash-16k-shape/records.json": "present",
+    "2026-11-22-glm53-16k-shape/records.json": "present",
+    "2026-11-21-experience-10/records.json": "present",
+    "2026-11-22-glmflash-16k-experience/records.json": "present",
+    "2026-11-22-glm53-16k-experience/records.json": "present",
+    "2026-11-21-risk-16k-head-to-head.json": "present",
+    "2026-11-21-risk-4k/records.json": "present",
+    "2026-11-22-visual-10-task-retry/records.json": "present"
   },
   "runs": [
     {
+      "dir": "2026-11-22-chair-10-16k-samples2",
+      "pack": "council-chair",
+      "protocol": null,
+      "models": [
+        "surplus/deepseek-v4.1-flash-1017",
+        "surplus/qwen3.8-flash"
+      ],
+      "samples": 2,
+      "retries": 0,
+      "maxTokens": 16000,
+      "records": 40,
+      "failed": 2,
+      "spent": 0.021374,
+      "startedAt": "2026-11-22T04:26:09.719Z",
+      "selected": false,
+      "purpose": "stability check"
+    },
+    {
+      "dir": "2026-11-22-glm53-16k-experience",
+      "pack": "council-experience",
+      "protocol": null,
+      "models": [
+        "surplus/glm-5.3"
+      ],
+      "samples": 1,
+      "retries": 0,
+      "maxTokens": 16000,
+      "records": 10,
+      "failed": 0,
+      "spent": 0.078666,
+      "startedAt": "2026-11-22T04:11:52.794Z",
+      "selected": false,
+      "purpose": "challenger"
+    },
+    {
+      "dir": "2026-11-22-glm53-16k-shape",
+      "pack": "council-shape",
+      "protocol": null,
+      "models": [
+        "surplus/glm-5.3"
+      ],
+      "samples": 1,
+      "retries": 0,
+      "maxTokens": 16000,
+      "records": 10,
+      "failed": 1,
+      "spent": 0.034339,
+      "startedAt": "2026-11-22T04:05:13.820Z",
+      "selected": false,
+      "purpose": "challenger"
+    },
+    {
+      "dir": "2026-11-22-glm53-16k-chair",
+      "pack": "council-chair",
+      "protocol": null,
+      "models": [
+        "surplus/glm-5.3"
+      ],
+      "samples": 1,
+      "retries": 0,
+      "maxTokens": 16000,
+      "records": 10,
+      "failed": 3,
+      "spent": 0.113538,
+      "startedAt": "2026-11-22T03:44:01.069Z",
+      "selected": false,
+      "purpose": "challenger"
+    },
+    {
+      "dir": "2026-11-22-visual-10-task-retry",
+      "pack": "visual-project-list",
+      "protocol": null,
+      "models": [
+        "surplus/glm-5.3-flash"
+      ],
+      "samples": 1,
+      "retries": 1,
+      "maxTokens": 16000,
+      "records": 10,
+      "failed": 0,
+      "spent": 0.009149,
+      "startedAt": "2026-11-22T03:28:45.833Z",
+      "selected": true,
+      "purpose": "evidence"
+    },
+    {
+      "dir": "2026-11-22-visual-10-task",
+      "pack": "visual-project-list",
+      "protocol": null,
+      "models": [
+        "surplus/glm-5.3-flash"
+      ],
+      "samples": 1,
+      "retries": 0,
+      "maxTokens": 16000,
+      "records": 10,
+      "failed": 2,
+      "spent": 0.004781,
+      "startedAt": "2026-11-22T03:17:29.962Z",
+      "selected": false,
+      "purpose": "pilot"
+    },
+    {
+      "dir": "2026-11-22-glmflash-16k-experience",
+      "pack": "council-experience",
+      "protocol": null,
+      "models": [
+        "surplus/glm-5.3-flash"
+      ],
+      "samples": 1,
+      "retries": 0,
+      "maxTokens": 16000,
+      "records": 10,
+      "failed": 3,
+      "spent": 0.005444,
+      "startedAt": "2026-11-22T02:51:37.820Z",
+      "selected": false,
+      "purpose": "challenger"
+    },
+    {
+      "dir": "2026-11-22-glmflash-16k-shape",
+      "pack": "council-shape",
+      "protocol": null,
+      "models": [
+        "surplus/glm-5.3-flash"
+      ],
+      "samples": 1,
+      "retries": 0,
+      "maxTokens": 16000,
+      "records": 10,
+      "failed": 5,
+      "spent": 0.00338,
+      "startedAt": "2026-11-22T02:44:37.359Z",
+      "selected": false,
+      "purpose": "challenger"
+    },
+    {
+      "dir": "2026-11-22-glmflash-16k-chair",
+      "pack": "council-chair",
+      "protocol": null,
+      "models": [
+        "surplus/glm-5.3-flash"
+      ],
+      "samples": 1,
+      "retries": 0,
+      "maxTokens": 16000,
+      "records": 10,
+      "failed": 6,
+      "spent": 0.006817,
+      "startedAt": "2026-11-22T02:32:54.922Z",
+      "selected": false,
+      "purpose": "challenger"
+    },
+    {
+      "dir": "2026-11-22-glmflash-16k-chair-timeout60",
+      "pack": "council-chair",
+      "protocol": null,
+      "models": [
+        "surplus/glm-5.3-flash"
+      ],
+      "samples": 1,
+      "retries": 0,
+      "maxTokens": 16000,
+      "records": 10,
+      "failed": 7,
+      "spent": 0.002432,
+      "startedAt": "2026-11-22T02:24:02.854Z",
+      "selected": false,
+      "purpose": "challenger"
+    },
+    {
       "dir": "2026-11-21-visual-pack-final",
       "pack": "visual-project-list",
+      "protocol": null,
+      "models": [
+        "surplus/glm-5.3-flash"
+      ],
+      "samples": 1,
+      "retries": 1,
       "maxTokens": 16000,
       "records": 1,
       "failed": 0,
       "spent": 0.000465,
-      "startedAt": "2026-11-21T22:37:38.626Z"
+      "startedAt": "2026-11-21T22:37:38.626Z",
+      "selected": false,
+      "purpose": "pilot"
     },
     {
       "dir": "2026-11-21-visual-pack-tuned",
       "pack": "visual-project-list",
+      "protocol": null,
+      "models": [
+        "surplus/glm-5.3-flash"
+      ],
+      "samples": 1,
+      "retries": 1,
       "maxTokens": 16000,
       "records": 1,
       "failed": 0,
       "spent": 0.000707,
-      "startedAt": "2026-11-21T22:32:53.070Z"
+      "startedAt": "2026-11-21T22:32:53.070Z",
+      "selected": false,
+      "purpose": "pilot"
     },
     {
       "dir": "2026-11-21-visual-pack-glmflash-retry",
       "pack": "visual-project-list",
+      "protocol": null,
+      "models": [
+        "surplus/glm-5.3-flash"
+      ],
+      "samples": 1,
+      "retries": 1,
       "maxTokens": 16000,
       "records": 1,
       "failed": 0,
       "spent": 0.001124,
-      "startedAt": "2026-11-21T22:26:33.311Z"
+      "startedAt": "2026-11-21T22:26:33.311Z",
+      "selected": false,
+      "purpose": "pilot"
     },
     {
       "dir": "2026-11-21-visual-pack-glmflash-16k",
       "pack": "visual-project-list",
+      "protocol": null,
+      "models": [
+        "surplus/glm-5.3-flash"
+      ],
+      "samples": 1,
+      "retries": 0,
       "maxTokens": 16000,
       "records": 1,
       "failed": 1,
       "spent": 0.00099,
-      "startedAt": "2026-11-21T22:21:16.847Z"
+      "startedAt": "2026-11-21T22:21:16.847Z",
+      "selected": false,
+      "purpose": "failed"
     },
     {
       "dir": "2026-11-21-visual-pack-glmflash",
       "pack": "visual-project-list",
+      "protocol": null,
+      "models": [
+        "surplus/glm-5.3-flash"
+      ],
+      "samples": 1,
+      "retries": 0,
       "maxTokens": 4000,
       "records": 1,
       "failed": 1,
       "spent": 0.000455,
-      "startedAt": "2026-11-21T22:19:31.614Z"
+      "startedAt": "2026-11-21T22:19:31.614Z",
+      "selected": false,
+      "purpose": "failed"
     },
     {
       "dir": "2026-11-21-shape-10-16k",
       "pack": "council-shape",
+      "protocol": null,
+      "models": [
+        "surplus/deepseek-v4.1-flash-1017",
+        "surplus/qwen3.8-flash"
+      ],
+      "samples": 1,
+      "retries": 0,
       "maxTokens": 16000,
       "records": 20,
       "failed": 0,
       "spent": 0.009635,
-      "startedAt": "2026-11-21T21:50:24.737Z"
+      "startedAt": "2026-11-21T21:50:24.737Z",
+      "selected": true,
+      "purpose": "evidence"
     },
     {
       "dir": "2026-11-21-chair-10-16k",
       "pack": "council-chair",
+      "protocol": null,
+      "models": [
+        "surplus/deepseek-v4.1-flash-1017",
+        "surplus/qwen3.8-flash"
+      ],
+      "samples": 1,
+      "retries": 0,
       "maxTokens": 16000,
       "records": 20,
       "failed": 0,
       "spent": 0.011118,
-      "startedAt": "2026-11-21T21:33:51.295Z"
+      "startedAt": "2026-11-21T21:33:51.295Z",
+      "selected": true,
+      "purpose": "evidence"
     },
     {
       "dir": "2026-11-21-experience-10",
       "pack": "council-experience",
+      "protocol": null,
+      "models": [
+        "surplus/deepseek-v4.1-flash-1017",
+        "surplus/glm-5.3-flash"
+      ],
+      "samples": 1,
+      "retries": 0,
       "maxTokens": 8000,
       "records": 20,
       "failed": 4,
       "spent": 0.00861,
-      "startedAt": "2026-11-21T21:16:54.425Z"
+      "startedAt": "2026-11-21T21:16:54.425Z",
+      "selected": true,
+      "purpose": "evidence"
     },
     {
       "dir": "2026-11-21-shape-10",
       "pack": "council-shape",
+      "protocol": null,
+      "models": [
+        "surplus/deepseek-v4.1-flash-1017",
+        "surplus/glm-5.3-flash",
+        "surplus/qwen3.8-flash"
+      ],
+      "samples": 1,
+      "retries": 0,
       "maxTokens": 8000,
       "records": 30,
       "failed": 4,
       "spent": 0.011078,
-      "startedAt": "2026-11-21T20:58:13.773Z"
+      "startedAt": "2026-11-21T20:58:13.773Z",
+      "selected": false,
+      "purpose": "pilot"
     },
     {
       "dir": "2026-11-21-chair-10",
       "pack": "council-chair",
+      "protocol": null,
+      "models": [
+        "surplus/deepseek-v4.1-flash-1017",
+        "surplus/glm-5.3-flash",
+        "surplus/qwen3.8-flash"
+      ],
+      "samples": 1,
+      "retries": 0,
       "maxTokens": 8000,
       "records": 30,
       "failed": 5,
       "spent": 0.015063,
-      "startedAt": "2026-11-21T20:33:39.169Z"
+      "startedAt": "2026-11-21T20:33:39.169Z",
+      "selected": false,
+      "purpose": "pilot"
     },
     {
       "dir": "2026-11-21-risk-glm53-16k",
       "pack": "security-review",
+      "protocol": null,
+      "models": [
+        "surplus/glm-5.3"
+      ],
+      "samples": 1,
+      "retries": 0,
       "maxTokens": 16000,
       "records": 10,
       "failed": 0,
       "spent": 0.032409,
-      "startedAt": "2026-11-21T20:22:04.208Z"
+      "startedAt": "2026-11-21T20:22:04.208Z",
+      "selected": true,
+      "purpose": "evidence"
     },
     {
       "dir": "2026-11-21-risk-glmflash-16k",
       "pack": "security-review",
+      "protocol": null,
+      "models": [
+        "surplus/glm-5.3-flash"
+      ],
+      "samples": 1,
+      "retries": 0,
       "maxTokens": 16000,
       "records": 10,
       "failed": 5,
       "spent": 0.008971,
-      "startedAt": "2026-11-21T20:12:10.085Z"
+      "startedAt": "2026-11-21T20:12:10.085Z",
+      "selected": false,
+      "purpose": "failed"
     },
     {
       "dir": "2026-11-21-experience",
       "pack": "council-experience",
+      "protocol": null,
+      "models": [
+        "surplus/deepseek-v4.1-flash-1017",
+        "surplus/glm-5.3-flash"
+      ],
+      "samples": 1,
+      "retries": 0,
       "maxTokens": 8000,
       "records": 6,
       "failed": 0,
       "spent": 0.012408,
-      "startedAt": "2026-11-21T20:08:15.403Z"
+      "startedAt": "2026-11-21T20:08:15.403Z",
+      "selected": false,
+      "purpose": "pilot"
     },
     {
       "dir": "2026-11-21-shape",
       "pack": "council-shape",
+      "protocol": null,
+      "models": [
+        "surplus/deepseek-v4.1-flash-1017",
+        "surplus/glm-5.3-flash",
+        "surplus/qwen3.8-flash"
+      ],
+      "samples": 1,
+      "retries": 0,
       "maxTokens": 8000,
       "records": 9,
       "failed": 1,
       "spent": 0.01433,
-      "startedAt": "2026-11-21T20:03:26.330Z"
+      "startedAt": "2026-11-21T20:03:26.330Z",
+      "selected": false,
+      "purpose": "failed"
     },
     {
       "dir": "2026-11-21-chair",
       "pack": "council-chair",
+      "protocol": null,
+      "models": [
+        "surplus/deepseek-v4.1-flash-1017",
+        "surplus/glm-5.3-flash",
+        "surplus/qwen3.8-flash"
+      ],
+      "samples": 1,
+      "retries": 0,
       "maxTokens": 8000,
       "records": 9,
       "failed": 0,
       "spent": 0.023654,
-      "startedAt": "2026-11-21T19:54:24.582Z"
+      "startedAt": "2026-11-21T19:54:24.582Z",
+      "selected": false,
+      "purpose": "pilot"
     },
     {
       "dir": "2026-11-21-risk-qwen-16k",
       "pack": "security-review",
+      "protocol": null,
+      "models": [
+        "surplus/qwen3.8-flash"
+      ],
+      "samples": 1,
+      "retries": 0,
       "maxTokens": 16000,
       "records": 10,
       "failed": 0,
       "spent": 0.012327,
-      "startedAt": "2026-11-21T19:48:16.440Z"
+      "startedAt": "2026-11-21T19:48:16.440Z",
+      "selected": true,
+      "purpose": "evidence"
     },
     {
       "dir": "2026-11-21-risk-qwen-8k",
       "pack": "security-review",
+      "protocol": null,
+      "models": [
+        "surplus/qwen3.8-flash"
+      ],
+      "samples": 1,
+      "retries": 0,
       "maxTokens": 8000,
       "records": 10,
       "failed": 1,
       "spent": 0.017786,
-      "startedAt": "2026-11-21T19:39:27.277Z"
+      "startedAt": "2026-11-21T19:39:27.277Z",
+      "selected": false,
+      "purpose": "failed"
     },
     {
       "dir": "2026-11-21-risk-4k",
       "pack": "security-review",
+      "protocol": null,
+      "models": [
+        "surplus/glm-5.3",
+        "surplus/deepseek-v4.1-flash-1017",
+        "surplus/qwen3.8-flash",
+        "surplus/glm-5.3-flash",
+        "surplus/claude-haiku-4.5"
+      ],
+      "samples": 1,
+      "retries": 0,
       "maxTokens": 4000,
       "records": 50,
       "failed": 25,
       "spent": 0.163435,
-      "startedAt": "2026-11-21T19:20:46.865Z"
+      "startedAt": "2026-11-21T19:20:46.865Z",
+      "selected": false,
+      "purpose": "pilot"
     },
     {
       "dir": "2026-11-21-risk",
       "pack": "security-review",
+      "protocol": null,
+      "models": [
+        "surplus/glm-5.3",
+        "surplus/deepseek-v4.1-flash-1017",
+        "surplus/qwen3.8-flash",
+        "surplus/glm-5.3-flash",
+        "surplus/claude-haiku-4.5"
+      ],
+      "samples": 1,
+      "retries": 0,
       "maxTokens": 1200,
       "records": 50,
       "failed": 40,
       "spent": 0.090776,
-      "startedAt": "2026-11-21T19:11:00.405Z"
+      "startedAt": "2026-11-21T19:11:00.405Z",
+      "selected": false,
+      "purpose": "failed"
     }
   ],
   "costs": {
-    "runSpend": 0.435341,
+    "runSpend": 0.715261,
+    "evidenceSpend": 0.083248,
+    "tuningSpend": 0.632013,
     "probeSpend": 0.001752,
-    "totalRecorded": 0.437093,
+    "totalRecorded": 0.717013,
+    "councilOneRound": 0.004774,
     "visualReviewUncosted": true
   },
   "risk": {
@@ -196,251 +546,1245 @@
         "model": "surplus/glm-5.3",
         "tier": "measured",
         "confidence": "medium",
+        "completeness": "complete",
         "scored": 10,
         "failed": 0,
+        "failedTasks": 0,
+        "samples": 1,
+        "retries": 0,
         "catch": 100,
         "precision": 85,
         "fp": 4,
         "cost": 0.032409,
         "costPerTask": 0.003241,
+        "costPerCall": 0.003241,
         "unique": null,
-        "maxTokens": 16000
+        "maxTokens": 16000,
+        "packHash": "sha256:868fee106a6d51db674ccbac7c40faaa195566804c239d14010a69aa4ccf4370",
+        "protocol": "security-review-v1",
+        "pack": "security-review",
+        "packVersion": 1,
+        "lastDate": "2026-11-21",
+        "stale": false,
+        "catchCi": [
+          100,
+          100
+        ],
+        "uniqueIds": []
       },
       {
         "model": "surplus/qwen3.8-flash",
         "tier": "measured",
         "confidence": "medium",
+        "completeness": "complete",
         "scored": 10,
         "failed": 0,
+        "failedTasks": 0,
+        "samples": 1,
+        "retries": 0,
         "catch": 97,
         "precision": 96,
         "fp": 1,
         "cost": 0.012327,
         "costPerTask": 0.001233,
+        "costPerCall": 0.001233,
         "unique": 0,
-        "maxTokens": 16000
+        "maxTokens": 16000,
+        "packHash": "sha256:868fee106a6d51db674ccbac7c40faaa195566804c239d14010a69aa4ccf4370",
+        "protocol": "security-review-v1",
+        "pack": "security-review",
+        "packVersion": 1,
+        "lastDate": "2026-11-21",
+        "stale": false,
+        "catchCi": [
+          91,
+          100
+        ],
+        "uniqueIds": []
       },
       {
         "model": "surplus/glm-5.3-flash",
         "tier": "pilot",
         "confidence": "low",
+        "completeness": "partial",
         "scored": 6,
         "failed": 4,
+        "failedTasks": 4,
+        "samples": 1,
+        "retries": 0,
         "catch": 95,
         "precision": 93,
         "fp": 1,
-        "cost": 0.003848,
-        "costPerTask": 0.000641,
-        "unique": 0,
-        "maxTokens": 4000
-      },
-      {
-        "model": "surplus/deepseek-v4.1-flash-1017",
-        "tier": "pilot",
-        "confidence": "low",
-        "scored": 5,
-        "failed": 5,
-        "catch": 86,
-        "precision": 100,
-        "fp": 0,
-        "cost": 0.004324,
-        "costPerTask": 0.000865,
-        "unique": 0,
-        "maxTokens": 4000
-      },
-      {
-        "model": "surplus/claude-haiku-4.5",
-        "tier": "incomplete",
-        "confidence": "low",
-        "scored": 0,
-        "failed": 10,
-        "catch": 0,
-        "precision": null,
-        "fp": 0,
-        "cost": null,
-        "costPerTask": null,
-        "unique": 0,
-        "maxTokens": 4000
-      }
-    ],
-    "risk4k": [
-      {
-        "model": "surplus/glm-5.3",
-        "tier": "pilot",
-        "confidence": "low",
-        "scored": 6,
-        "failed": 4,
-        "catch": 100,
-        "precision": 92,
-        "fp": 1,
-        "cost": 0.036252,
-        "costPerTask": 0.006042,
+        "cost": 0.008859,
+        "costPerTask": 0.001477,
+        "costPerCall": 0.001477,
         "unique": null,
-        "maxTokens": 4000
-      },
-      {
-        "model": "surplus/qwen3.8-flash",
-        "tier": "pilot",
-        "confidence": "low",
-        "scored": 8,
-        "failed": 2,
-        "catch": 95,
-        "precision": 100,
-        "fp": 0,
-        "cost": 0.007854,
-        "costPerTask": 0.000982,
-        "unique": 0,
-        "maxTokens": 4000
-      },
-      {
-        "model": "surplus/glm-5.3-flash",
-        "tier": "pilot",
-        "confidence": "low",
-        "scored": 6,
-        "failed": 4,
-        "catch": 95,
-        "precision": 93,
-        "fp": 1,
-        "cost": 0.003848,
-        "costPerTask": 0.000641,
-        "unique": 0,
-        "maxTokens": 4000
+        "maxTokens": 4000,
+        "packHash": "sha256:868fee106a6d51db674ccbac7c40faaa195566804c239d14010a69aa4ccf4370",
+        "protocol": "security-review-v1",
+        "pack": "security-review",
+        "packVersion": 1,
+        "lastDate": "2026-11-21",
+        "stale": false,
+        "catchCi": [
+          86,
+          100
+        ],
+        "uniqueIds": []
       },
       {
         "model": "surplus/deepseek-v4.1-flash-1017",
         "tier": "pilot",
         "confidence": "low",
+        "completeness": "partial",
         "scored": 5,
         "failed": 5,
+        "failedTasks": 5,
+        "samples": 1,
+        "retries": 0,
         "catch": 86,
         "precision": 100,
         "fp": 0,
-        "cost": 0.004324,
-        "costPerTask": 0.000865,
-        "unique": 0,
-        "maxTokens": 4000
+        "cost": 0.016851,
+        "costPerTask": 0.00337,
+        "costPerCall": 0.00337,
+        "unique": null,
+        "maxTokens": 4000,
+        "packHash": "sha256:868fee106a6d51db674ccbac7c40faaa195566804c239d14010a69aa4ccf4370",
+        "protocol": "security-review-v1",
+        "pack": "security-review",
+        "packVersion": 1,
+        "lastDate": "2026-11-21",
+        "stale": false,
+        "catchCi": [
+          74,
+          100
+        ],
+        "uniqueIds": []
       },
       {
         "model": "surplus/claude-haiku-4.5",
         "tier": "incomplete",
         "confidence": "low",
+        "completeness": "none",
         "scored": 0,
         "failed": 10,
+        "failedTasks": 10,
+        "samples": 1,
+        "retries": 0,
         "catch": 0,
         "precision": null,
         "fp": 0,
-        "cost": null,
-        "costPerTask": null,
-        "unique": 0,
-        "maxTokens": 4000
+        "cost": 0.017934,
+        "costPerTask": 0.017934,
+        "costPerCall": 0.017934,
+        "unique": null,
+        "maxTokens": 4000,
+        "packHash": "sha256:868fee106a6d51db674ccbac7c40faaa195566804c239d14010a69aa4ccf4370",
+        "protocol": "security-review-v1",
+        "pack": "security-review",
+        "packVersion": 1,
+        "lastDate": null,
+        "stale": false,
+        "catchCi": null,
+        "uniqueIds": []
       }
     ],
     "tasks": [
       {
         "task": "01-sql-injection",
-        "key": 2,
-        "glmCaught": 2,
-        "glmFp": 0,
-        "qwenCaught": 2,
-        "qwenFp": 0,
-        "qwenMissed": [],
-        "glmMissed": []
+        "total": 2,
+        "ids": [
+          "K1",
+          "K2"
+        ],
+        "models": {
+          "surplus/glm-5.3": {
+            "ok": true,
+            "reason": null,
+            "caught": [
+              "K1",
+              "K2"
+            ],
+            "missed": [],
+            "caughtCount": 2,
+            "total": 2,
+            "weightedPct": 100,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
+          },
+          "surplus/qwen3.8-flash": {
+            "ok": true,
+            "reason": null,
+            "caught": [
+              "K1",
+              "K2"
+            ],
+            "missed": [],
+            "caughtCount": 2,
+            "total": 2,
+            "weightedPct": 100,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
+          },
+          "surplus/glm-5.3-flash": {
+            "ok": true,
+            "reason": null,
+            "caught": [
+              "K1",
+              "K2"
+            ],
+            "missed": [],
+            "caughtCount": 2,
+            "total": 2,
+            "weightedPct": 100,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 4000
+          },
+          "surplus/deepseek-v4.1-flash-1017": {
+            "ok": true,
+            "reason": null,
+            "caught": [
+              "K1",
+              "K2"
+            ],
+            "missed": [],
+            "caughtCount": 2,
+            "total": 2,
+            "weightedPct": 100,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 4000
+          },
+          "surplus/claude-haiku-4.5": {
+            "ok": false,
+            "reason": "invalid answer",
+            "caught": [],
+            "missed": [
+              "K1",
+              "K2"
+            ],
+            "caughtCount": 0,
+            "total": 2,
+            "weightedPct": 0,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 1,
+            "maxTokens": 4000
+          }
+        }
       },
       {
         "task": "02-path-traversal",
-        "key": 1,
-        "glmCaught": 1,
-        "glmFp": 2,
-        "qwenCaught": 1,
-        "qwenFp": 0,
-        "qwenMissed": [],
-        "glmMissed": []
+        "total": 1,
+        "ids": [
+          "K1"
+        ],
+        "models": {
+          "surplus/glm-5.3": {
+            "ok": true,
+            "reason": null,
+            "caught": [
+              "K1"
+            ],
+            "missed": [],
+            "caughtCount": 1,
+            "total": 1,
+            "weightedPct": 100,
+            "fp": 2,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
+          },
+          "surplus/qwen3.8-flash": {
+            "ok": true,
+            "reason": null,
+            "caught": [
+              "K1"
+            ],
+            "missed": [],
+            "caughtCount": 1,
+            "total": 1,
+            "weightedPct": 100,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
+          },
+          "surplus/glm-5.3-flash": {
+            "ok": true,
+            "reason": null,
+            "caught": [
+              "K1"
+            ],
+            "missed": [],
+            "caughtCount": 1,
+            "total": 1,
+            "weightedPct": 100,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 4000
+          },
+          "surplus/deepseek-v4.1-flash-1017": {
+            "ok": false,
+            "reason": "invalid answer",
+            "caught": [],
+            "missed": [
+              "K1"
+            ],
+            "caughtCount": 0,
+            "total": 1,
+            "weightedPct": 0,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 1,
+            "maxTokens": 4000
+          },
+          "surplus/claude-haiku-4.5": {
+            "ok": false,
+            "reason": "invalid answer",
+            "caught": [],
+            "missed": [
+              "K1"
+            ],
+            "caughtCount": 0,
+            "total": 1,
+            "weightedPct": 0,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 1,
+            "maxTokens": 4000
+          }
+        }
       },
       {
         "task": "03-idor",
-        "key": 2,
-        "glmCaught": 2,
-        "glmFp": 0,
-        "qwenCaught": 2,
-        "qwenFp": 0,
-        "qwenMissed": [],
-        "glmMissed": []
+        "total": 2,
+        "ids": [
+          "K1",
+          "K2"
+        ],
+        "models": {
+          "surplus/glm-5.3": {
+            "ok": true,
+            "reason": null,
+            "caught": [
+              "K1",
+              "K2"
+            ],
+            "missed": [],
+            "caughtCount": 2,
+            "total": 2,
+            "weightedPct": 100,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
+          },
+          "surplus/qwen3.8-flash": {
+            "ok": true,
+            "reason": null,
+            "caught": [
+              "K1",
+              "K2"
+            ],
+            "missed": [],
+            "caughtCount": 2,
+            "total": 2,
+            "weightedPct": 100,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
+          },
+          "surplus/glm-5.3-flash": {
+            "ok": false,
+            "reason": "invalid answer",
+            "caught": [],
+            "missed": [
+              "K1",
+              "K2"
+            ],
+            "caughtCount": 0,
+            "total": 2,
+            "weightedPct": 0,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 1,
+            "maxTokens": 4000
+          },
+          "surplus/deepseek-v4.1-flash-1017": {
+            "ok": true,
+            "reason": null,
+            "caught": [
+              "K1",
+              "K2"
+            ],
+            "missed": [],
+            "caughtCount": 2,
+            "total": 2,
+            "weightedPct": 100,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 4000
+          },
+          "surplus/claude-haiku-4.5": {
+            "ok": false,
+            "reason": "invalid answer",
+            "caught": [],
+            "missed": [
+              "K1",
+              "K2"
+            ],
+            "caughtCount": 0,
+            "total": 2,
+            "weightedPct": 0,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 1,
+            "maxTokens": 4000
+          }
+        }
       },
       {
         "task": "04-jwt",
-        "key": 2,
-        "glmCaught": 2,
-        "glmFp": 0,
-        "qwenCaught": 2,
-        "qwenFp": 0,
-        "qwenMissed": [],
-        "glmMissed": []
+        "total": 2,
+        "ids": [
+          "K1",
+          "K2"
+        ],
+        "models": {
+          "surplus/glm-5.3": {
+            "ok": true,
+            "reason": null,
+            "caught": [
+              "K1",
+              "K2"
+            ],
+            "missed": [],
+            "caughtCount": 2,
+            "total": 2,
+            "weightedPct": 100,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
+          },
+          "surplus/qwen3.8-flash": {
+            "ok": true,
+            "reason": null,
+            "caught": [
+              "K1",
+              "K2"
+            ],
+            "missed": [],
+            "caughtCount": 2,
+            "total": 2,
+            "weightedPct": 100,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
+          },
+          "surplus/glm-5.3-flash": {
+            "ok": true,
+            "reason": null,
+            "caught": [
+              "K1",
+              "K2"
+            ],
+            "missed": [],
+            "caughtCount": 2,
+            "total": 2,
+            "weightedPct": 100,
+            "fp": 1,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 4000
+          },
+          "surplus/deepseek-v4.1-flash-1017": {
+            "ok": true,
+            "reason": null,
+            "caught": [
+              "K1"
+            ],
+            "missed": [
+              "K2"
+            ],
+            "caughtCount": 1,
+            "total": 2,
+            "weightedPct": 67,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 4000
+          },
+          "surplus/claude-haiku-4.5": {
+            "ok": false,
+            "reason": "invalid answer",
+            "caught": [],
+            "missed": [
+              "K1",
+              "K2"
+            ],
+            "caughtCount": 0,
+            "total": 2,
+            "weightedPct": 0,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 1,
+            "maxTokens": 4000
+          }
+        }
       },
       {
         "task": "05-ssrf",
-        "key": 1,
-        "glmCaught": 1,
-        "glmFp": 1,
-        "qwenCaught": 1,
-        "qwenFp": 1,
-        "qwenMissed": [],
-        "glmMissed": []
+        "total": 1,
+        "ids": [
+          "K1"
+        ],
+        "models": {
+          "surplus/glm-5.3": {
+            "ok": true,
+            "reason": null,
+            "caught": [
+              "K1"
+            ],
+            "missed": [],
+            "caughtCount": 1,
+            "total": 1,
+            "weightedPct": 100,
+            "fp": 1,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
+          },
+          "surplus/qwen3.8-flash": {
+            "ok": true,
+            "reason": null,
+            "caught": [
+              "K1"
+            ],
+            "missed": [],
+            "caughtCount": 1,
+            "total": 1,
+            "weightedPct": 100,
+            "fp": 1,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
+          },
+          "surplus/glm-5.3-flash": {
+            "ok": false,
+            "reason": "invalid answer",
+            "caught": [],
+            "missed": [
+              "K1"
+            ],
+            "caughtCount": 0,
+            "total": 1,
+            "weightedPct": 0,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 1,
+            "maxTokens": 4000
+          },
+          "surplus/deepseek-v4.1-flash-1017": {
+            "ok": false,
+            "reason": "invalid answer",
+            "caught": [],
+            "missed": [
+              "K1"
+            ],
+            "caughtCount": 0,
+            "total": 1,
+            "weightedPct": 0,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 1,
+            "maxTokens": 4000
+          },
+          "surplus/claude-haiku-4.5": {
+            "ok": false,
+            "reason": "invalid answer",
+            "caught": [],
+            "missed": [
+              "K1"
+            ],
+            "caughtCount": 0,
+            "total": 1,
+            "weightedPct": 0,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 1,
+            "maxTokens": 4000
+          }
+        }
       },
       {
         "task": "06-command-injection",
-        "key": 3,
-        "glmCaught": 3,
-        "glmFp": 0,
-        "qwenCaught": 3,
-        "qwenFp": 0,
-        "qwenMissed": [],
-        "glmMissed": []
+        "total": 3,
+        "ids": [
+          "K1",
+          "K2",
+          "K3"
+        ],
+        "models": {
+          "surplus/glm-5.3": {
+            "ok": true,
+            "reason": null,
+            "caught": [
+              "K1",
+              "K2",
+              "K3"
+            ],
+            "missed": [],
+            "caughtCount": 3,
+            "total": 3,
+            "weightedPct": 100,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
+          },
+          "surplus/qwen3.8-flash": {
+            "ok": true,
+            "reason": null,
+            "caught": [
+              "K1",
+              "K2",
+              "K3"
+            ],
+            "missed": [],
+            "caughtCount": 3,
+            "total": 3,
+            "weightedPct": 100,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
+          },
+          "surplus/glm-5.3-flash": {
+            "ok": true,
+            "reason": null,
+            "caught": [
+              "K1",
+              "K2",
+              "K3"
+            ],
+            "missed": [],
+            "caughtCount": 3,
+            "total": 3,
+            "weightedPct": 100,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 4000
+          },
+          "surplus/deepseek-v4.1-flash-1017": {
+            "ok": false,
+            "reason": "invalid answer",
+            "caught": [],
+            "missed": [
+              "K1",
+              "K2",
+              "K3"
+            ],
+            "caughtCount": 0,
+            "total": 3,
+            "weightedPct": 0,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 1,
+            "maxTokens": 4000
+          },
+          "surplus/claude-haiku-4.5": {
+            "ok": false,
+            "reason": "invalid answer",
+            "caught": [],
+            "missed": [
+              "K1",
+              "K2",
+              "K3"
+            ],
+            "caughtCount": 0,
+            "total": 3,
+            "weightedPct": 0,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 1,
+            "maxTokens": 4000
+          }
+        }
       },
       {
         "task": "07-deserialization",
-        "key": 2,
-        "glmCaught": 2,
-        "glmFp": 0,
-        "qwenCaught": 2,
-        "qwenFp": 0,
-        "qwenMissed": [],
-        "glmMissed": []
+        "total": 2,
+        "ids": [
+          "K1",
+          "K2"
+        ],
+        "models": {
+          "surplus/glm-5.3": {
+            "ok": true,
+            "reason": null,
+            "caught": [
+              "K1",
+              "K2"
+            ],
+            "missed": [],
+            "caughtCount": 2,
+            "total": 2,
+            "weightedPct": 100,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
+          },
+          "surplus/qwen3.8-flash": {
+            "ok": true,
+            "reason": null,
+            "caught": [
+              "K1",
+              "K2"
+            ],
+            "missed": [],
+            "caughtCount": 2,
+            "total": 2,
+            "weightedPct": 100,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
+          },
+          "surplus/glm-5.3-flash": {
+            "ok": true,
+            "reason": null,
+            "caught": [
+              "K1",
+              "K2"
+            ],
+            "missed": [],
+            "caughtCount": 2,
+            "total": 2,
+            "weightedPct": 100,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 4000
+          },
+          "surplus/deepseek-v4.1-flash-1017": {
+            "ok": true,
+            "reason": null,
+            "caught": [
+              "K1",
+              "K2"
+            ],
+            "missed": [],
+            "caughtCount": 2,
+            "total": 2,
+            "weightedPct": 100,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 4000
+          },
+          "surplus/claude-haiku-4.5": {
+            "ok": false,
+            "reason": "invalid answer",
+            "caught": [],
+            "missed": [
+              "K1",
+              "K2"
+            ],
+            "caughtCount": 0,
+            "total": 2,
+            "weightedPct": 0,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 1,
+            "maxTokens": 4000
+          }
+        }
       },
       {
         "task": "08-secret-leak",
-        "key": 4,
-        "glmCaught": 4,
-        "glmFp": 0,
-        "qwenCaught": 3,
-        "qwenFp": 0,
-        "qwenMissed": [
-          {
-            "id": "K4",
-            "severity": "major",
-            "summary": "the full user record, including credential fields, is returned to the caller"
-          }
+        "total": 4,
+        "ids": [
+          "K1",
+          "K2",
+          "K3",
+          "K4"
         ],
-        "glmMissed": []
+        "models": {
+          "surplus/glm-5.3": {
+            "ok": true,
+            "reason": null,
+            "caught": [
+              "K1",
+              "K2",
+              "K3",
+              "K4"
+            ],
+            "missed": [],
+            "caughtCount": 4,
+            "total": 4,
+            "weightedPct": 100,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
+          },
+          "surplus/qwen3.8-flash": {
+            "ok": true,
+            "reason": null,
+            "caught": [
+              "K1",
+              "K2",
+              "K3"
+            ],
+            "missed": [
+              "K4"
+            ],
+            "caughtCount": 3,
+            "total": 4,
+            "weightedPct": 71,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
+          },
+          "surplus/glm-5.3-flash": {
+            "ok": true,
+            "reason": null,
+            "caught": [
+              "K1",
+              "K2",
+              "K3"
+            ],
+            "missed": [
+              "K4"
+            ],
+            "caughtCount": 3,
+            "total": 4,
+            "weightedPct": 71,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 4000
+          },
+          "surplus/deepseek-v4.1-flash-1017": {
+            "ok": true,
+            "reason": null,
+            "caught": [
+              "K1",
+              "K2",
+              "K3"
+            ],
+            "missed": [
+              "K4"
+            ],
+            "caughtCount": 3,
+            "total": 4,
+            "weightedPct": 71,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 4000
+          },
+          "surplus/claude-haiku-4.5": {
+            "ok": false,
+            "reason": "invalid answer",
+            "caught": [],
+            "missed": [
+              "K1",
+              "K2",
+              "K3",
+              "K4"
+            ],
+            "caughtCount": 0,
+            "total": 4,
+            "weightedPct": 0,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 1,
+            "maxTokens": 4000
+          }
+        }
       },
       {
         "task": "09-crypto",
-        "key": 3,
-        "glmCaught": 3,
-        "glmFp": 1,
-        "qwenCaught": 3,
-        "qwenFp": 0,
-        "qwenMissed": [],
-        "glmMissed": []
+        "total": 3,
+        "ids": [
+          "K1",
+          "K2",
+          "K3"
+        ],
+        "models": {
+          "surplus/glm-5.3": {
+            "ok": true,
+            "reason": null,
+            "caught": [
+              "K1",
+              "K2",
+              "K3"
+            ],
+            "missed": [],
+            "caughtCount": 3,
+            "total": 3,
+            "weightedPct": 100,
+            "fp": 1,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
+          },
+          "surplus/qwen3.8-flash": {
+            "ok": true,
+            "reason": null,
+            "caught": [
+              "K1",
+              "K2",
+              "K3"
+            ],
+            "missed": [],
+            "caughtCount": 3,
+            "total": 3,
+            "weightedPct": 100,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
+          },
+          "surplus/glm-5.3-flash": {
+            "ok": false,
+            "reason": "invalid answer",
+            "caught": [],
+            "missed": [
+              "K1",
+              "K2",
+              "K3"
+            ],
+            "caughtCount": 0,
+            "total": 3,
+            "weightedPct": 0,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 1,
+            "maxTokens": 4000
+          },
+          "surplus/deepseek-v4.1-flash-1017": {
+            "ok": false,
+            "reason": "invalid answer",
+            "caught": [],
+            "missed": [
+              "K1",
+              "K2",
+              "K3"
+            ],
+            "caughtCount": 0,
+            "total": 3,
+            "weightedPct": 0,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 1,
+            "maxTokens": 4000
+          },
+          "surplus/claude-haiku-4.5": {
+            "ok": false,
+            "reason": "invalid answer",
+            "caught": [],
+            "missed": [
+              "K1",
+              "K2",
+              "K3"
+            ],
+            "caughtCount": 0,
+            "total": 3,
+            "weightedPct": 0,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 1,
+            "maxTokens": 4000
+          }
+        }
       },
       {
         "task": "10-config-exposure",
-        "key": 3,
-        "glmCaught": 3,
-        "glmFp": 0,
-        "qwenCaught": 3,
-        "qwenFp": 0,
-        "qwenMissed": [],
-        "glmMissed": []
+        "total": 3,
+        "ids": [
+          "K1",
+          "K2",
+          "K3"
+        ],
+        "models": {
+          "surplus/glm-5.3": {
+            "ok": true,
+            "reason": null,
+            "caught": [
+              "K1",
+              "K2",
+              "K3"
+            ],
+            "missed": [],
+            "caughtCount": 3,
+            "total": 3,
+            "weightedPct": 100,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
+          },
+          "surplus/qwen3.8-flash": {
+            "ok": true,
+            "reason": null,
+            "caught": [
+              "K1",
+              "K2",
+              "K3"
+            ],
+            "missed": [],
+            "caughtCount": 3,
+            "total": 3,
+            "weightedPct": 100,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
+          },
+          "surplus/glm-5.3-flash": {
+            "ok": false,
+            "reason": "invalid answer",
+            "caught": [],
+            "missed": [
+              "K1",
+              "K2",
+              "K3"
+            ],
+            "caughtCount": 0,
+            "total": 3,
+            "weightedPct": 0,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 1,
+            "maxTokens": 4000
+          },
+          "surplus/deepseek-v4.1-flash-1017": {
+            "ok": false,
+            "reason": "invalid answer",
+            "caught": [],
+            "missed": [
+              "K1",
+              "K2",
+              "K3"
+            ],
+            "caughtCount": 0,
+            "total": 3,
+            "weightedPct": 0,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 1,
+            "maxTokens": 4000
+          },
+          "surplus/claude-haiku-4.5": {
+            "ok": false,
+            "reason": "invalid answer",
+            "caught": [],
+            "missed": [
+              "K1",
+              "K2",
+              "K3"
+            ],
+            "caughtCount": 0,
+            "total": 3,
+            "weightedPct": 0,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 1,
+            "maxTokens": 4000
+          }
+        }
+      }
+    ],
+    "models": [
+      "surplus/glm-5.3",
+      "surplus/qwen3.8-flash",
+      "surplus/glm-5.3-flash",
+      "surplus/deepseek-v4.1-flash-1017",
+      "surplus/claude-haiku-4.5"
+    ],
+    "chosen": {
+      "model": "surplus/glm-5.3",
+      "tier": "measured",
+      "confidence": "medium",
+      "completeness": "complete",
+      "scored": 10,
+      "failed": 0,
+      "failedTasks": 0,
+      "samples": 1,
+      "retries": 0,
+      "catch": 100,
+      "precision": 85,
+      "fp": 4,
+      "cost": 0.032409,
+      "costPerTask": 0.003241,
+      "costPerCall": 0.003241,
+      "unique": null,
+      "maxTokens": 16000,
+      "packHash": "sha256:868fee106a6d51db674ccbac7c40faaa195566804c239d14010a69aa4ccf4370",
+      "protocol": "security-review-v1",
+      "pack": "security-review",
+      "packVersion": 1,
+      "lastDate": "2026-11-21",
+      "stale": false,
+      "catchCi": [
+        100,
+        100
+      ],
+      "uniqueIds": []
+    },
+    "runnerUp": {
+      "model": "surplus/qwen3.8-flash",
+      "tier": "measured",
+      "confidence": "medium",
+      "completeness": "complete",
+      "scored": 10,
+      "failed": 0,
+      "failedTasks": 0,
+      "samples": 1,
+      "retries": 0,
+      "catch": 97,
+      "precision": 96,
+      "fp": 1,
+      "cost": 0.012327,
+      "costPerTask": 0.001233,
+      "costPerCall": 0.001233,
+      "unique": 0,
+      "maxTokens": 16000,
+      "packHash": "sha256:868fee106a6d51db674ccbac7c40faaa195566804c239d14010a69aa4ccf4370",
+      "protocol": "security-review-v1",
+      "pack": "security-review",
+      "packVersion": 1,
+      "lastDate": "2026-11-21",
+      "stale": false,
+      "catchCi": [
+        91,
+        100
+      ],
+      "uniqueIds": []
+    },
+    "diff": [
+      {
+        "task": "01-sql-injection",
+        "both": [
+          "K1",
+          "K2"
+        ],
+        "onlyFirst": [],
+        "onlySecond": [],
+        "neither": []
+      },
+      {
+        "task": "02-path-traversal",
+        "both": [
+          "K1"
+        ],
+        "onlyFirst": [],
+        "onlySecond": [],
+        "neither": []
+      },
+      {
+        "task": "03-idor",
+        "both": [
+          "K1",
+          "K2"
+        ],
+        "onlyFirst": [],
+        "onlySecond": [],
+        "neither": []
+      },
+      {
+        "task": "04-jwt",
+        "both": [
+          "K1",
+          "K2"
+        ],
+        "onlyFirst": [],
+        "onlySecond": [],
+        "neither": []
+      },
+      {
+        "task": "05-ssrf",
+        "both": [
+          "K1"
+        ],
+        "onlyFirst": [],
+        "onlySecond": [],
+        "neither": []
+      },
+      {
+        "task": "06-command-injection",
+        "both": [
+          "K1",
+          "K2",
+          "K3"
+        ],
+        "onlyFirst": [],
+        "onlySecond": [],
+        "neither": []
+      },
+      {
+        "task": "07-deserialization",
+        "both": [
+          "K1",
+          "K2"
+        ],
+        "onlyFirst": [],
+        "onlySecond": [],
+        "neither": []
+      },
+      {
+        "task": "08-secret-leak",
+        "both": [
+          "K1",
+          "K2",
+          "K3"
+        ],
+        "onlyFirst": [
+          "K4"
+        ],
+        "onlySecond": [],
+        "neither": []
+      },
+      {
+        "task": "09-crypto",
+        "both": [
+          "K1",
+          "K2",
+          "K3"
+        ],
+        "onlyFirst": [],
+        "onlySecond": [],
+        "neither": []
+      },
+      {
+        "task": "10-config-exposure",
+        "both": [
+          "K1",
+          "K2",
+          "K3"
+        ],
+        "onlyFirst": [],
+        "onlySecond": [],
+        "neither": []
       }
     ]
   },
@@ -450,282 +1794,1393 @@
         "model": "surplus/qwen3.8-flash",
         "tier": "measured",
         "confidence": "medium",
+        "completeness": "complete",
         "scored": 10,
         "failed": 0,
+        "failedTasks": 0,
+        "samples": 1,
+        "retries": 0,
         "catch": 80,
         "precision": 98,
         "fp": 1,
         "cost": 0.0047,
         "costPerTask": 0.00047,
+        "costPerCall": 0.00047,
         "unique": 6,
-        "maxTokens": 16000
+        "maxTokens": 16000,
+        "packHash": "sha256:4cb9f2cd1a7c12de733e131a9b51617d3c37184f94f464c62782a3d11a3101c8",
+        "protocol": "council-seat-v1",
+        "pack": "council-chair",
+        "packVersion": 2,
+        "lastDate": "2026-11-21",
+        "stale": false,
+        "catchCi": [
+          71,
+          89
+        ],
+        "uniqueIds": [
+          {
+            "task": "02-summary-cache",
+            "id": "C4"
+          },
+          {
+            "task": "04-search-index",
+            "id": "C4"
+          },
+          {
+            "task": "05-status-ownership",
+            "id": "C4"
+          },
+          {
+            "task": "07-command-palette",
+            "id": "C1"
+          },
+          {
+            "task": "07-command-palette",
+            "id": "C4"
+          },
+          {
+            "task": "08-second-transport",
+            "id": "C6"
+          }
+        ]
       },
       {
         "model": "surplus/deepseek-v4.1-flash-1017",
         "tier": "measured",
         "confidence": "medium",
+        "completeness": "complete",
         "scored": 10,
         "failed": 0,
+        "failedTasks": 0,
+        "samples": 1,
+        "retries": 0,
         "catch": 78,
         "precision": 100,
         "fp": 0,
         "cost": 0.006418,
         "costPerTask": 0.000642,
+        "costPerCall": 0.000642,
         "unique": null,
-        "maxTokens": 16000
+        "maxTokens": 16000,
+        "packHash": "sha256:4cb9f2cd1a7c12de733e131a9b51617d3c37184f94f464c62782a3d11a3101c8",
+        "protocol": "council-seat-v1",
+        "pack": "council-chair",
+        "packVersion": 2,
+        "lastDate": "2026-11-21",
+        "stale": false,
+        "catchCi": [
+          69,
+          87
+        ],
+        "uniqueIds": []
       },
       {
         "model": "surplus/glm-5.3-flash",
         "tier": "pilot",
         "confidence": "low",
-        "scored": 7,
-        "failed": 3,
-        "catch": 83,
+        "completeness": "partial",
+        "scored": 4,
+        "failed": 6,
+        "failedTasks": 6,
+        "samples": 1,
+        "retries": 0,
+        "catch": 91,
         "precision": 100,
         "fp": 0,
-        "cost": 0.003461,
-        "costPerTask": 0.000494,
-        "unique": 9,
-        "maxTokens": 8000
+        "cost": 0.006817,
+        "costPerTask": 0.001704,
+        "costPerCall": 0.001704,
+        "unique": 5,
+        "maxTokens": 16000,
+        "packHash": "sha256:4cb9f2cd1a7c12de733e131a9b51617d3c37184f94f464c62782a3d11a3101c8",
+        "protocol": "council-seat-v1",
+        "pack": "council-chair",
+        "packVersion": 2,
+        "lastDate": "2026-11-22",
+        "stale": false,
+        "catchCi": [
+          80,
+          100
+        ],
+        "uniqueIds": [
+          {
+            "task": "05-status-ownership",
+            "id": "C5"
+          },
+          {
+            "task": "05-status-ownership",
+            "id": "C6"
+          },
+          {
+            "task": "07-command-palette",
+            "id": "C1"
+          },
+          {
+            "task": "07-command-palette",
+            "id": "C5"
+          },
+          {
+            "task": "08-second-transport",
+            "id": "C6"
+          }
+        ]
+      },
+      {
+        "model": "surplus/glm-5.3",
+        "tier": "pilot",
+        "confidence": "low",
+        "completeness": "partial",
+        "scored": 7,
+        "failed": 3,
+        "failedTasks": 3,
+        "samples": 1,
+        "retries": 0,
+        "catch": 81,
+        "precision": 100,
+        "fp": 0,
+        "cost": 0.113538,
+        "costPerTask": 0.01622,
+        "costPerCall": 0.01622,
+        "unique": 4,
+        "maxTokens": 16000,
+        "packHash": "sha256:4cb9f2cd1a7c12de733e131a9b51617d3c37184f94f464c62782a3d11a3101c8",
+        "protocol": "council-seat-v1",
+        "pack": "council-chair",
+        "packVersion": 2,
+        "lastDate": "2026-11-22",
+        "stale": false,
+        "catchCi": [
+          72,
+          91
+        ],
+        "uniqueIds": [
+          {
+            "task": "04-search-index",
+            "id": "C4"
+          },
+          {
+            "task": "05-status-ownership",
+            "id": "C4"
+          },
+          {
+            "task": "07-command-palette",
+            "id": "C4"
+          },
+          {
+            "task": "08-second-transport",
+            "id": "C6"
+          }
+        ]
       }
     ],
     "tasks": [
       {
         "task": "01-switching-threads",
         "total": 6,
+        "ids": [
+          "C1",
+          "C2",
+          "C3",
+          "C4",
+          "C5",
+          "C6"
+        ],
         "models": {
-          "surplus/deepseek-v4.1-flash-1017": {
-            "ok": true,
-            "caught": 6,
-            "fp": 0,
-            "missed": []
-          },
           "surplus/qwen3.8-flash": {
             "ok": true,
-            "caught": 6,
+            "reason": null,
+            "caught": [
+              "C1",
+              "C2",
+              "C3",
+              "C4",
+              "C5",
+              "C6"
+            ],
+            "missed": [],
+            "caughtCount": 6,
+            "total": 6,
+            "weightedPct": 100,
             "fp": 0,
-            "missed": []
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
+          },
+          "surplus/deepseek-v4.1-flash-1017": {
+            "ok": true,
+            "reason": null,
+            "caught": [
+              "C1",
+              "C2",
+              "C3",
+              "C4",
+              "C5",
+              "C6"
+            ],
+            "missed": [],
+            "caughtCount": 6,
+            "total": 6,
+            "weightedPct": 100,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
+          },
+          "surplus/glm-5.3-flash": {
+            "ok": false,
+            "reason": "invalid answer",
+            "caught": [],
+            "missed": [
+              "C1",
+              "C2",
+              "C3",
+              "C4",
+              "C5",
+              "C6"
+            ],
+            "caughtCount": 0,
+            "total": 6,
+            "weightedPct": 0,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 1,
+            "maxTokens": 16000
+          },
+          "surplus/glm-5.3": {
+            "ok": false,
+            "reason": "invalid answer",
+            "caught": [],
+            "missed": [
+              "C1",
+              "C2",
+              "C3",
+              "C4",
+              "C5",
+              "C6"
+            ],
+            "caughtCount": 0,
+            "total": 6,
+            "weightedPct": 0,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 1,
+            "maxTokens": 16000
           }
         }
       },
       {
         "task": "02-summary-cache",
         "total": 7,
+        "ids": [
+          "C1",
+          "C2",
+          "C3",
+          "C4",
+          "C5",
+          "C6",
+          "C7"
+        ],
         "models": {
-          "surplus/deepseek-v4.1-flash-1017": {
-            "ok": true,
-            "caught": 4,
-            "fp": 0,
-            "missed": [
-              "C1: lists all three options A, B and C",
-              "C4: captures the experience dissent about a visible stale read",
-              "C6: names C as rejected because it adds SQLite or a new store"
-            ]
-          },
           "surplus/qwen3.8-flash": {
             "ok": true,
-            "caught": 4,
-            "fp": 0,
+            "reason": null,
+            "caught": [
+              "C2",
+              "C3",
+              "C4",
+              "C7"
+            ],
             "missed": [
-              "C1: lists all three options A, B and C",
-              "C5: names B as rejected because it is a file or second store",
-              "C6: names C as rejected because it adds SQLite or a new store"
-            ]
+              "C1",
+              "C5",
+              "C6"
+            ],
+            "caughtCount": 4,
+            "total": 7,
+            "weightedPct": 67,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
+          },
+          "surplus/deepseek-v4.1-flash-1017": {
+            "ok": true,
+            "reason": null,
+            "caught": [
+              "C2",
+              "C3",
+              "C5",
+              "C7"
+            ],
+            "missed": [
+              "C1",
+              "C4",
+              "C6"
+            ],
+            "caughtCount": 4,
+            "total": 7,
+            "weightedPct": 67,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
+          },
+          "surplus/glm-5.3-flash": {
+            "ok": false,
+            "reason": "invalid answer",
+            "caught": [],
+            "missed": [
+              "C1",
+              "C2",
+              "C3",
+              "C4",
+              "C5",
+              "C6",
+              "C7"
+            ],
+            "caughtCount": 0,
+            "total": 7,
+            "weightedPct": 0,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 1,
+            "maxTokens": 16000
+          },
+          "surplus/glm-5.3": {
+            "ok": false,
+            "reason": "invalid answer",
+            "caught": [],
+            "missed": [
+              "C1",
+              "C2",
+              "C3",
+              "C4",
+              "C5",
+              "C6",
+              "C7"
+            ],
+            "caughtCount": 0,
+            "total": 7,
+            "weightedPct": 0,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 1,
+            "maxTokens": 16000
           }
         }
       },
       {
         "task": "03-storage-migration",
         "total": 6,
+        "ids": [
+          "C1",
+          "C2",
+          "C3",
+          "C4",
+          "C5",
+          "C6"
+        ],
         "models": {
-          "surplus/deepseek-v4.1-flash-1017": {
-            "ok": true,
-            "caught": 6,
-            "fp": 0,
-            "missed": []
-          },
           "surplus/qwen3.8-flash": {
             "ok": true,
-            "caught": 5,
-            "fp": 0,
+            "reason": null,
+            "caught": [
+              "C1",
+              "C2",
+              "C3",
+              "C4",
+              "C6"
+            ],
             "missed": [
-              "C5: names B as rejected because it cannot be rolled back"
-            ]
+              "C5"
+            ],
+            "caughtCount": 5,
+            "total": 6,
+            "weightedPct": 91,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
+          },
+          "surplus/deepseek-v4.1-flash-1017": {
+            "ok": true,
+            "reason": null,
+            "caught": [
+              "C1",
+              "C2",
+              "C3",
+              "C4",
+              "C5",
+              "C6"
+            ],
+            "missed": [],
+            "caughtCount": 6,
+            "total": 6,
+            "weightedPct": 100,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
+          },
+          "surplus/glm-5.3-flash": {
+            "ok": true,
+            "reason": null,
+            "caught": [
+              "C1",
+              "C2",
+              "C3",
+              "C4",
+              "C5",
+              "C6"
+            ],
+            "missed": [],
+            "caughtCount": 6,
+            "total": 6,
+            "weightedPct": 100,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
+          },
+          "surplus/glm-5.3": {
+            "ok": true,
+            "reason": null,
+            "caught": [
+              "C1",
+              "C2",
+              "C3",
+              "C4",
+              "C5",
+              "C6"
+            ],
+            "missed": [],
+            "caughtCount": 6,
+            "total": 6,
+            "weightedPct": 100,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
           }
         }
       },
       {
         "task": "04-search-index",
         "total": 6,
+        "ids": [
+          "C1",
+          "C2",
+          "C3",
+          "C4",
+          "C5",
+          "C6"
+        ],
         "models": {
-          "surplus/deepseek-v4.1-flash-1017": {
-            "ok": true,
-            "caught": 3,
-            "fp": 0,
-            "missed": [
-              "C1: lists all three options",
-              "C4: captures the experience dissent about stale results",
-              "C6: names C as rejected for a service or dependency"
-            ]
-          },
           "surplus/qwen3.8-flash": {
             "ok": true,
-            "caught": 3,
-            "fp": 0,
+            "reason": null,
+            "caught": [
+              "C2",
+              "C3",
+              "C4"
+            ],
             "missed": [
-              "C1: lists all three options",
-              "C5: names B as rejected for being an on-disk store or leak",
-              "C6: names C as rejected for a service or dependency"
-            ]
+              "C1",
+              "C5",
+              "C6"
+            ],
+            "caughtCount": 3,
+            "total": 6,
+            "weightedPct": 64,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
+          },
+          "surplus/deepseek-v4.1-flash-1017": {
+            "ok": true,
+            "reason": null,
+            "caught": [
+              "C2",
+              "C3",
+              "C5"
+            ],
+            "missed": [
+              "C1",
+              "C4",
+              "C6"
+            ],
+            "caughtCount": 3,
+            "total": 6,
+            "weightedPct": 64,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
+          },
+          "surplus/glm-5.3-flash": {
+            "ok": false,
+            "reason": "invalid answer",
+            "caught": [],
+            "missed": [
+              "C1",
+              "C2",
+              "C3",
+              "C4",
+              "C5",
+              "C6"
+            ],
+            "caughtCount": 0,
+            "total": 6,
+            "weightedPct": 0,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 1,
+            "maxTokens": 16000
+          },
+          "surplus/glm-5.3": {
+            "ok": true,
+            "reason": null,
+            "caught": [
+              "C2",
+              "C3",
+              "C4",
+              "C5"
+            ],
+            "missed": [
+              "C1",
+              "C6"
+            ],
+            "caughtCount": 4,
+            "total": 6,
+            "weightedPct": 73,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
           }
         }
       },
       {
         "task": "05-status-ownership",
         "total": 6,
+        "ids": [
+          "C1",
+          "C2",
+          "C3",
+          "C4",
+          "C5",
+          "C6"
+        ],
         "models": {
-          "surplus/deepseek-v4.1-flash-1017": {
-            "ok": true,
-            "caught": 2,
-            "fp": 0,
-            "missed": [
-              "C1: lists all three options",
-              "C4: captures the shape warning about a duplicated copy",
-              "C5: names B as rejected for a second source of truth",
-              "C6: names C as rejected for duplication"
-            ]
-          },
           "surplus/qwen3.8-flash": {
             "ok": true,
-            "caught": 3,
-            "fp": 0,
+            "reason": null,
+            "caught": [
+              "C2",
+              "C3",
+              "C4"
+            ],
             "missed": [
-              "C1: lists all three options",
-              "C5: names B as rejected for a second source of truth",
-              "C6: names C as rejected for duplication"
-            ]
+              "C1",
+              "C5",
+              "C6"
+            ],
+            "caughtCount": 3,
+            "total": 6,
+            "weightedPct": 64,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
+          },
+          "surplus/deepseek-v4.1-flash-1017": {
+            "ok": true,
+            "reason": null,
+            "caught": [
+              "C2",
+              "C3"
+            ],
+            "missed": [
+              "C1",
+              "C4",
+              "C5",
+              "C6"
+            ],
+            "caughtCount": 2,
+            "total": 6,
+            "weightedPct": 55,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
+          },
+          "surplus/glm-5.3-flash": {
+            "ok": true,
+            "reason": null,
+            "caught": [
+              "C2",
+              "C3",
+              "C5",
+              "C6"
+            ],
+            "missed": [
+              "C1",
+              "C4"
+            ],
+            "caughtCount": 4,
+            "total": 6,
+            "weightedPct": 73,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
+          },
+          "surplus/glm-5.3": {
+            "ok": true,
+            "reason": null,
+            "caught": [
+              "C2",
+              "C3",
+              "C4"
+            ],
+            "missed": [
+              "C1",
+              "C5",
+              "C6"
+            ],
+            "caughtCount": 3,
+            "total": 6,
+            "weightedPct": 64,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
           }
         }
       },
       {
         "task": "06-warning-placement",
         "total": 6,
+        "ids": [
+          "C1",
+          "C2",
+          "C3",
+          "C4",
+          "C5",
+          "C6"
+        ],
         "models": {
-          "surplus/deepseek-v4.1-flash-1017": {
-            "ok": true,
-            "caught": 4,
-            "fp": 0,
-            "missed": [
-              "C4: captures the shape dissent for the topbar",
-              "C6: names the risk position that the state must stay visible"
-            ]
-          },
           "surplus/qwen3.8-flash": {
             "ok": true,
-            "caught": 3,
-            "fp": 0,
+            "reason": null,
+            "caught": [
+              "C1",
+              "C2",
+              "C5"
+            ],
             "missed": [
-              "C3: captures the experience dissent for the body banner",
-              "C4: captures the shape dissent for the topbar",
-              "C6: names the risk position that the state must stay visible"
-            ]
+              "C3",
+              "C4",
+              "C6"
+            ],
+            "caughtCount": 3,
+            "total": 6,
+            "weightedPct": 64,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
+          },
+          "surplus/deepseek-v4.1-flash-1017": {
+            "ok": true,
+            "reason": null,
+            "caught": [
+              "C1",
+              "C2",
+              "C3",
+              "C5"
+            ],
+            "missed": [
+              "C4",
+              "C6"
+            ],
+            "caughtCount": 4,
+            "total": 6,
+            "weightedPct": 82,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
+          },
+          "surplus/glm-5.3-flash": {
+            "ok": false,
+            "reason": "invalid answer",
+            "caught": [],
+            "missed": [
+              "C1",
+              "C2",
+              "C3",
+              "C4",
+              "C5",
+              "C6"
+            ],
+            "caughtCount": 0,
+            "total": 6,
+            "weightedPct": 0,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 1,
+            "maxTokens": 16000
+          },
+          "surplus/glm-5.3": {
+            "ok": true,
+            "reason": null,
+            "caught": [
+              "C1",
+              "C2",
+              "C3",
+              "C5"
+            ],
+            "missed": [
+              "C4",
+              "C6"
+            ],
+            "caughtCount": 4,
+            "total": 6,
+            "weightedPct": 82,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
           }
         }
       },
       {
         "task": "07-command-palette",
         "total": 6,
+        "ids": [
+          "C1",
+          "C2",
+          "C3",
+          "C4",
+          "C5",
+          "C6"
+        ],
         "models": {
-          "surplus/deepseek-v4.1-flash-1017": {
-            "ok": true,
-            "caught": 3,
-            "fp": 0,
-            "missed": [
-              "C1: lists all three options",
-              "C4: captures the experience point about reusing visible labels",
-              "C5: names B as rejected for a duplicate command list"
-            ]
-          },
           "surplus/qwen3.8-flash": {
             "ok": true,
-            "caught": 5,
-            "fp": 1,
+            "reason": null,
+            "caught": [
+              "C1",
+              "C2",
+              "C3",
+              "C4",
+              "C6"
+            ],
             "missed": [
-              "C5: names B as rejected for a duplicate command list"
-            ]
+              "C5"
+            ],
+            "caughtCount": 5,
+            "total": 6,
+            "weightedPct": 91,
+            "fp": 1,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
+          },
+          "surplus/deepseek-v4.1-flash-1017": {
+            "ok": true,
+            "reason": null,
+            "caught": [
+              "C2",
+              "C3",
+              "C6"
+            ],
+            "missed": [
+              "C1",
+              "C4",
+              "C5"
+            ],
+            "caughtCount": 3,
+            "total": 6,
+            "weightedPct": 64,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
+          },
+          "surplus/glm-5.3-flash": {
+            "ok": true,
+            "reason": null,
+            "caught": [
+              "C1",
+              "C2",
+              "C3",
+              "C5",
+              "C6"
+            ],
+            "missed": [
+              "C4"
+            ],
+            "caughtCount": 5,
+            "total": 6,
+            "weightedPct": 91,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
+          },
+          "surplus/glm-5.3": {
+            "ok": true,
+            "reason": null,
+            "caught": [
+              "C2",
+              "C3",
+              "C4",
+              "C6"
+            ],
+            "missed": [
+              "C1",
+              "C5"
+            ],
+            "caughtCount": 4,
+            "total": 6,
+            "weightedPct": 73,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
           }
         }
       },
       {
         "task": "08-second-transport",
         "total": 6,
+        "ids": [
+          "C1",
+          "C2",
+          "C3",
+          "C4",
+          "C5",
+          "C6"
+        ],
         "models": {
-          "surplus/deepseek-v4.1-flash-1017": {
-            "ok": true,
-            "caught": 5,
-            "fp": 0,
-            "missed": [
-              "C6: captures the experience goal of lower latency"
-            ]
-          },
           "surplus/qwen3.8-flash": {
             "ok": true,
-            "caught": 6,
+            "reason": null,
+            "caught": [
+              "C1",
+              "C2",
+              "C3",
+              "C4",
+              "C5",
+              "C6"
+            ],
+            "missed": [],
+            "caughtCount": 6,
+            "total": 6,
+            "weightedPct": 100,
             "fp": 0,
-            "missed": []
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
+          },
+          "surplus/deepseek-v4.1-flash-1017": {
+            "ok": true,
+            "reason": null,
+            "caught": [
+              "C1",
+              "C2",
+              "C3",
+              "C4",
+              "C5"
+            ],
+            "missed": [
+              "C6"
+            ],
+            "caughtCount": 5,
+            "total": 6,
+            "weightedPct": 91,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
+          },
+          "surplus/glm-5.3-flash": {
+            "ok": true,
+            "reason": null,
+            "caught": [
+              "C1",
+              "C2",
+              "C3",
+              "C4",
+              "C5",
+              "C6"
+            ],
+            "missed": [],
+            "caughtCount": 6,
+            "total": 6,
+            "weightedPct": 100,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
+          },
+          "surplus/glm-5.3": {
+            "ok": true,
+            "reason": null,
+            "caught": [
+              "C1",
+              "C2",
+              "C3",
+              "C4",
+              "C5",
+              "C6"
+            ],
+            "missed": [],
+            "caughtCount": 6,
+            "total": 6,
+            "weightedPct": 100,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
           }
         }
       },
       {
         "task": "09-no-dissent",
         "total": 4,
+        "ids": [
+          "C1",
+          "C2",
+          "C3",
+          "C4"
+        ],
         "models": {
-          "surplus/deepseek-v4.1-flash-1017": {
-            "ok": true,
-            "caught": 3,
-            "fp": 0,
-            "missed": [
-              "C1: lists the three options A, B and C"
-            ]
-          },
           "surplus/qwen3.8-flash": {
             "ok": true,
-            "caught": 3,
-            "fp": 0,
+            "reason": null,
+            "caught": [
+              "C2",
+              "C3",
+              "C4"
+            ],
             "missed": [
-              "C1: lists the three options A, B and C"
-            ]
+              "C1"
+            ],
+            "caughtCount": 3,
+            "total": 4,
+            "weightedPct": 78,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
+          },
+          "surplus/deepseek-v4.1-flash-1017": {
+            "ok": true,
+            "reason": null,
+            "caught": [
+              "C2",
+              "C3",
+              "C4"
+            ],
+            "missed": [
+              "C1"
+            ],
+            "caughtCount": 3,
+            "total": 4,
+            "weightedPct": 78,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
+          },
+          "surplus/glm-5.3-flash": {
+            "ok": false,
+            "reason": "invalid answer",
+            "caught": [],
+            "missed": [
+              "C1",
+              "C2",
+              "C3",
+              "C4"
+            ],
+            "caughtCount": 0,
+            "total": 4,
+            "weightedPct": 0,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 1,
+            "maxTokens": 16000
+          },
+          "surplus/glm-5.3": {
+            "ok": true,
+            "reason": null,
+            "caught": [
+              "C2",
+              "C3",
+              "C4"
+            ],
+            "missed": [
+              "C1"
+            ],
+            "caughtCount": 3,
+            "total": 4,
+            "weightedPct": 78,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
           }
         }
       },
       {
         "task": "10-admin-endpoint",
         "total": 6,
+        "ids": [
+          "C1",
+          "C2",
+          "C3",
+          "C4",
+          "C5",
+          "C6"
+        ],
         "models": {
-          "surplus/deepseek-v4.1-flash-1017": {
-            "ok": true,
-            "caught": 4,
-            "fp": 0,
-            "missed": [
-              "C4: captures the risk dissent about metadata exposure",
-              "C5: captures the shape preference for no endpoint"
-            ]
-          },
           "surplus/qwen3.8-flash": {
             "ok": true,
-            "caught": 4,
-            "fp": 0,
+            "reason": null,
+            "caught": [
+              "C1",
+              "C2",
+              "C3",
+              "C6"
+            ],
             "missed": [
-              "C4: captures the risk dissent about metadata exposure",
-              "C5: captures the shape preference for no endpoint"
-            ]
+              "C4",
+              "C5"
+            ],
+            "caughtCount": 4,
+            "total": 6,
+            "weightedPct": 82,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
+          },
+          "surplus/deepseek-v4.1-flash-1017": {
+            "ok": true,
+            "reason": null,
+            "caught": [
+              "C1",
+              "C2",
+              "C3",
+              "C6"
+            ],
+            "missed": [
+              "C4",
+              "C5"
+            ],
+            "caughtCount": 4,
+            "total": 6,
+            "weightedPct": 82,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
+          },
+          "surplus/glm-5.3-flash": {
+            "ok": false,
+            "reason": "invalid answer",
+            "caught": [],
+            "missed": [
+              "C1",
+              "C2",
+              "C3",
+              "C4",
+              "C5",
+              "C6"
+            ],
+            "caughtCount": 0,
+            "total": 6,
+            "weightedPct": 0,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 1,
+            "maxTokens": 16000
+          },
+          "surplus/glm-5.3": {
+            "ok": false,
+            "reason": "invalid answer",
+            "caught": [],
+            "missed": [
+              "C1",
+              "C2",
+              "C3",
+              "C4",
+              "C5",
+              "C6"
+            ],
+            "caughtCount": 0,
+            "total": 6,
+            "weightedPct": 0,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 1,
+            "maxTokens": 16000
           }
         }
       }
     ],
     "models": [
+      "surplus/qwen3.8-flash",
       "surplus/deepseek-v4.1-flash-1017",
-      "surplus/qwen3.8-flash"
+      "surplus/glm-5.3-flash",
+      "surplus/glm-5.3"
+    ],
+    "chosen": {
+      "model": "surplus/deepseek-v4.1-flash-1017",
+      "tier": "measured",
+      "confidence": "medium",
+      "completeness": "complete",
+      "scored": 10,
+      "failed": 0,
+      "failedTasks": 0,
+      "samples": 1,
+      "retries": 0,
+      "catch": 78,
+      "precision": 100,
+      "fp": 0,
+      "cost": 0.006418,
+      "costPerTask": 0.000642,
+      "costPerCall": 0.000642,
+      "unique": null,
+      "maxTokens": 16000,
+      "packHash": "sha256:4cb9f2cd1a7c12de733e131a9b51617d3c37184f94f464c62782a3d11a3101c8",
+      "protocol": "council-seat-v1",
+      "pack": "council-chair",
+      "packVersion": 2,
+      "lastDate": "2026-11-21",
+      "stale": false,
+      "catchCi": [
+        69,
+        87
+      ],
+      "uniqueIds": []
+    },
+    "runnerUp": {
+      "model": "surplus/qwen3.8-flash",
+      "tier": "measured",
+      "confidence": "medium",
+      "completeness": "complete",
+      "scored": 10,
+      "failed": 0,
+      "failedTasks": 0,
+      "samples": 1,
+      "retries": 0,
+      "catch": 80,
+      "precision": 98,
+      "fp": 1,
+      "cost": 0.0047,
+      "costPerTask": 0.00047,
+      "costPerCall": 0.00047,
+      "unique": 6,
+      "maxTokens": 16000,
+      "packHash": "sha256:4cb9f2cd1a7c12de733e131a9b51617d3c37184f94f464c62782a3d11a3101c8",
+      "protocol": "council-seat-v1",
+      "pack": "council-chair",
+      "packVersion": 2,
+      "lastDate": "2026-11-21",
+      "stale": false,
+      "catchCi": [
+        71,
+        89
+      ],
+      "uniqueIds": [
+        {
+          "task": "02-summary-cache",
+          "id": "C4"
+        },
+        {
+          "task": "04-search-index",
+          "id": "C4"
+        },
+        {
+          "task": "05-status-ownership",
+          "id": "C4"
+        },
+        {
+          "task": "07-command-palette",
+          "id": "C1"
+        },
+        {
+          "task": "07-command-palette",
+          "id": "C4"
+        },
+        {
+          "task": "08-second-transport",
+          "id": "C6"
+        }
+      ]
+    },
+    "diff": [
+      {
+        "task": "01-switching-threads",
+        "both": [
+          "C1",
+          "C2",
+          "C3",
+          "C4",
+          "C5",
+          "C6"
+        ],
+        "onlyFirst": [],
+        "onlySecond": [],
+        "neither": []
+      },
+      {
+        "task": "02-summary-cache",
+        "both": [
+          "C2",
+          "C3",
+          "C7"
+        ],
+        "onlyFirst": [
+          "C5"
+        ],
+        "onlySecond": [
+          "C4"
+        ],
+        "neither": [
+          "C1",
+          "C6"
+        ]
+      },
+      {
+        "task": "03-storage-migration",
+        "both": [
+          "C1",
+          "C2",
+          "C3",
+          "C4",
+          "C6"
+        ],
+        "onlyFirst": [
+          "C5"
+        ],
+        "onlySecond": [],
+        "neither": []
+      },
+      {
+        "task": "04-search-index",
+        "both": [
+          "C2",
+          "C3"
+        ],
+        "onlyFirst": [
+          "C5"
+        ],
+        "onlySecond": [
+          "C4"
+        ],
+        "neither": [
+          "C1",
+          "C6"
+        ]
+      },
+      {
+        "task": "05-status-ownership",
+        "both": [
+          "C2",
+          "C3"
+        ],
+        "onlyFirst": [],
+        "onlySecond": [
+          "C4"
+        ],
+        "neither": [
+          "C1",
+          "C5",
+          "C6"
+        ]
+      },
+      {
+        "task": "06-warning-placement",
+        "both": [
+          "C1",
+          "C2",
+          "C5"
+        ],
+        "onlyFirst": [
+          "C3"
+        ],
+        "onlySecond": [],
+        "neither": [
+          "C4",
+          "C6"
+        ]
+      },
+      {
+        "task": "07-command-palette",
+        "both": [
+          "C2",
+          "C3",
+          "C6"
+        ],
+        "onlyFirst": [],
+        "onlySecond": [
+          "C1",
+          "C4"
+        ],
+        "neither": [
+          "C5"
+        ]
+      },
+      {
+        "task": "08-second-transport",
+        "both": [
+          "C1",
+          "C2",
+          "C3",
+          "C4",
+          "C5"
+        ],
+        "onlyFirst": [],
+        "onlySecond": [
+          "C6"
+        ],
+        "neither": []
+      },
+      {
+        "task": "09-no-dissent",
+        "both": [
+          "C2",
+          "C3",
+          "C4"
+        ],
+        "onlyFirst": [],
+        "onlySecond": [],
+        "neither": [
+          "C1"
+        ]
+      },
+      {
+        "task": "10-admin-endpoint",
+        "both": [
+          "C1",
+          "C2",
+          "C3",
+          "C6"
+        ],
+        "onlyFirst": [],
+        "onlySecond": [],
+        "neither": [
+          "C4",
+          "C5"
+        ]
+      }
     ]
   },
   "shape": {
@@ -734,253 +3189,1262 @@
         "model": "surplus/deepseek-v4.1-flash-1017",
         "tier": "measured",
         "confidence": "medium",
+        "completeness": "complete",
         "scored": 10,
         "failed": 0,
+        "failedTasks": 0,
+        "samples": 1,
+        "retries": 0,
         "catch": 91,
         "precision": 100,
         "fp": 0,
         "cost": 0.005819,
         "costPerTask": 0.000582,
+        "costPerCall": 0.000582,
         "unique": null,
-        "maxTokens": 16000
+        "maxTokens": 16000,
+        "packHash": "sha256:a3a47b3a43c30e0642489b9ff718e7d7c7b22377d7a2ad9ef44bcd37c6f97fcd",
+        "protocol": "council-seat-v1",
+        "pack": "council-shape",
+        "packVersion": 2,
+        "lastDate": "2026-11-21",
+        "stale": false,
+        "catchCi": [
+          86,
+          97
+        ],
+        "uniqueIds": []
       },
       {
         "model": "surplus/qwen3.8-flash",
         "tier": "measured",
         "confidence": "medium",
+        "completeness": "complete",
         "scored": 10,
         "failed": 0,
+        "failedTasks": 0,
+        "samples": 1,
+        "retries": 0,
         "catch": 87,
         "precision": 100,
         "fp": 0,
         "cost": 0.003816,
         "costPerTask": 0.000382,
+        "costPerCall": 0.000382,
         "unique": 1,
-        "maxTokens": 16000
+        "maxTokens": 16000,
+        "packHash": "sha256:a3a47b3a43c30e0642489b9ff718e7d7c7b22377d7a2ad9ef44bcd37c6f97fcd",
+        "protocol": "council-seat-v1",
+        "pack": "council-shape",
+        "packVersion": 2,
+        "lastDate": "2026-11-21",
+        "stale": false,
+        "catchCi": [
+          79,
+          94
+        ],
+        "uniqueIds": [
+          {
+            "task": "03-per-thread-drafts",
+            "id": "C3"
+          }
+        ]
+      },
+      {
+        "model": "surplus/glm-5.3",
+        "tier": "pilot",
+        "confidence": "low",
+        "completeness": "partial",
+        "scored": 9,
+        "failed": 1,
+        "failedTasks": 1,
+        "samples": 1,
+        "retries": 0,
+        "catch": 87,
+        "precision": 100,
+        "fp": 0,
+        "cost": 0.034339,
+        "costPerTask": 0.003815,
+        "costPerCall": 0.003815,
+        "unique": 2,
+        "maxTokens": 16000,
+        "packHash": "sha256:a3a47b3a43c30e0642489b9ff718e7d7c7b22377d7a2ad9ef44bcd37c6f97fcd",
+        "protocol": "council-seat-v1",
+        "pack": "council-shape",
+        "packVersion": 2,
+        "lastDate": "2026-11-22",
+        "stale": false,
+        "catchCi": [
+          75,
+          97
+        ],
+        "uniqueIds": [
+          {
+            "task": "01-status-page",
+            "id": "C3"
+          },
+          {
+            "task": "03-per-thread-drafts",
+            "id": "C3"
+          }
+        ]
       },
       {
         "model": "surplus/glm-5.3-flash",
         "tier": "pilot",
         "confidence": "low",
-        "scored": 8,
-        "failed": 2,
-        "catch": 93,
+        "completeness": "partial",
+        "scored": 5,
+        "failed": 5,
+        "failedTasks": 5,
+        "samples": 1,
+        "retries": 0,
+        "catch": 86,
         "precision": 100,
         "fp": 0,
-        "cost": 0.002227,
-        "costPerTask": 0.000278,
-        "unique": 0,
-        "maxTokens": 8000
+        "cost": 0.00338,
+        "costPerTask": 0.000676,
+        "costPerCall": 0.000676,
+        "unique": 1,
+        "maxTokens": 16000,
+        "packHash": "sha256:a3a47b3a43c30e0642489b9ff718e7d7c7b22377d7a2ad9ef44bcd37c6f97fcd",
+        "protocol": "council-seat-v1",
+        "pack": "council-shape",
+        "packVersion": 2,
+        "lastDate": "2026-11-22",
+        "stale": false,
+        "catchCi": [
+          69,
+          100
+        ],
+        "uniqueIds": [
+          {
+            "task": "03-per-thread-drafts",
+            "id": "C3"
+          }
+        ]
       }
     ],
     "tasks": [
       {
         "task": "01-status-page",
         "total": 5,
+        "ids": [
+          "C1",
+          "C2",
+          "C3",
+          "C4",
+          "C5"
+        ],
         "models": {
           "surplus/deepseek-v4.1-flash-1017": {
             "ok": true,
-            "caught": 4,
-            "fp": 0,
+            "reason": null,
+            "caught": [
+              "C1",
+              "C2",
+              "C4",
+              "C5"
+            ],
             "missed": [
-              "C3: defers live updates and analytics"
-            ]
+              "C3"
+            ],
+            "caughtCount": 4,
+            "total": 5,
+            "weightedPct": 86,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
           },
           "surplus/qwen3.8-flash": {
             "ok": true,
-            "caught": 4,
-            "fp": 0,
+            "reason": null,
+            "caught": [
+              "C1",
+              "C2",
+              "C4",
+              "C5"
+            ],
             "missed": [
-              "C3: defers live updates and analytics"
-            ]
+              "C3"
+            ],
+            "caughtCount": 4,
+            "total": 5,
+            "weightedPct": 86,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
+          },
+          "surplus/glm-5.3": {
+            "ok": true,
+            "reason": null,
+            "caught": [
+              "C1",
+              "C2",
+              "C3",
+              "C4",
+              "C5"
+            ],
+            "missed": [],
+            "caughtCount": 5,
+            "total": 5,
+            "weightedPct": 100,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
+          },
+          "surplus/glm-5.3-flash": {
+            "ok": true,
+            "reason": null,
+            "caught": [
+              "C1",
+              "C2",
+              "C4"
+            ],
+            "missed": [
+              "C3",
+              "C5"
+            ],
+            "caughtCount": 3,
+            "total": 5,
+            "weightedPct": 71,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
           }
         }
       },
       {
         "task": "02-read-only-list",
         "total": 5,
+        "ids": [
+          "C1",
+          "C2",
+          "C3",
+          "C4",
+          "C5"
+        ],
         "models": {
           "surplus/deepseek-v4.1-flash-1017": {
             "ok": true,
-            "caught": 5,
+            "reason": null,
+            "caught": [
+              "C1",
+              "C2",
+              "C3",
+              "C4",
+              "C5"
+            ],
+            "missed": [],
+            "caughtCount": 5,
+            "total": 5,
+            "weightedPct": 100,
             "fp": 0,
-            "missed": []
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
           },
           "surplus/qwen3.8-flash": {
             "ok": true,
-            "caught": 5,
+            "reason": null,
+            "caught": [
+              "C1",
+              "C2",
+              "C3",
+              "C4",
+              "C5"
+            ],
+            "missed": [],
+            "caughtCount": 5,
+            "total": 5,
+            "weightedPct": 100,
             "fp": 0,
-            "missed": []
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
+          },
+          "surplus/glm-5.3": {
+            "ok": true,
+            "reason": null,
+            "caught": [
+              "C1",
+              "C2",
+              "C3",
+              "C4",
+              "C5"
+            ],
+            "missed": [],
+            "caughtCount": 5,
+            "total": 5,
+            "weightedPct": 100,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
+          },
+          "surplus/glm-5.3-flash": {
+            "ok": true,
+            "reason": null,
+            "caught": [
+              "C1",
+              "C2",
+              "C3",
+              "C4",
+              "C5"
+            ],
+            "missed": [],
+            "caughtCount": 5,
+            "total": 5,
+            "weightedPct": 100,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
           }
         }
       },
       {
         "task": "03-per-thread-drafts",
         "total": 5,
+        "ids": [
+          "C1",
+          "C2",
+          "C3",
+          "C4",
+          "C5"
+        ],
         "models": {
           "surplus/deepseek-v4.1-flash-1017": {
             "ok": true,
-            "caught": 4,
-            "fp": 0,
+            "reason": null,
+            "caught": [
+              "C1",
+              "C2",
+              "C4",
+              "C5"
+            ],
             "missed": [
-              "C3: defers cross-device sync"
-            ]
+              "C3"
+            ],
+            "caughtCount": 4,
+            "total": 5,
+            "weightedPct": 86,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
           },
           "surplus/qwen3.8-flash": {
             "ok": true,
-            "caught": 5,
+            "reason": null,
+            "caught": [
+              "C1",
+              "C2",
+              "C3",
+              "C4",
+              "C5"
+            ],
+            "missed": [],
+            "caughtCount": 5,
+            "total": 5,
+            "weightedPct": 100,
             "fp": 0,
-            "missed": []
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
+          },
+          "surplus/glm-5.3": {
+            "ok": true,
+            "reason": null,
+            "caught": [
+              "C1",
+              "C2",
+              "C3",
+              "C4",
+              "C5"
+            ],
+            "missed": [],
+            "caughtCount": 5,
+            "total": 5,
+            "weightedPct": 100,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
+          },
+          "surplus/glm-5.3-flash": {
+            "ok": true,
+            "reason": null,
+            "caught": [
+              "C1",
+              "C2",
+              "C3",
+              "C4",
+              "C5"
+            ],
+            "missed": [],
+            "caughtCount": 5,
+            "total": 5,
+            "weightedPct": 100,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
           }
         }
       },
       {
         "task": "04-background-refresh",
         "total": 5,
+        "ids": [
+          "C1",
+          "C2",
+          "C3",
+          "C4",
+          "C5"
+        ],
         "models": {
           "surplus/deepseek-v4.1-flash-1017": {
             "ok": true,
-            "caught": 4,
-            "fp": 0,
+            "reason": null,
+            "caught": [
+              "C1",
+              "C2",
+              "C4",
+              "C5"
+            ],
             "missed": [
-              "C3: defers hourly freshness and the worker"
-            ]
+              "C3"
+            ],
+            "caughtCount": 4,
+            "total": 5,
+            "weightedPct": 86,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
           },
           "surplus/qwen3.8-flash": {
             "ok": true,
-            "caught": 4,
-            "fp": 0,
+            "reason": null,
+            "caught": [
+              "C1",
+              "C2",
+              "C4",
+              "C5"
+            ],
             "missed": [
-              "C3: defers hourly freshness and the worker"
-            ]
+              "C3"
+            ],
+            "caughtCount": 4,
+            "total": 5,
+            "weightedPct": 86,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
+          },
+          "surplus/glm-5.3": {
+            "ok": false,
+            "reason": "invalid answer",
+            "caught": [],
+            "missed": [
+              "C1",
+              "C2",
+              "C3",
+              "C4",
+              "C5"
+            ],
+            "caughtCount": 0,
+            "total": 5,
+            "weightedPct": 0,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 1,
+            "maxTokens": 16000
+          },
+          "surplus/glm-5.3-flash": {
+            "ok": false,
+            "reason": "invalid answer",
+            "caught": [],
+            "missed": [
+              "C1",
+              "C2",
+              "C3",
+              "C4",
+              "C5"
+            ],
+            "caughtCount": 0,
+            "total": 5,
+            "weightedPct": 0,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 1,
+            "maxTokens": 16000
           }
         }
       },
       {
         "task": "05-landing-cache",
         "total": 5,
+        "ids": [
+          "C1",
+          "C2",
+          "C3",
+          "C4",
+          "C5"
+        ],
         "models": {
           "surplus/deepseek-v4.1-flash-1017": {
             "ok": true,
-            "caught": 5,
+            "reason": null,
+            "caught": [
+              "C1",
+              "C2",
+              "C3",
+              "C4",
+              "C5"
+            ],
+            "missed": [],
+            "caughtCount": 5,
+            "total": 5,
+            "weightedPct": 100,
             "fp": 0,
-            "missed": []
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
           },
           "surplus/qwen3.8-flash": {
             "ok": true,
-            "caught": 4,
-            "fp": 0,
+            "reason": null,
+            "caught": [
+              "C2",
+              "C3",
+              "C4",
+              "C5"
+            ],
             "missed": [
-              "C1: uses an in-memory cache over the existing module"
-            ]
+              "C1"
+            ],
+            "caughtCount": 4,
+            "total": 5,
+            "weightedPct": 71,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
+          },
+          "surplus/glm-5.3": {
+            "ok": true,
+            "reason": null,
+            "caught": [
+              "C1",
+              "C2",
+              "C3",
+              "C4",
+              "C5"
+            ],
+            "missed": [],
+            "caughtCount": 5,
+            "total": 5,
+            "weightedPct": 100,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
+          },
+          "surplus/glm-5.3-flash": {
+            "ok": false,
+            "reason": "invalid answer",
+            "caught": [],
+            "missed": [
+              "C1",
+              "C2",
+              "C3",
+              "C4",
+              "C5"
+            ],
+            "caughtCount": 0,
+            "total": 5,
+            "weightedPct": 0,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 1,
+            "maxTokens": 16000
           }
         }
       },
       {
         "task": "06-import-projects",
         "total": 5,
+        "ids": [
+          "C1",
+          "C2",
+          "C3",
+          "C4",
+          "C5"
+        ],
         "models": {
           "surplus/deepseek-v4.1-flash-1017": {
             "ok": true,
-            "caught": 5,
+            "reason": null,
+            "caught": [
+              "C1",
+              "C2",
+              "C3",
+              "C4",
+              "C5"
+            ],
+            "missed": [],
+            "caughtCount": 5,
+            "total": 5,
+            "weightedPct": 100,
             "fp": 0,
-            "missed": []
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
           },
           "surplus/qwen3.8-flash": {
             "ok": true,
-            "caught": 5,
+            "reason": null,
+            "caught": [
+              "C1",
+              "C2",
+              "C3",
+              "C4",
+              "C5"
+            ],
+            "missed": [],
+            "caughtCount": 5,
+            "total": 5,
+            "weightedPct": 100,
             "fp": 0,
-            "missed": []
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
+          },
+          "surplus/glm-5.3": {
+            "ok": true,
+            "reason": null,
+            "caught": [
+              "C1",
+              "C2",
+              "C3",
+              "C5"
+            ],
+            "missed": [
+              "C4"
+            ],
+            "caughtCount": 4,
+            "total": 5,
+            "weightedPct": 86,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
+          },
+          "surplus/glm-5.3-flash": {
+            "ok": true,
+            "reason": null,
+            "caught": [
+              "C1",
+              "C2",
+              "C3",
+              "C4",
+              "C5"
+            ],
+            "missed": [],
+            "caughtCount": 5,
+            "total": 5,
+            "weightedPct": 100,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
           }
         }
       },
       {
         "task": "07-settings-page",
         "total": 5,
+        "ids": [
+          "C1",
+          "C2",
+          "C3",
+          "C4",
+          "C5"
+        ],
         "models": {
           "surplus/deepseek-v4.1-flash-1017": {
             "ok": true,
-            "caught": 4,
-            "fp": 0,
+            "reason": null,
+            "caught": [
+              "C1",
+              "C2",
+              "C4",
+              "C5"
+            ],
             "missed": [
-              "C3: defers multi-user settings and auth"
-            ]
+              "C3"
+            ],
+            "caughtCount": 4,
+            "total": 5,
+            "weightedPct": 86,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
           },
           "surplus/qwen3.8-flash": {
             "ok": true,
-            "caught": 4,
-            "fp": 0,
+            "reason": null,
+            "caught": [
+              "C1",
+              "C2",
+              "C4",
+              "C5"
+            ],
             "missed": [
-              "C3: defers multi-user settings and auth"
-            ]
+              "C3"
+            ],
+            "caughtCount": 4,
+            "total": 5,
+            "weightedPct": 86,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
+          },
+          "surplus/glm-5.3": {
+            "ok": true,
+            "reason": null,
+            "caught": [
+              "C1",
+              "C2",
+              "C4",
+              "C5"
+            ],
+            "missed": [
+              "C3"
+            ],
+            "caughtCount": 4,
+            "total": 5,
+            "weightedPct": 86,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
+          },
+          "surplus/glm-5.3-flash": {
+            "ok": false,
+            "reason": "invalid answer",
+            "caught": [],
+            "missed": [
+              "C1",
+              "C2",
+              "C3",
+              "C4",
+              "C5"
+            ],
+            "caughtCount": 0,
+            "total": 5,
+            "weightedPct": 0,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 1,
+            "maxTokens": 16000
           }
         }
       },
       {
         "task": "08-delete-project",
         "total": 5,
+        "ids": [
+          "C1",
+          "C2",
+          "C3",
+          "C4",
+          "C5"
+        ],
         "models": {
           "surplus/deepseek-v4.1-flash-1017": {
             "ok": true,
-            "caught": 5,
+            "reason": null,
+            "caught": [
+              "C1",
+              "C2",
+              "C3",
+              "C4",
+              "C5"
+            ],
+            "missed": [],
+            "caughtCount": 5,
+            "total": 5,
+            "weightedPct": 100,
             "fp": 0,
-            "missed": []
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
           },
           "surplus/qwen3.8-flash": {
             "ok": true,
-            "caught": 4,
-            "fp": 0,
+            "reason": null,
+            "caught": [
+              "C1",
+              "C2",
+              "C3",
+              "C5"
+            ],
             "missed": [
-              "C4: describes a restore or revert path"
-            ]
+              "C4"
+            ],
+            "caughtCount": 4,
+            "total": 5,
+            "weightedPct": 86,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
+          },
+          "surplus/glm-5.3": {
+            "ok": true,
+            "reason": null,
+            "caught": [
+              "C1",
+              "C2",
+              "C3",
+              "C5"
+            ],
+            "missed": [
+              "C4"
+            ],
+            "caughtCount": 4,
+            "total": 5,
+            "weightedPct": 86,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
+          },
+          "surplus/glm-5.3-flash": {
+            "ok": false,
+            "reason": "invalid answer",
+            "caught": [],
+            "missed": [
+              "C1",
+              "C2",
+              "C3",
+              "C4",
+              "C5"
+            ],
+            "caughtCount": 0,
+            "total": 5,
+            "weightedPct": 0,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 1,
+            "maxTokens": 16000
           }
         }
       },
       {
         "task": "09-sqlite-migration",
         "total": 5,
+        "ids": [
+          "C1",
+          "C2",
+          "C3",
+          "C4",
+          "C5"
+        ],
         "models": {
           "surplus/deepseek-v4.1-flash-1017": {
             "ok": true,
-            "caught": 4,
-            "fp": 0,
+            "reason": null,
+            "caught": [
+              "C1",
+              "C3",
+              "C4",
+              "C5"
+            ],
             "missed": [
-              "C2: names the store and read seams"
-            ]
+              "C2"
+            ],
+            "caughtCount": 4,
+            "total": 5,
+            "weightedPct": 71,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
           },
           "surplus/qwen3.8-flash": {
             "ok": true,
-            "caught": 3,
-            "fp": 0,
+            "reason": null,
+            "caught": [
+              "C1",
+              "C3",
+              "C5"
+            ],
             "missed": [
-              "C2: names the store and read seams",
-              "C4: describes a rollback path"
-            ]
+              "C2",
+              "C4"
+            ],
+            "caughtCount": 3,
+            "total": 5,
+            "weightedPct": 57,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
+          },
+          "surplus/glm-5.3": {
+            "ok": true,
+            "reason": null,
+            "caught": [
+              "C3",
+              "C4",
+              "C5"
+            ],
+            "missed": [
+              "C1",
+              "C2"
+            ],
+            "caughtCount": 3,
+            "total": 5,
+            "weightedPct": 43,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
+          },
+          "surplus/glm-5.3-flash": {
+            "ok": true,
+            "reason": null,
+            "caught": [
+              "C1",
+              "C3",
+              "C5"
+            ],
+            "missed": [
+              "C2",
+              "C4"
+            ],
+            "caughtCount": 3,
+            "total": 5,
+            "weightedPct": 57,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
           }
         }
       },
       {
         "task": "10-test-results-table",
         "total": 5,
+        "ids": [
+          "C1",
+          "C2",
+          "C3",
+          "C4",
+          "C5"
+        ],
         "models": {
           "surplus/deepseek-v4.1-flash-1017": {
             "ok": true,
-            "caught": 5,
+            "reason": null,
+            "caught": [
+              "C1",
+              "C2",
+              "C3",
+              "C4",
+              "C5"
+            ],
+            "missed": [],
+            "caughtCount": 5,
+            "total": 5,
+            "weightedPct": 100,
             "fp": 0,
-            "missed": []
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
           },
           "surplus/qwen3.8-flash": {
             "ok": true,
-            "caught": 5,
+            "reason": null,
+            "caught": [
+              "C1",
+              "C2",
+              "C3",
+              "C4",
+              "C5"
+            ],
+            "missed": [],
+            "caughtCount": 5,
+            "total": 5,
+            "weightedPct": 100,
             "fp": 0,
-            "missed": []
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
+          },
+          "surplus/glm-5.3": {
+            "ok": true,
+            "reason": null,
+            "caught": [
+              "C1",
+              "C2",
+              "C3",
+              "C4"
+            ],
+            "missed": [
+              "C5"
+            ],
+            "caughtCount": 4,
+            "total": 5,
+            "weightedPct": 86,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
+          },
+          "surplus/glm-5.3-flash": {
+            "ok": false,
+            "reason": "invalid answer",
+            "caught": [],
+            "missed": [
+              "C1",
+              "C2",
+              "C3",
+              "C4",
+              "C5"
+            ],
+            "caughtCount": 0,
+            "total": 5,
+            "weightedPct": 0,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 1,
+            "maxTokens": 16000
           }
         }
       }
     ],
     "models": [
       "surplus/deepseek-v4.1-flash-1017",
-      "surplus/qwen3.8-flash"
+      "surplus/qwen3.8-flash",
+      "surplus/glm-5.3",
+      "surplus/glm-5.3-flash"
+    ],
+    "chosen": {
+      "model": "surplus/deepseek-v4.1-flash-1017",
+      "tier": "measured",
+      "confidence": "medium",
+      "completeness": "complete",
+      "scored": 10,
+      "failed": 0,
+      "failedTasks": 0,
+      "samples": 1,
+      "retries": 0,
+      "catch": 91,
+      "precision": 100,
+      "fp": 0,
+      "cost": 0.005819,
+      "costPerTask": 0.000582,
+      "costPerCall": 0.000582,
+      "unique": null,
+      "maxTokens": 16000,
+      "packHash": "sha256:a3a47b3a43c30e0642489b9ff718e7d7c7b22377d7a2ad9ef44bcd37c6f97fcd",
+      "protocol": "council-seat-v1",
+      "pack": "council-shape",
+      "packVersion": 2,
+      "lastDate": "2026-11-21",
+      "stale": false,
+      "catchCi": [
+        86,
+        97
+      ],
+      "uniqueIds": []
+    },
+    "runnerUp": {
+      "model": "surplus/qwen3.8-flash",
+      "tier": "measured",
+      "confidence": "medium",
+      "completeness": "complete",
+      "scored": 10,
+      "failed": 0,
+      "failedTasks": 0,
+      "samples": 1,
+      "retries": 0,
+      "catch": 87,
+      "precision": 100,
+      "fp": 0,
+      "cost": 0.003816,
+      "costPerTask": 0.000382,
+      "costPerCall": 0.000382,
+      "unique": 1,
+      "maxTokens": 16000,
+      "packHash": "sha256:a3a47b3a43c30e0642489b9ff718e7d7c7b22377d7a2ad9ef44bcd37c6f97fcd",
+      "protocol": "council-seat-v1",
+      "pack": "council-shape",
+      "packVersion": 2,
+      "lastDate": "2026-11-21",
+      "stale": false,
+      "catchCi": [
+        79,
+        94
+      ],
+      "uniqueIds": [
+        {
+          "task": "03-per-thread-drafts",
+          "id": "C3"
+        }
+      ]
+    },
+    "diff": [
+      {
+        "task": "01-status-page",
+        "both": [
+          "C1",
+          "C2",
+          "C4",
+          "C5"
+        ],
+        "onlyFirst": [],
+        "onlySecond": [],
+        "neither": [
+          "C3"
+        ]
+      },
+      {
+        "task": "02-read-only-list",
+        "both": [
+          "C1",
+          "C2",
+          "C3",
+          "C4",
+          "C5"
+        ],
+        "onlyFirst": [],
+        "onlySecond": [],
+        "neither": []
+      },
+      {
+        "task": "03-per-thread-drafts",
+        "both": [
+          "C1",
+          "C2",
+          "C4",
+          "C5"
+        ],
+        "onlyFirst": [],
+        "onlySecond": [
+          "C3"
+        ],
+        "neither": []
+      },
+      {
+        "task": "04-background-refresh",
+        "both": [
+          "C1",
+          "C2",
+          "C4",
+          "C5"
+        ],
+        "onlyFirst": [],
+        "onlySecond": [],
+        "neither": [
+          "C3"
+        ]
+      },
+      {
+        "task": "05-landing-cache",
+        "both": [
+          "C2",
+          "C3",
+          "C4",
+          "C5"
+        ],
+        "onlyFirst": [
+          "C1"
+        ],
+        "onlySecond": [],
+        "neither": []
+      },
+      {
+        "task": "06-import-projects",
+        "both": [
+          "C1",
+          "C2",
+          "C3",
+          "C4",
+          "C5"
+        ],
+        "onlyFirst": [],
+        "onlySecond": [],
+        "neither": []
+      },
+      {
+        "task": "07-settings-page",
+        "both": [
+          "C1",
+          "C2",
+          "C4",
+          "C5"
+        ],
+        "onlyFirst": [],
+        "onlySecond": [],
+        "neither": [
+          "C3"
+        ]
+      },
+      {
+        "task": "08-delete-project",
+        "both": [
+          "C1",
+          "C2",
+          "C3",
+          "C5"
+        ],
+        "onlyFirst": [
+          "C4"
+        ],
+        "onlySecond": [],
+        "neither": []
+      },
+      {
+        "task": "09-sqlite-migration",
+        "both": [
+          "C1",
+          "C3",
+          "C5"
+        ],
+        "onlyFirst": [
+          "C4"
+        ],
+        "onlySecond": [],
+        "neither": [
+          "C2"
+        ]
+      },
+      {
+        "task": "10-test-results-table",
+        "both": [
+          "C1",
+          "C2",
+          "C3",
+          "C4",
+          "C5"
+        ],
+        "onlyFirst": [],
+        "onlySecond": [],
+        "neither": []
+      }
     ]
   },
   "experience": {
@@ -989,257 +4453,1742 @@
         "model": "surplus/deepseek-v4.1-flash-1017",
         "tier": "measured",
         "confidence": "medium",
+        "completeness": "complete",
         "scored": 10,
         "failed": 0,
+        "failedTasks": 0,
+        "samples": 1,
+        "retries": 0,
         "catch": 93,
         "precision": 100,
         "fp": 0,
         "cost": 0.00309,
         "costPerTask": 0.000309,
+        "costPerCall": 0.000309,
         "unique": null,
-        "maxTokens": 8000
+        "maxTokens": 8000,
+        "packHash": "sha256:396db55fbb8bd707f37cfd9d5e7705adbc0194806751f1352db75200bc111d32",
+        "protocol": "council-seat-v1",
+        "pack": "council-experience",
+        "packVersion": 2,
+        "lastDate": "2026-11-21",
+        "stale": false,
+        "catchCi": [
+          87,
+          99
+        ],
+        "uniqueIds": []
+      },
+      {
+        "model": "surplus/glm-5.3",
+        "tier": "measured",
+        "confidence": "medium",
+        "completeness": "complete",
+        "scored": 10,
+        "failed": 0,
+        "failedTasks": 0,
+        "samples": 1,
+        "retries": 0,
+        "catch": 91,
+        "precision": 100,
+        "fp": 0,
+        "cost": 0.078666,
+        "costPerTask": 0.007867,
+        "costPerCall": 0.007867,
+        "unique": null,
+        "maxTokens": 16000,
+        "packHash": "sha256:396db55fbb8bd707f37cfd9d5e7705adbc0194806751f1352db75200bc111d32",
+        "protocol": "council-seat-v1",
+        "pack": "council-experience",
+        "packVersion": 2,
+        "lastDate": "2026-11-22",
+        "stale": false,
+        "catchCi": [
+          82,
+          100
+        ],
+        "uniqueIds": [
+          {
+            "task": "03-delete-confirmation",
+            "id": "C4"
+          },
+          {
+            "task": "08-first-project",
+            "id": "C5"
+          },
+          {
+            "task": "10-stale-live-update",
+            "id": "C5"
+          }
+        ]
       },
       {
         "model": "surplus/glm-5.3-flash",
         "tier": "pilot",
         "confidence": "low",
-        "scored": 6,
-        "failed": 4,
-        "catch": 87,
+        "completeness": "partial",
+        "scored": 7,
+        "failed": 3,
+        "failedTasks": 3,
+        "samples": 1,
+        "retries": 0,
+        "catch": 89,
         "precision": 100,
         "fp": 0,
-        "cost": 0.003203,
-        "costPerTask": 0.000534,
-        "unique": 1,
-        "maxTokens": 8000
+        "cost": 0.005444,
+        "costPerTask": 0.000778,
+        "costPerCall": 0.000778,
+        "unique": null,
+        "maxTokens": 16000,
+        "packHash": "sha256:396db55fbb8bd707f37cfd9d5e7705adbc0194806751f1352db75200bc111d32",
+        "protocol": "council-seat-v1",
+        "pack": "council-experience",
+        "packVersion": 2,
+        "lastDate": "2026-11-22",
+        "stale": false,
+        "catchCi": [
+          81,
+          95
+        ],
+        "uniqueIds": [
+          {
+            "task": "04-error-state",
+            "id": "C1"
+          },
+          {
+            "task": "08-first-project",
+            "id": "C5"
+          },
+          {
+            "task": "10-stale-live-update",
+            "id": "C5"
+          }
+        ]
       }
     ],
     "tasks": [
       {
         "task": "01-empty-state",
         "total": 7,
+        "ids": [
+          "C1",
+          "C2",
+          "C3",
+          "C4",
+          "C5",
+          "C6",
+          "C7"
+        ],
         "models": {
           "surplus/deepseek-v4.1-flash-1017": {
             "ok": true,
-            "caught": 7,
+            "reason": null,
+            "caught": [
+              "C1",
+              "C2",
+              "C3",
+              "C4",
+              "C5",
+              "C6",
+              "C7"
+            ],
+            "missed": [],
+            "caughtCount": 7,
+            "total": 7,
+            "weightedPct": 100,
             "fp": 0,
-            "missed": []
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 8000
+          },
+          "surplus/glm-5.3": {
+            "ok": true,
+            "reason": null,
+            "caught": [
+              "C1",
+              "C3",
+              "C4",
+              "C5",
+              "C6",
+              "C7"
+            ],
+            "missed": [
+              "C2"
+            ],
+            "caughtCount": 6,
+            "total": 7,
+            "weightedPct": 78,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
           },
           "surplus/glm-5.3-flash": {
-            "ok": false,
-            "caught": 0,
+            "ok": true,
+            "reason": null,
+            "caught": [
+              "C1",
+              "C2",
+              "C3",
+              "C5",
+              "C6",
+              "C7"
+            ],
+            "missed": [
+              "C4"
+            ],
+            "caughtCount": 6,
+            "total": 7,
+            "weightedPct": 89,
             "fp": 0,
-            "missed": []
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
           }
         }
       },
       {
         "task": "02-loading-state",
         "total": 7,
+        "ids": [
+          "C1",
+          "C2",
+          "C3",
+          "C4",
+          "C5",
+          "C6",
+          "C7"
+        ],
         "models": {
           "surplus/deepseek-v4.1-flash-1017": {
             "ok": true,
-            "caught": 7,
+            "reason": null,
+            "caught": [
+              "C1",
+              "C2",
+              "C3",
+              "C4",
+              "C5",
+              "C6",
+              "C7"
+            ],
+            "missed": [],
+            "caughtCount": 7,
+            "total": 7,
+            "weightedPct": 100,
             "fp": 0,
-            "missed": []
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 8000
+          },
+          "surplus/glm-5.3": {
+            "ok": true,
+            "reason": null,
+            "caught": [
+              "C1",
+              "C2",
+              "C3",
+              "C4",
+              "C5",
+              "C6",
+              "C7"
+            ],
+            "missed": [],
+            "caughtCount": 7,
+            "total": 7,
+            "weightedPct": 100,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
           },
           "surplus/glm-5.3-flash": {
-            "ok": true,
-            "caught": 7,
+            "ok": false,
+            "reason": "invalid answer",
+            "caught": [],
+            "missed": [
+              "C1",
+              "C2",
+              "C3",
+              "C4",
+              "C5",
+              "C6",
+              "C7"
+            ],
+            "caughtCount": 0,
+            "total": 7,
+            "weightedPct": 0,
             "fp": 0,
-            "missed": []
+            "samples": 1,
+            "invalid": 1,
+            "maxTokens": 16000
           }
         }
       },
       {
         "task": "03-delete-confirmation",
         "total": 7,
+        "ids": [
+          "C1",
+          "C2",
+          "C3",
+          "C4",
+          "C5",
+          "C6",
+          "C7"
+        ],
         "models": {
           "surplus/deepseek-v4.1-flash-1017": {
             "ok": true,
-            "caught": 6,
-            "fp": 0,
+            "reason": null,
+            "caught": [
+              "C1",
+              "C2",
+              "C3",
+              "C5",
+              "C6",
+              "C7"
+            ],
             "missed": [
-              "C4: the list updates without a layout jump"
-            ]
+              "C4"
+            ],
+            "caughtCount": 6,
+            "total": 7,
+            "weightedPct": 89,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 8000
+          },
+          "surplus/glm-5.3": {
+            "ok": true,
+            "reason": null,
+            "caught": [
+              "C1",
+              "C2",
+              "C3",
+              "C4",
+              "C5",
+              "C6",
+              "C7"
+            ],
+            "missed": [],
+            "caughtCount": 7,
+            "total": 7,
+            "weightedPct": 100,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
           },
           "surplus/glm-5.3-flash": {
-            "ok": false,
-            "caught": 0,
+            "ok": true,
+            "reason": null,
+            "caught": [
+              "C1",
+              "C2",
+              "C3",
+              "C5",
+              "C6",
+              "C7"
+            ],
+            "missed": [
+              "C4"
+            ],
+            "caughtCount": 6,
+            "total": 7,
+            "weightedPct": 89,
             "fp": 0,
-            "missed": []
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
           }
         }
       },
       {
         "task": "04-error-state",
         "total": 7,
+        "ids": [
+          "C1",
+          "C2",
+          "C3",
+          "C4",
+          "C5",
+          "C6",
+          "C7"
+        ],
         "models": {
           "surplus/deepseek-v4.1-flash-1017": {
             "ok": true,
-            "caught": 5,
-            "fp": 0,
+            "reason": null,
+            "caught": [
+              "C2",
+              "C3",
+              "C5",
+              "C6",
+              "C7"
+            ],
             "missed": [
-              "C1: the three-second read says the page failed to load",
-              "C4: content is replaced in place without a jump"
-            ]
+              "C1",
+              "C4"
+            ],
+            "caughtCount": 5,
+            "total": 7,
+            "weightedPct": 67,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 8000
+          },
+          "surplus/glm-5.3": {
+            "ok": true,
+            "reason": null,
+            "caught": [
+              "C2",
+              "C3",
+              "C5",
+              "C6",
+              "C7"
+            ],
+            "missed": [
+              "C1",
+              "C4"
+            ],
+            "caughtCount": 5,
+            "total": 7,
+            "weightedPct": 67,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
           },
           "surplus/glm-5.3-flash": {
             "ok": true,
-            "caught": 4,
-            "fp": 0,
+            "reason": null,
+            "caught": [
+              "C1",
+              "C2",
+              "C3",
+              "C5",
+              "C6",
+              "C7"
+            ],
             "missed": [
-              "C1: the three-second read says the page failed to load",
-              "C4: content is replaced in place without a jump",
-              "C5: avoids a stack trace, blame or modal"
-            ]
+              "C4"
+            ],
+            "caughtCount": 6,
+            "total": 7,
+            "weightedPct": 89,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
           }
         }
       },
       {
         "task": "05-composer",
         "total": 7,
+        "ids": [
+          "C1",
+          "C2",
+          "C3",
+          "C4",
+          "C5",
+          "C6",
+          "C7"
+        ],
         "models": {
           "surplus/deepseek-v4.1-flash-1017": {
             "ok": true,
-            "caught": 7,
+            "reason": null,
+            "caught": [
+              "C1",
+              "C2",
+              "C3",
+              "C4",
+              "C5",
+              "C6",
+              "C7"
+            ],
+            "missed": [],
+            "caughtCount": 7,
+            "total": 7,
+            "weightedPct": 100,
             "fp": 0,
-            "missed": []
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 8000
+          },
+          "surplus/glm-5.3": {
+            "ok": true,
+            "reason": null,
+            "caught": [
+              "C1",
+              "C2",
+              "C3",
+              "C4",
+              "C5",
+              "C6",
+              "C7"
+            ],
+            "missed": [],
+            "caughtCount": 7,
+            "total": 7,
+            "weightedPct": 100,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
           },
           "surplus/glm-5.3-flash": {
             "ok": false,
-            "caught": 0,
+            "reason": "invalid answer",
+            "caught": [],
+            "missed": [
+              "C1",
+              "C2",
+              "C3",
+              "C4",
+              "C5",
+              "C6",
+              "C7"
+            ],
+            "caughtCount": 0,
+            "total": 7,
+            "weightedPct": 0,
             "fp": 0,
-            "missed": []
+            "samples": 1,
+            "invalid": 1,
+            "maxTokens": 16000
           }
         }
       },
       {
         "task": "06-disconnect-confirmation",
         "total": 7,
+        "ids": [
+          "C1",
+          "C2",
+          "C3",
+          "C4",
+          "C5",
+          "C6",
+          "C7"
+        ],
         "models": {
           "surplus/deepseek-v4.1-flash-1017": {
             "ok": true,
-            "caught": 7,
+            "reason": null,
+            "caught": [
+              "C1",
+              "C2",
+              "C3",
+              "C4",
+              "C5",
+              "C6",
+              "C7"
+            ],
+            "missed": [],
+            "caughtCount": 7,
+            "total": 7,
+            "weightedPct": 100,
             "fp": 0,
-            "missed": []
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 8000
+          },
+          "surplus/glm-5.3": {
+            "ok": true,
+            "reason": null,
+            "caught": [
+              "C1",
+              "C2",
+              "C3",
+              "C4",
+              "C5",
+              "C6",
+              "C7"
+            ],
+            "missed": [],
+            "caughtCount": 7,
+            "total": 7,
+            "weightedPct": 100,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
           },
           "surplus/glm-5.3-flash": {
-            "ok": true,
-            "caught": 7,
+            "ok": false,
+            "reason": "invalid answer",
+            "caught": [],
+            "missed": [
+              "C1",
+              "C2",
+              "C3",
+              "C4",
+              "C5",
+              "C6",
+              "C7"
+            ],
+            "caughtCount": 0,
+            "total": 7,
+            "weightedPct": 0,
             "fp": 0,
-            "missed": []
+            "samples": 1,
+            "invalid": 1,
+            "maxTokens": 16000
           }
         }
       },
       {
         "task": "07-settings-page",
         "total": 7,
+        "ids": [
+          "C1",
+          "C2",
+          "C3",
+          "C4",
+          "C5",
+          "C6",
+          "C7"
+        ],
         "models": {
           "surplus/deepseek-v4.1-flash-1017": {
             "ok": true,
-            "caught": 7,
+            "reason": null,
+            "caught": [
+              "C1",
+              "C2",
+              "C3",
+              "C4",
+              "C5",
+              "C6",
+              "C7"
+            ],
+            "missed": [],
+            "caughtCount": 7,
+            "total": 7,
+            "weightedPct": 100,
             "fp": 0,
-            "missed": []
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 8000
+          },
+          "surplus/glm-5.3": {
+            "ok": true,
+            "reason": null,
+            "caught": [
+              "C1",
+              "C2",
+              "C3",
+              "C4",
+              "C5",
+              "C6",
+              "C7"
+            ],
+            "missed": [],
+            "caughtCount": 7,
+            "total": 7,
+            "weightedPct": 100,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
           },
           "surplus/glm-5.3-flash": {
             "ok": true,
-            "caught": 7,
+            "reason": null,
+            "caught": [
+              "C1",
+              "C2",
+              "C3",
+              "C4",
+              "C5",
+              "C6",
+              "C7"
+            ],
+            "missed": [],
+            "caughtCount": 7,
+            "total": 7,
+            "weightedPct": 100,
             "fp": 0,
-            "missed": []
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
           }
         }
       },
       {
         "task": "08-first-project",
         "total": 7,
+        "ids": [
+          "C1",
+          "C2",
+          "C3",
+          "C4",
+          "C5",
+          "C6",
+          "C7"
+        ],
         "models": {
           "surplus/deepseek-v4.1-flash-1017": {
             "ok": true,
-            "caught": 6,
-            "fp": 0,
+            "reason": null,
+            "caught": [
+              "C1",
+              "C2",
+              "C3",
+              "C4",
+              "C6",
+              "C7"
+            ],
             "missed": [
-              "C5: avoids a tour, a modal or sample data"
-            ]
+              "C5"
+            ],
+            "caughtCount": 6,
+            "total": 7,
+            "weightedPct": 89,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 8000
+          },
+          "surplus/glm-5.3": {
+            "ok": true,
+            "reason": null,
+            "caught": [
+              "C1",
+              "C2",
+              "C3",
+              "C4",
+              "C5",
+              "C6",
+              "C7"
+            ],
+            "missed": [],
+            "caughtCount": 7,
+            "total": 7,
+            "weightedPct": 100,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
           },
           "surplus/glm-5.3-flash": {
             "ok": true,
-            "caught": 6,
-            "fp": 0,
+            "reason": null,
+            "caught": [
+              "C1",
+              "C2",
+              "C3",
+              "C5",
+              "C6",
+              "C7"
+            ],
             "missed": [
-              "C1: the three-second read says there are no projects"
-            ]
+              "C4"
+            ],
+            "caughtCount": 6,
+            "total": 7,
+            "weightedPct": 89,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
           }
         }
       },
       {
         "task": "09-test-results-table",
         "total": 7,
+        "ids": [
+          "C1",
+          "C2",
+          "C3",
+          "C4",
+          "C5",
+          "C6",
+          "C7"
+        ],
         "models": {
           "surplus/deepseek-v4.1-flash-1017": {
             "ok": true,
-            "caught": 7,
+            "reason": null,
+            "caught": [
+              "C1",
+              "C2",
+              "C3",
+              "C4",
+              "C5",
+              "C6",
+              "C7"
+            ],
+            "missed": [],
+            "caughtCount": 7,
+            "total": 7,
+            "weightedPct": 100,
             "fp": 0,
-            "missed": []
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 8000
+          },
+          "surplus/glm-5.3": {
+            "ok": true,
+            "reason": null,
+            "caught": [
+              "C1",
+              "C2",
+              "C3",
+              "C4",
+              "C5",
+              "C6",
+              "C7"
+            ],
+            "missed": [],
+            "caughtCount": 7,
+            "total": 7,
+            "weightedPct": 100,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
           },
           "surplus/glm-5.3-flash": {
             "ok": true,
-            "caught": 6,
+            "reason": null,
+            "caught": [
+              "C1",
+              "C2",
+              "C3",
+              "C4",
+              "C5",
+              "C6",
+              "C7"
+            ],
+            "missed": [],
+            "caughtCount": 7,
+            "total": 7,
+            "weightedPct": 100,
             "fp": 0,
-            "missed": [
-              "C5: avoids horizontal scroll and colour-only status"
-            ]
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
           }
         }
       },
       {
         "task": "10-stale-live-update",
         "total": 7,
+        "ids": [
+          "C1",
+          "C2",
+          "C3",
+          "C4",
+          "C5",
+          "C6",
+          "C7"
+        ],
         "models": {
           "surplus/deepseek-v4.1-flash-1017": {
             "ok": true,
-            "caught": 6,
-            "fp": 0,
+            "reason": null,
+            "caught": [
+              "C1",
+              "C2",
+              "C3",
+              "C4",
+              "C6",
+              "C7"
+            ],
             "missed": [
-              "C5: avoids silent stale data, a spinner or a modal"
-            ]
+              "C5"
+            ],
+            "caughtCount": 6,
+            "total": 7,
+            "weightedPct": 89,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 8000
+          },
+          "surplus/glm-5.3": {
+            "ok": true,
+            "reason": null,
+            "caught": [
+              "C2",
+              "C3",
+              "C5",
+              "C6",
+              "C7"
+            ],
+            "missed": [
+              "C1",
+              "C4"
+            ],
+            "caughtCount": 5,
+            "total": 7,
+            "weightedPct": 67,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
           },
           "surplus/glm-5.3-flash": {
-            "ok": false,
-            "caught": 0,
+            "ok": true,
+            "reason": null,
+            "caught": [
+              "C2",
+              "C3",
+              "C5",
+              "C6",
+              "C7"
+            ],
+            "missed": [
+              "C1",
+              "C4"
+            ],
+            "caughtCount": 5,
+            "total": 7,
+            "weightedPct": 67,
             "fp": 0,
-            "missed": []
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
           }
         }
       }
     ],
     "models": [
       "surplus/deepseek-v4.1-flash-1017",
+      "surplus/glm-5.3",
       "surplus/glm-5.3-flash"
+    ],
+    "chosen": {
+      "model": "surplus/deepseek-v4.1-flash-1017",
+      "tier": "measured",
+      "confidence": "medium",
+      "completeness": "complete",
+      "scored": 10,
+      "failed": 0,
+      "failedTasks": 0,
+      "samples": 1,
+      "retries": 0,
+      "catch": 93,
+      "precision": 100,
+      "fp": 0,
+      "cost": 0.00309,
+      "costPerTask": 0.000309,
+      "costPerCall": 0.000309,
+      "unique": null,
+      "maxTokens": 8000,
+      "packHash": "sha256:396db55fbb8bd707f37cfd9d5e7705adbc0194806751f1352db75200bc111d32",
+      "protocol": "council-seat-v1",
+      "pack": "council-experience",
+      "packVersion": 2,
+      "lastDate": "2026-11-21",
+      "stale": false,
+      "catchCi": [
+        87,
+        99
+      ],
+      "uniqueIds": []
+    },
+    "runnerUp": {
+      "model": "surplus/glm-5.3",
+      "tier": "measured",
+      "confidence": "medium",
+      "completeness": "complete",
+      "scored": 10,
+      "failed": 0,
+      "failedTasks": 0,
+      "samples": 1,
+      "retries": 0,
+      "catch": 91,
+      "precision": 100,
+      "fp": 0,
+      "cost": 0.078666,
+      "costPerTask": 0.007867,
+      "costPerCall": 0.007867,
+      "unique": null,
+      "maxTokens": 16000,
+      "packHash": "sha256:396db55fbb8bd707f37cfd9d5e7705adbc0194806751f1352db75200bc111d32",
+      "protocol": "council-seat-v1",
+      "pack": "council-experience",
+      "packVersion": 2,
+      "lastDate": "2026-11-22",
+      "stale": false,
+      "catchCi": [
+        82,
+        100
+      ],
+      "uniqueIds": [
+        {
+          "task": "03-delete-confirmation",
+          "id": "C4"
+        },
+        {
+          "task": "08-first-project",
+          "id": "C5"
+        },
+        {
+          "task": "10-stale-live-update",
+          "id": "C5"
+        }
+      ]
+    },
+    "diff": [
+      {
+        "task": "01-empty-state",
+        "both": [
+          "C1",
+          "C3",
+          "C4",
+          "C5",
+          "C6",
+          "C7"
+        ],
+        "onlyFirst": [
+          "C2"
+        ],
+        "onlySecond": [],
+        "neither": []
+      },
+      {
+        "task": "02-loading-state",
+        "both": [
+          "C1",
+          "C2",
+          "C3",
+          "C4",
+          "C5",
+          "C6",
+          "C7"
+        ],
+        "onlyFirst": [],
+        "onlySecond": [],
+        "neither": []
+      },
+      {
+        "task": "03-delete-confirmation",
+        "both": [
+          "C1",
+          "C2",
+          "C3",
+          "C5",
+          "C6",
+          "C7"
+        ],
+        "onlyFirst": [],
+        "onlySecond": [
+          "C4"
+        ],
+        "neither": []
+      },
+      {
+        "task": "04-error-state",
+        "both": [
+          "C2",
+          "C3",
+          "C5",
+          "C6",
+          "C7"
+        ],
+        "onlyFirst": [],
+        "onlySecond": [],
+        "neither": [
+          "C1",
+          "C4"
+        ]
+      },
+      {
+        "task": "05-composer",
+        "both": [
+          "C1",
+          "C2",
+          "C3",
+          "C4",
+          "C5",
+          "C6",
+          "C7"
+        ],
+        "onlyFirst": [],
+        "onlySecond": [],
+        "neither": []
+      },
+      {
+        "task": "06-disconnect-confirmation",
+        "both": [
+          "C1",
+          "C2",
+          "C3",
+          "C4",
+          "C5",
+          "C6",
+          "C7"
+        ],
+        "onlyFirst": [],
+        "onlySecond": [],
+        "neither": []
+      },
+      {
+        "task": "07-settings-page",
+        "both": [
+          "C1",
+          "C2",
+          "C3",
+          "C4",
+          "C5",
+          "C6",
+          "C7"
+        ],
+        "onlyFirst": [],
+        "onlySecond": [],
+        "neither": []
+      },
+      {
+        "task": "08-first-project",
+        "both": [
+          "C1",
+          "C2",
+          "C3",
+          "C4",
+          "C6",
+          "C7"
+        ],
+        "onlyFirst": [],
+        "onlySecond": [
+          "C5"
+        ],
+        "neither": []
+      },
+      {
+        "task": "09-test-results-table",
+        "both": [
+          "C1",
+          "C2",
+          "C3",
+          "C4",
+          "C5",
+          "C6",
+          "C7"
+        ],
+        "onlyFirst": [],
+        "onlySecond": [],
+        "neither": []
+      },
+      {
+        "task": "10-stale-live-update",
+        "both": [
+          "C2",
+          "C3",
+          "C6",
+          "C7"
+        ],
+        "onlyFirst": [
+          "C1",
+          "C4"
+        ],
+        "onlySecond": [
+          "C5"
+        ],
+        "neither": []
+      }
     ]
   },
   "visual": {
     "row": [
       {
         "model": "surplus/glm-5.3-flash",
-        "tier": "pilot",
-        "confidence": "low",
-        "scored": 1,
+        "tier": "measured",
+        "confidence": "medium",
+        "completeness": "complete",
+        "scored": 10,
         "failed": 0,
-        "catch": 73,
-        "precision": 100,
-        "fp": 0,
-        "cost": 0.000465,
-        "costPerTask": 0.000465,
+        "failedTasks": 0,
+        "samples": 1,
+        "retries": 1,
+        "catch": 60,
+        "precision": 66,
+        "fp": 40,
+        "cost": 0.009149,
+        "costPerTask": 0.000915,
+        "costPerCall": 0.000915,
         "unique": null,
-        "maxTokens": 16000
+        "maxTokens": 16000,
+        "packHash": "sha256:413d56e11b1e31b177917569a360ea6fcf26b1fcd30e79c3470bc87c52bfeda2",
+        "protocol": "visual-review-v1",
+        "pack": "visual-project-list",
+        "packVersion": 2,
+        "lastDate": "2026-11-22",
+        "stale": false,
+        "catchCi": [
+          43,
+          74
+        ],
+        "uniqueIds": []
       }
     ],
+    "rows": [
+      {
+        "model": "surplus/glm-5.3-flash",
+        "tier": "measured",
+        "confidence": "medium",
+        "completeness": "complete",
+        "scored": 10,
+        "failed": 0,
+        "failedTasks": 0,
+        "samples": 1,
+        "retries": 1,
+        "catch": 60,
+        "precision": 66,
+        "fp": 40,
+        "cost": 0.009149,
+        "costPerTask": 0.000915,
+        "costPerCall": 0.000915,
+        "unique": null,
+        "maxTokens": 16000,
+        "packHash": "sha256:413d56e11b1e31b177917569a360ea6fcf26b1fcd30e79c3470bc87c52bfeda2",
+        "protocol": "visual-review-v1",
+        "pack": "visual-project-list",
+        "packVersion": 2,
+        "lastDate": "2026-11-22",
+        "stale": false,
+        "catchCi": [
+          43,
+          74
+        ],
+        "uniqueIds": []
+      }
+    ],
+    "tasks": [
+      {
+        "task": "01-project-list",
+        "total": 22,
+        "ids": [
+          "D1-375-light",
+          "D1-900-light",
+          "D1-375-dark",
+          "D1-900-dark",
+          "D2-375-light",
+          "D2-375-dark",
+          "D3-375-light",
+          "D3-900-light",
+          "D3-375-dark",
+          "D3-900-dark",
+          "D4-375-light",
+          "D4-900-light",
+          "D4-375-dark",
+          "D4-900-dark",
+          "D5-375-light",
+          "D5-900-light",
+          "D5-375-dark",
+          "D5-900-dark",
+          "D6-375-light",
+          "D6-900-light",
+          "D6-375-dark",
+          "D6-900-dark"
+        ],
+        "models": {
+          "surplus/glm-5.3-flash": {
+            "ok": true,
+            "reason": null,
+            "caught": [
+              "D1-375-light",
+              "D1-900-light",
+              "D4-375-light",
+              "D4-900-light",
+              "D4-375-dark",
+              "D4-900-dark",
+              "D3-375-light",
+              "D3-900-light",
+              "D3-375-dark",
+              "D3-900-dark",
+              "D2-375-light",
+              "D2-375-dark",
+              "D6-375-light",
+              "D6-900-light",
+              "D6-375-dark",
+              "D6-900-dark"
+            ],
+            "missed": [
+              "D1-375-dark",
+              "D1-900-dark",
+              "D5-375-light",
+              "D5-900-light",
+              "D5-375-dark",
+              "D5-900-dark"
+            ],
+            "caughtCount": 16,
+            "total": 22,
+            "weightedPct": 82,
+            "fp": 0,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
+          }
+        }
+      },
+      {
+        "task": "02-empty-state",
+        "total": 12,
+        "ids": [
+          "E1-375-light",
+          "E1-900-light",
+          "E1-375-dark",
+          "E1-900-dark",
+          "E2-375-light",
+          "E2-375-dark",
+          "E3-375-light",
+          "E3-375-dark",
+          "E4-375-light",
+          "E4-900-light",
+          "E4-375-dark",
+          "E4-900-dark"
+        ],
+        "models": {
+          "surplus/glm-5.3-flash": {
+            "ok": true,
+            "reason": null,
+            "caught": [
+              "E1-375-light",
+              "E1-900-light",
+              "E1-375-dark",
+              "E1-900-dark",
+              "E4-375-light",
+              "E4-375-dark",
+              "E3-375-light",
+              "E3-375-dark",
+              "E4-900-light",
+              "E4-900-dark"
+            ],
+            "missed": [
+              "E2-375-light",
+              "E2-375-dark"
+            ],
+            "caughtCount": 10,
+            "total": 12,
+            "weightedPct": 78,
+            "fp": 2,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
+          }
+        }
+      },
+      {
+        "task": "03-loading-state",
+        "total": 12,
+        "ids": [
+          "L1-375-light",
+          "L1-900-light",
+          "L1-375-dark",
+          "L1-900-dark",
+          "L2-375-light",
+          "L2-900-light",
+          "L2-375-dark",
+          "L2-900-dark",
+          "L3-375-light",
+          "L3-900-light",
+          "L3-375-dark",
+          "L3-900-dark"
+        ],
+        "models": {
+          "surplus/glm-5.3-flash": {
+            "ok": true,
+            "reason": null,
+            "caught": [
+              "L1-375-light",
+              "L1-900-light",
+              "L1-375-dark",
+              "L1-900-dark",
+              "L2-375-light",
+              "L2-900-light",
+              "L2-375-dark",
+              "L2-900-dark",
+              "L3-375-light",
+              "L3-900-light",
+              "L3-375-dark",
+              "L3-900-dark"
+            ],
+            "missed": [],
+            "caughtCount": 12,
+            "total": 12,
+            "weightedPct": 100,
+            "fp": 4,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
+          }
+        }
+      },
+      {
+        "task": "04-error-state",
+        "total": 12,
+        "ids": [
+          "X1-375-light",
+          "X1-900-light",
+          "X1-375-dark",
+          "X1-900-dark",
+          "X2-375-light",
+          "X2-900-light",
+          "X2-375-dark",
+          "X2-900-dark",
+          "X3-375-light",
+          "X3-900-light",
+          "X3-375-dark",
+          "X3-900-dark"
+        ],
+        "models": {
+          "surplus/glm-5.3-flash": {
+            "ok": true,
+            "reason": null,
+            "caught": [
+              "X2-375-light",
+              "X2-900-light",
+              "X2-375-dark",
+              "X2-900-dark",
+              "X3-375-light",
+              "X3-900-light",
+              "X3-375-dark",
+              "X3-900-dark"
+            ],
+            "missed": [
+              "X1-375-light",
+              "X1-900-light",
+              "X1-375-dark",
+              "X1-900-dark"
+            ],
+            "caughtCount": 8,
+            "total": 12,
+            "weightedPct": 60,
+            "fp": 4,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
+          }
+        }
+      },
+      {
+        "task": "05-settings-form",
+        "total": 14,
+        "ids": [
+          "S1-375-light",
+          "S1-900-light",
+          "S1-375-dark",
+          "S1-900-dark",
+          "S2-375-light",
+          "S2-375-dark",
+          "S3-375-light",
+          "S3-900-light",
+          "S3-375-dark",
+          "S3-900-dark",
+          "S4-375-light",
+          "S4-900-light",
+          "S4-375-dark",
+          "S4-900-dark"
+        ],
+        "models": {
+          "surplus/glm-5.3-flash": {
+            "ok": true,
+            "reason": null,
+            "caught": [
+              "S1-375-light",
+              "S1-900-light",
+              "S1-375-dark",
+              "S1-900-dark",
+              "S2-375-light",
+              "S2-375-dark"
+            ],
+            "missed": [
+              "S3-375-light",
+              "S3-900-light",
+              "S3-375-dark",
+              "S3-900-dark",
+              "S4-375-light",
+              "S4-900-light",
+              "S4-375-dark",
+              "S4-900-dark"
+            ],
+            "caughtCount": 6,
+            "total": 14,
+            "weightedPct": 40,
+            "fp": 4,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
+          }
+        }
+      },
+      {
+        "task": "06-test-results-table",
+        "total": 12,
+        "ids": [
+          "T1-375-light",
+          "T1-900-light",
+          "T1-375-dark",
+          "T1-900-dark",
+          "T2-375-light",
+          "T2-375-dark",
+          "T3-375-light",
+          "T3-900-light",
+          "T3-375-dark",
+          "T3-900-dark",
+          "T4-375-light",
+          "T4-375-dark"
+        ],
+        "models": {
+          "surplus/glm-5.3-flash": {
+            "ok": true,
+            "reason": null,
+            "caught": [
+              "T1-375-light",
+              "T1-900-light",
+              "T1-375-dark",
+              "T1-900-dark",
+              "T3-375-light",
+              "T3-900-light",
+              "T3-375-dark",
+              "T3-900-dark",
+              "T4-375-light",
+              "T4-375-dark"
+            ],
+            "missed": [
+              "T2-375-light",
+              "T2-375-dark"
+            ],
+            "caughtCount": 10,
+            "total": 12,
+            "weightedPct": 85,
+            "fp": 2,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
+          }
+        }
+      },
+      {
+        "task": "07-mobile-nav",
+        "total": 14,
+        "ids": [
+          "N1-375-light",
+          "N1-375-dark",
+          "N2-375-light",
+          "N2-900-light",
+          "N2-375-dark",
+          "N2-900-dark",
+          "N3-375-light",
+          "N3-900-light",
+          "N3-375-dark",
+          "N3-900-dark",
+          "N4-375-light",
+          "N4-900-light",
+          "N4-375-dark",
+          "N4-900-dark"
+        ],
+        "models": {
+          "surplus/glm-5.3-flash": {
+            "ok": true,
+            "reason": null,
+            "caught": [
+              "N2-375-light",
+              "N2-900-light",
+              "N2-375-dark",
+              "N2-900-dark"
+            ],
+            "missed": [
+              "N1-375-light",
+              "N1-375-dark",
+              "N3-375-light",
+              "N3-900-light",
+              "N3-375-dark",
+              "N3-900-dark",
+              "N4-375-light",
+              "N4-900-light",
+              "N4-375-dark",
+              "N4-900-dark"
+            ],
+            "caughtCount": 4,
+            "total": 14,
+            "weightedPct": 33,
+            "fp": 8,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
+          }
+        }
+      },
+      {
+        "task": "08-form-validation",
+        "total": 16,
+        "ids": [
+          "V1-375-light",
+          "V1-900-light",
+          "V1-375-dark",
+          "V1-900-dark",
+          "V2-375-light",
+          "V2-900-light",
+          "V2-375-dark",
+          "V2-900-dark",
+          "V3-375-light",
+          "V3-900-light",
+          "V3-375-dark",
+          "V3-900-dark",
+          "V4-375-light",
+          "V4-900-light",
+          "V4-375-dark",
+          "V4-900-dark"
+        ],
+        "models": {
+          "surplus/glm-5.3-flash": {
+            "ok": true,
+            "reason": null,
+            "caught": [
+              "V1-375-light",
+              "V1-900-light",
+              "V3-375-light",
+              "V3-900-light",
+              "V3-375-dark",
+              "V3-900-dark"
+            ],
+            "missed": [
+              "V1-375-dark",
+              "V1-900-dark",
+              "V2-375-light",
+              "V2-900-light",
+              "V2-375-dark",
+              "V2-900-dark",
+              "V4-375-light",
+              "V4-900-light",
+              "V4-375-dark",
+              "V4-900-dark"
+            ],
+            "caughtCount": 6,
+            "total": 16,
+            "weightedPct": 33,
+            "fp": 4,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
+          }
+        }
+      },
+      {
+        "task": "09-long-content",
+        "total": 8,
+        "ids": [
+          "C1-900-light",
+          "C1-900-dark",
+          "C2-375-light",
+          "C2-375-dark",
+          "C3-375-light",
+          "C3-900-light",
+          "C3-375-dark",
+          "C3-900-dark"
+        ],
+        "models": {
+          "surplus/glm-5.3-flash": {
+            "ok": true,
+            "reason": null,
+            "caught": [
+              "C2-375-light",
+              "C2-375-dark"
+            ],
+            "missed": [
+              "C1-900-light",
+              "C1-900-dark",
+              "C3-375-light",
+              "C3-900-light",
+              "C3-375-dark",
+              "C3-900-dark"
+            ],
+            "caughtCount": 2,
+            "total": 8,
+            "weightedPct": 40,
+            "fp": 6,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
+          }
+        }
+      },
+      {
+        "task": "10-dark-dashboard",
+        "total": 8,
+        "ids": [
+          "K1-375-dark",
+          "K1-900-dark",
+          "K2-375-dark",
+          "K2-900-dark",
+          "K3-375-dark",
+          "K3-900-dark",
+          "K4-375-dark",
+          "K4-900-dark"
+        ],
+        "models": {
+          "surplus/glm-5.3-flash": {
+            "ok": true,
+            "reason": null,
+            "caught": [
+              "K1-375-dark",
+              "K1-900-dark"
+            ],
+            "missed": [
+              "K2-375-dark",
+              "K2-900-dark",
+              "K3-375-dark",
+              "K3-900-dark",
+              "K4-375-dark",
+              "K4-900-dark"
+            ],
+            "caughtCount": 2,
+            "total": 8,
+            "weightedPct": 29,
+            "fp": 6,
+            "samples": 1,
+            "invalid": 0,
+            "maxTokens": 16000
+          }
+        }
+      }
+    ],
+    "models": [
+      "surplus/glm-5.3-flash"
+    ],
+    "chosen": {
+      "model": "surplus/glm-5.3-flash",
+      "tier": "measured",
+      "confidence": "medium",
+      "completeness": "complete",
+      "scored": 10,
+      "failed": 0,
+      "failedTasks": 0,
+      "samples": 1,
+      "retries": 1,
+      "catch": 60,
+      "precision": 66,
+      "fp": 40,
+      "cost": 0.009149,
+      "costPerTask": 0.000915,
+      "costPerCall": 0.000915,
+      "unique": null,
+      "maxTokens": 16000,
+      "packHash": "sha256:413d56e11b1e31b177917569a360ea6fcf26b1fcd30e79c3470bc87c52bfeda2",
+      "protocol": "visual-review-v1",
+      "pack": "visual-project-list",
+      "packVersion": 2,
+      "lastDate": "2026-11-22",
+      "stale": false,
+      "catchCi": [
+        43,
+        74
+      ],
+      "uniqueIds": []
+    },
     "caught": [
       "D1-375-light",
       "D1-900-light",
-      "D1-375-dark",
-      "D1-900-dark",
       "D4-375-light",
       "D4-900-light",
       "D4-375-dark",
@@ -1249,77 +6198,131 @@
       "D3-375-dark",
       "D3-900-dark",
       "D2-375-light",
-      "D2-375-dark"
+      "D2-375-dark",
+      "D6-375-light",
+      "D6-900-light",
+      "D6-375-dark",
+      "D6-900-dark",
+      "E1-375-light",
+      "E1-900-light",
+      "E1-375-dark",
+      "E1-900-dark",
+      "E4-375-light",
+      "E4-375-dark",
+      "E3-375-light",
+      "E3-375-dark",
+      "E4-900-light",
+      "E4-900-dark",
+      "L1-375-light",
+      "L1-900-light",
+      "L1-375-dark",
+      "L1-900-dark",
+      "L2-375-light",
+      "L2-900-light",
+      "L2-375-dark",
+      "L2-900-dark",
+      "L3-375-light",
+      "L3-900-light",
+      "L3-375-dark",
+      "L3-900-dark",
+      "X2-375-light",
+      "X2-900-light",
+      "X2-375-dark",
+      "X2-900-dark",
+      "X3-375-light",
+      "X3-900-light",
+      "X3-375-dark",
+      "X3-900-dark",
+      "S1-375-light",
+      "S1-900-light",
+      "S1-375-dark",
+      "S1-900-dark",
+      "S2-375-light",
+      "S2-375-dark",
+      "T1-375-light",
+      "T1-900-light",
+      "T1-375-dark",
+      "T1-900-dark",
+      "T3-375-light",
+      "T3-900-light",
+      "T3-375-dark",
+      "T3-900-dark",
+      "T4-375-light",
+      "T4-375-dark",
+      "N2-375-light",
+      "N2-900-light",
+      "N2-375-dark",
+      "N2-900-dark",
+      "V1-375-light",
+      "V1-900-light",
+      "V3-375-light",
+      "V3-900-light",
+      "V3-375-dark",
+      "V3-900-dark",
+      "C2-375-light",
+      "C2-375-dark",
+      "K1-375-dark",
+      "K1-900-dark"
     ],
     "missed": [
-      {
-        "id": "D5-375-light",
-        "shot": "375-light",
-        "region": "gap above third row",
-        "kind": "defect",
-        "severity": "minor",
-        "summary": "the gap above the third row is larger than the other row gaps"
-      },
-      {
-        "id": "D5-900-light",
-        "shot": "900-light",
-        "region": "gap above third row",
-        "kind": "defect",
-        "severity": "minor",
-        "summary": "the gap above the third row is larger than the other row gaps"
-      },
-      {
-        "id": "D5-375-dark",
-        "shot": "375-dark",
-        "region": "gap above third row",
-        "kind": "defect",
-        "severity": "minor",
-        "summary": "the gap above the third row is larger than the other row gaps"
-      },
-      {
-        "id": "D5-900-dark",
-        "shot": "900-dark",
-        "region": "gap above third row",
-        "kind": "defect",
-        "severity": "minor",
-        "summary": "the gap above the third row is larger than the other row gaps"
-      },
-      {
-        "id": "D6-375-light",
-        "shot": "375-light",
-        "region": "row 2 3 second third",
-        "kind": "defect",
-        "severity": "major",
-        "summary": "rows 2 and 3 have no status badge"
-      },
-      {
-        "id": "D6-900-light",
-        "shot": "900-light",
-        "region": "row 2 3 second third",
-        "kind": "defect",
-        "severity": "major",
-        "summary": "rows 2 and 3 have no status badge"
-      },
-      {
-        "id": "D6-375-dark",
-        "shot": "375-dark",
-        "region": "row 2 3 second third",
-        "kind": "defect",
-        "severity": "major",
-        "summary": "rows 2 and 3 have no status badge"
-      },
-      {
-        "id": "D6-900-dark",
-        "shot": "900-dark",
-        "region": "row 2 3 second third",
-        "kind": "defect",
-        "severity": "major",
-        "summary": "rows 2 and 3 have no status badge"
-      }
+      "D1-375-dark",
+      "D1-900-dark",
+      "D5-375-light",
+      "D5-900-light",
+      "D5-375-dark",
+      "D5-900-dark",
+      "E2-375-light",
+      "E2-375-dark",
+      "X1-375-light",
+      "X1-900-light",
+      "X1-375-dark",
+      "X1-900-dark",
+      "S3-375-light",
+      "S3-900-light",
+      "S3-375-dark",
+      "S3-900-dark",
+      "S4-375-light",
+      "S4-900-light",
+      "S4-375-dark",
+      "S4-900-dark",
+      "T2-375-light",
+      "T2-375-dark",
+      "N1-375-light",
+      "N1-375-dark",
+      "N3-375-light",
+      "N3-900-light",
+      "N3-375-dark",
+      "N3-900-dark",
+      "N4-375-light",
+      "N4-900-light",
+      "N4-375-dark",
+      "N4-900-dark",
+      "V1-375-dark",
+      "V1-900-dark",
+      "V2-375-light",
+      "V2-900-light",
+      "V2-375-dark",
+      "V2-900-dark",
+      "V4-375-light",
+      "V4-900-light",
+      "V4-375-dark",
+      "V4-900-dark",
+      "C1-900-light",
+      "C1-900-dark",
+      "C3-375-light",
+      "C3-900-light",
+      "C3-375-dark",
+      "C3-900-dark",
+      "K2-375-dark",
+      "K2-900-dark",
+      "K3-375-dark",
+      "K3-900-dark",
+      "K4-375-dark",
+      "K4-900-dark"
     ],
-    "fp": 0,
-    "weighted": "64/88",
-    "keyCount": 22,
-    "shotCount": 4
+    "fp": 40,
+    "weighted": "60%",
+    "keyCount": 130,
+    "shotCount": 38
   }
 }

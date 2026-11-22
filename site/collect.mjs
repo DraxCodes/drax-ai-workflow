@@ -37,166 +37,391 @@ function readJson(file) {
   }
 }
 
+const round = (value, places = 0) => {
+  const factor = 10 ** places;
+  return Math.round(value * factor) / factor;
+};
+const mean = (values) => (values.length ? values.reduce((sum, value) => sum + value, 0) / values.length : 0);
+
+/** Deterministic bootstrap so the report does not change on every build. */
+function mulberry32(seed) {
+  let a = seed;
+  return () => {
+    a |= 0;
+    a = (a + 0x6d2b79f5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+function bootstrapCi(values, rounds = 20000) {
+  if (values.length < 3) return null;
+  const random = mulberry32(0x51ed270b);
+  const means = [];
+  for (let roundIndex = 0; roundIndex < rounds; roundIndex += 1) {
+    let sum = 0;
+    for (let index = 0; index < values.length; index += 1) {
+      sum += values[Math.floor(random() * values.length)];
+    }
+    means.push(sum / values.length);
+  }
+  means.sort((a, b) => a - b);
+  const low = means[Math.floor(0.025 * (means.length - 1))];
+  const high = means[Math.floor(0.975 * (means.length - 1))];
+  return [round(low * 100), round(high * 100)];
+}
+
 function summaryRow(row) {
+  const catchPct = Math.round(row.catch * 100);
+  const precisionPct = row.precision === null ? null : Math.round(row.precision * 100);
+  const completeness =
+    row.scored === 0
+      ? "none"
+      : row.failed > 0 || row.failedTasks > 0
+        ? "partial"
+        : row.scored >= row.minTasks
+          ? "complete"
+          : "short";
   return {
     model: row.model,
     tier: row.tier,
     confidence: row.confidence,
+    completeness,
     scored: row.scored,
     failed: row.failed,
-    catch: Math.round(row.catch * 100),
-    precision: row.precision === null ? null : Math.round(row.precision * 100),
+    failedTasks: row.failedTasks,
+    samples: row.samples,
+    retries: row.retries ?? 0,
+    catch: catchPct,
+    precision: precisionPct,
     fp: row.falsePositives,
     cost: row.costUsd,
     costPerTask:
       row.costUsd === null ? null : Number((row.costUsd / Math.max(1, row.scored)).toFixed(6)),
+    costPerCall:
+      row.costUsd === null
+        ? null
+        : Number(
+            (row.costUsd / Math.max(1, row.scored) / Math.max(1, row.samples ?? 1)).toFixed(6),
+          ),
     unique: row.uniqueCatch,
     maxTokens: row.maxTokens,
+    packHash: row.packHash,
+    protocol: row.protocol,
+    pack: row.pack,
+    packVersion: row.packVersion,
+    lastDate: row.lastDate,
+    stale: row.stale,
   };
 }
 
-function aggregate(file, slot, referenceModel = null) {
-  const { records, error } = readRecords(file);
-  if (error) return { error, rows: [], records: [] };
+function seatRecords(config) {
+  const records = [];
+  const files = new Set();
+  for (const [model, modelFiles] of Object.entries(config.models)) {
+    for (const file of modelFiles) {
+      if (!existsSync(file)) continue;
+      files.add(file);
+      const { records: read, error } = readRecords(file);
+      if (error) throw new Error(error);
+      records.push(
+        ...read.filter(
+          (record) =>
+            record.model === model &&
+            record.pack === config.pack.pack?.id &&
+            record.slot === config.pack.pack?.slot,
+        ),
+      );
+    }
+  }
+  return { records, files: [...files] };
+}
+
+function taskScores(records, row) {
+  const byTask = new Map();
+  for (const record of records) {
+    if (
+      record.model !== row.model ||
+      record.ok === false ||
+      (record.maxTokens ?? null) !== (row.maxTokens ?? null) ||
+      (record.packHash ?? null) !== (row.packHash ?? null)
+    ) {
+      continue;
+    }
+    const current = byTask.get(record.task) ?? [];
+    current.push((record.weightedCaught ?? 0) / Math.max(1, record.weightedTotal ?? 0));
+    byTask.set(record.task, current);
+  }
+  return [...byTask.values()].map(mean);
+}
+
+function cellFor(records, model, task, maxTokens) {
+  const all = records.filter(
+    (record) =>
+      record.model === model &&
+      record.task === task.id &&
+      (maxTokens === null || (record.maxTokens ?? null) === maxTokens),
+  );
+  const valid = all.filter((record) => record.ok !== false);
+  const total = task.key.criteria?.length ?? task.key.defects?.length ?? 0;
+  const allIds = (task.key.criteria ?? task.key.defects ?? []).map((entry) => entry.id);
+  if (valid.length === 0) {
+    return {
+      ok: false,
+      reason: all.length ? "invalid answer" : "not run",
+      caught: [],
+      missed: allIds,
+      caughtCount: 0,
+      total,
+      weightedPct: 0,
+      fp: 0,
+      samples: all.length,
+      invalid: all.length,
+      maxTokens,
+    };
+  }
+  const first = valid[0];
   return {
-    rows: aggregateRecords({ records, slot, referenceModel }).map(summaryRow),
-    records,
+    ok: true,
+    reason: null,
+    caught: first.caught ?? [],
+    missed: first.missed ?? [],
+    caughtCount: round(mean(valid.map((record) => record.caught?.length ?? 0))),
+    total,
+    weightedPct: round(
+      mean(
+        valid.map(
+          (record) => (record.weightedCaught ?? 0) / Math.max(1, record.weightedTotal ?? 0),
+        ),
+      ) * 100,
+    ),
+    fp: round(mean(valid.map((record) => record.falsePositives ?? 0))),
+    samples: valid.length,
+    invalid: all.length - valid.length,
+    maxTokens: first.maxTokens ?? null,
   };
+}
+
+function tasksFor(config, records, rows) {
+  const tokenByModel = Object.fromEntries(rows.map((row) => [row.model, row.maxTokens]));
+  return config.pack.tasks.map((task) => {
+    const models = {};
+    for (const [model, maxTokens] of Object.entries(tokenByModel)) {
+      models[model] = cellFor(records, model, task, maxTokens);
+    }
+    const ids = (task.key.criteria ?? task.key.defects ?? []).map((entry) => entry.id);
+    return {
+      task: task.id,
+      total: (task.key.criteria ?? task.key.defects ?? []).length,
+      ids,
+      models,
+    };
+  });
+}
+
+function diffTasks(tasks, first, second) {
+  return tasks.map((task) => {
+    const a = new Set(task.models[first]?.caught ?? []);
+    const b = new Set(task.models[second]?.caught ?? []);
+    const both = task.ids.filter((id) => a.has(id) && b.has(id));
+    const onlyFirst = task.ids.filter((id) => a.has(id) && !b.has(id));
+    const onlySecond = task.ids.filter((id) => b.has(id) && !a.has(id));
+    const neither = task.ids.filter((id) => !a.has(id) && !b.has(id));
+    return { task: task.task, both, onlyFirst, onlySecond, neither };
+  });
+}
+
+function uniqueIds(tasks, model, reference) {
+  const unique = [];
+  for (const task of tasks) {
+    const mine = new Set(task.models[model]?.caught ?? []);
+    const theirs = new Set(task.models[reference]?.caught ?? []);
+    for (const id of task.ids) {
+      if (mine.has(id) && !theirs.has(id)) unique.push({ task: task.task, id });
+    }
+  }
+  return unique;
+}
+
+function readSeat(config) {
+  const { records, files } = seatRecords(config);
+  const rows = aggregateRecords({
+    records,
+    slot: config.pack.pack.slot,
+    referenceModel: config.reference,
+  }).map((row) => {
+    const summary = summaryRow(row);
+    summary.catchCi = bootstrapCi(taskScores(records, row));
+    return summary;
+  });
+  const tasks = tasksFor(config, records, rows);
+  for (const row of rows) {
+    row.uniqueIds = config.reference ? uniqueIds(tasks, row.model, config.reference) : [];
+  }
+  const chosen = rows.find((row) => row.model === config.chosen) ?? rows[0] ?? null;
+  const runnerUp =
+    rows
+      .filter(
+        (row) =>
+          row !== chosen &&
+          row.completeness === "complete" &&
+          row.maxTokens === chosen?.maxTokens,
+      )
+      .sort((a, b) => b.catch - a.catch || (b.precision ?? -1) - (a.precision ?? -1))[0] ??
+    rows
+      .filter((row) => row !== chosen && row.scored > 0 && row.completeness === "complete")
+      .sort((a, b) => b.catch - a.catch || (b.precision ?? -1) - (a.precision ?? -1))[0] ??
+    null;
+  const diff = chosen && runnerUp ? diffTasks(tasks, chosen.model, runnerUp.model) : [];
+  return { rows, tasks, models: rows.map((row) => row.model), chosen, runnerUp, diff, files };
 }
 
 const sources = {
   risk: join(benchmarks, "2026-11-21-risk-16k-head-to-head.json"),
   risk4k: join(benchmarks, "2026-11-21-risk-4k", "records.json"),
   chair: join(benchmarks, "2026-11-21-chair-10-16k", "records.json"),
-  chair10: join(benchmarks, "2026-11-21-chair-10", "records.json"),
+  chair8: join(benchmarks, "2026-11-21-chair-10", "records.json"),
+  chair16: join(benchmarks, "2026-11-22-glmflash-16k-chair", "records.json"),
+  chair53: join(benchmarks, "2026-11-22-glm53-16k-chair", "records.json"),
   shape: join(benchmarks, "2026-11-21-shape-10-16k", "records.json"),
-  shape10: join(benchmarks, "2026-11-21-shape-10", "records.json"),
+  shape8: join(benchmarks, "2026-11-21-shape-10", "records.json"),
+  shape16: join(benchmarks, "2026-11-22-glmflash-16k-shape", "records.json"),
+  shape53: join(benchmarks, "2026-11-22-glm53-16k-shape", "records.json"),
   experience: join(benchmarks, "2026-11-21-experience-10", "records.json"),
-  visual: join(benchmarks, "2026-11-21-visual-pack-final", "records.json"),
+  experience16: join(benchmarks, "2026-11-22-glmflash-16k-experience", "records.json"),
+  experience53: join(benchmarks, "2026-11-22-glm53-16k-experience", "records.json"),
+  visual: join(benchmarks, "2026-11-22-visual-10-task-retry", "records.json"),
 };
 
-const risk = aggregate(sources.risk, "council.risk", "surplus/glm-5.3");
-const risk4k = aggregate(sources.risk4k, "council.risk", "surplus/glm-5.3");
-const chair = aggregate(sources.chair, "council.chair", "surplus/deepseek-v4.1-flash-1017");
-const chair10 = aggregate(sources.chair10, "council.chair", "surplus/deepseek-v4.1-flash-1017");
-const shape = aggregate(sources.shape, "council.shape", "surplus/deepseek-v4.1-flash-1017");
-const shape10 = aggregate(sources.shape10, "council.shape", "surplus/deepseek-v4.1-flash-1017");
-const experience = aggregate(sources.experience, "council.experience", "surplus/deepseek-v4.1-flash-1017");
-const visual = aggregate(sources.visual, "hillclimb.blindspot", "surplus/glm-5.3-flash");
-
-function rowRank(row) {
-  return [
-    row.tier === "measured" ? 0 : row.tier === "pilot" ? 1 : 2,
-    -(row.scored ?? 0),
-    -(row.maxTokens ?? 0),
-  ];
-}
-
-function betterRow(candidate, current) {
-  const a = rowRank(candidate);
-  const b = rowRank(current);
-  for (let index = 0; index < a.length; index += 1) {
-    if (a[index] !== b[index]) return a[index] < b[index];
-  }
-  return (candidate.catch ?? 0) > (current.catch ?? 0);
-}
-
-function mergeRows(primary, secondary) {
-  const byModel = new Map(primary.map((row) => [row.model, row]));
-  for (const row of secondary) {
-    const current = byModel.get(row.model);
-    if (!current || betterRow(row, current)) byModel.set(row.model, row);
-  }
-  return [...byModel.values()];
-}
-
-const candidateRows = {
-  risk: mergeRows(risk.rows, risk4k.rows),
-  chair: mergeRows(chair.rows, chair10.rows),
-  shape: mergeRows(shape.rows, shape10.rows),
-  experience: mergeRows(experience.rows, experience.rows),
-  blindspot: visual.rows,
+const seatConfigs = {
+  chair: {
+    pack: packs.chair,
+    chosen: "surplus/deepseek-v4.1-flash-1017",
+    reference: "surplus/deepseek-v4.1-flash-1017",
+    models: {
+      "surplus/deepseek-v4.1-flash-1017": [sources.chair],
+      "surplus/qwen3.8-flash": [sources.chair],
+      "surplus/glm-5.3-flash": [sources.chair16],
+      "surplus/glm-5.3": [sources.chair53],
+    },
+  },
+  shape: {
+    pack: packs.shape,
+    chosen: "surplus/deepseek-v4.1-flash-1017",
+    reference: "surplus/deepseek-v4.1-flash-1017",
+    models: {
+      "surplus/deepseek-v4.1-flash-1017": [sources.shape],
+      "surplus/qwen3.8-flash": [sources.shape],
+      "surplus/glm-5.3-flash": [sources.shape16],
+      "surplus/glm-5.3": [sources.shape53],
+    },
+  },
+  experience: {
+    pack: packs.experience,
+    chosen: "surplus/deepseek-v4.1-flash-1017",
+    reference: "surplus/deepseek-v4.1-flash-1017",
+    models: {
+      "surplus/deepseek-v4.1-flash-1017": [sources.experience],
+      "surplus/glm-5.3-flash": [sources.experience16],
+      "surplus/glm-5.3": [sources.experience53],
+    },
+  },
+  risk: {
+    pack: packs.security,
+    chosen: "surplus/glm-5.3",
+    reference: "surplus/glm-5.3",
+    models: {
+      "surplus/glm-5.3": [sources.risk],
+      "surplus/qwen3.8-flash": [sources.risk],
+      "surplus/glm-5.3-flash": [sources.risk4k],
+      "surplus/deepseek-v4.1-flash-1017": [sources.risk4k],
+      "surplus/claude-haiku-4.5": [sources.risk4k],
+    },
+  },
+  visual: {
+    pack: packs.visual,
+    chosen: "surplus/glm-5.3-flash",
+    reference: "surplus/glm-5.3-flash",
+    models: {
+      "surplus/glm-5.3-flash": [sources.visual],
+    },
+  },
 };
 
-function recordsByModel(records, model) {
-  return new Map(records.filter((r) => r.model === model).map((r) => [r.task, r]));
+const seats = {};
+for (const [id, config] of Object.entries(seatConfigs)) {
+  seats[id] = readSeat(config);
 }
-
-const riskByG = recordsByModel(risk.records, "surplus/glm-5.3");
-const riskByQ = recordsByModel(risk.records, "surplus/qwen3.8-flash");
-const riskTasks = packs.security.tasks.map((task) => {
-  const g = riskByG.get(task.id);
-  const q = riskByQ.get(task.id);
-  const key = new Map(task.key.defects.map((d) => [d.id, d]));
-  return {
-    task: task.id,
-    key: task.key.defects.length,
-    glmCaught: g?.caught.length ?? 0,
-    glmFp: g?.falsePositives ?? null,
-    qwenCaught: q?.caught.length ?? 0,
-    qwenFp: q?.falsePositives ?? null,
-    qwenMissed: (q?.missed ?? []).map((id) => {
-      const d = key.get(id);
-      return d ? { id, severity: d.severity, summary: d.summary } : { id, severity: "unknown", summary: id };
-    }),
-    glmMissed: (g?.missed ?? []).map((id) => {
-      const d = key.get(id);
-      return d ? { id, severity: d.severity, summary: d.summary } : { id, severity: "unknown", summary: id };
-    }),
-  };
-});
-
-function councilTasks(pack, records, models) {
-  const by = Object.fromEntries(models.map((m) => [m, recordsByModel(records, m)]));
-  return pack.tasks.map((task) => {
-    const criteria = new Map(task.key.criteria.map((c) => [c.id, c]));
-    const row = { task: task.id, total: task.key.criteria.length, models: {} };
-    for (const model of models) {
-      const record = by[model].get(task.id);
-      if (!record || record.ok === false) {
-        row.models[model] = { ok: false, caught: 0, fp: 0, missed: [] };
-        continue;
-      }
-      row.models[model] = {
-        ok: true,
-        caught: record.caught.length,
-        fp: record.falsePositives ?? 0,
-        missed: (record.missed ?? []).map((id) => {
-          const criterion = criteria.get(id);
-          return criterion ? `${id}: ${criterion.description}` : id;
-        }),
-      };
-    }
-    return row;
-  });
-}
-
-const chairModels = ["surplus/deepseek-v4.1-flash-1017", "surplus/qwen3.8-flash"];
-const shapeModels = ["surplus/deepseek-v4.1-flash-1017", "surplus/qwen3.8-flash"];
-const experienceModels = ["surplus/deepseek-v4.1-flash-1017", "surplus/glm-5.3-flash"];
-
-const visualRecord = visual.records[0] ?? null;
-const visualDefects = new Map(
-  packs.visual.tasks[0].key.defects.map((defect) => [defect.id, defect]),
-);
 
 const runDirs = existsSync(benchmarks)
   ? readdirSync(benchmarks, { withFileTypes: true })
   : [];
+const EVIDENCE_RUNS = new Set([
+  "2026-11-21-chair-10-16k",
+  "2026-11-21-shape-10-16k",
+  "2026-11-21-experience-10",
+  "2026-11-21-risk-glm53-16k",
+  "2026-11-21-risk-qwen-16k",
+  "2026-11-22-visual-10-task-retry",
+]);
+const STABILITY_RUNS = new Set(["2026-11-22-chair-10-16k-samples2"]);
+const CHALLENGER_RUNS = new Set([
+  "2026-11-22-glm53-16k-chair",
+  "2026-11-22-glm53-16k-shape",
+  "2026-11-22-glm53-16k-experience",
+  "2026-11-22-glmflash-16k-chair",
+  "2026-11-22-glmflash-16k-chair-timeout60",
+  "2026-11-22-glmflash-16k-shape",
+  "2026-11-22-glmflash-16k-experience",
+]);
+const PILOT_RUNS = new Set([
+  "2026-11-21-chair-10",
+  "2026-11-21-shape-10",
+  "2026-11-21-risk-4k",
+  "2026-11-21-visual-pack-final",
+  "2026-11-22-visual-10-task",
+  "2026-11-22-glmflash-16k-chair",
+  "2026-11-22-glmflash-16k-chair-timeout60",
+  "2026-11-22-glmflash-16k-shape",
+  "2026-11-22-glmflash-16k-experience",
+  "2026-11-22-glm53-16k-chair",
+  "2026-11-22-glm53-16k-shape",
+  "2026-11-22-glm53-16k-experience",
+]);
+
+function purposeFor(dir, run) {
+  if (EVIDENCE_RUNS.has(dir)) return "evidence";
+  if (STABILITY_RUNS.has(dir)) return "stability check";
+  if (CHALLENGER_RUNS.has(dir)) return "challenger";
+  if (PILOT_RUNS.has(dir)) return "pilot";
+  if (dir.includes("1200") || dir.includes("4k")) return "token tuning";
+  if ((run.failed ?? 0) > 0) return "failed";
+  return "pilot";
+}
+
 const runs = [];
 for (const entry of runDirs) {
   if (!entry.isDirectory()) continue;
   const dir = join(benchmarks, entry.name);
-  const meta = readJson(join(dir, "run.json"));
-  if (!meta) continue;
+  const run = readJson(join(dir, "run.json"));
+  if (!run) continue;
+  const samples = run.plan?.samples ?? 1;
+  const maxTokens = run.plan?.maxTokens ?? null;
   runs.push({
     dir: entry.name,
-    pack: meta.plan?.pack ?? "unknown",
-    maxTokens: meta.plan?.maxTokens ?? null,
-    records: meta.records ?? 0,
-    failed: meta.failed ?? 0,
-    spent: meta.spentUsd ?? 0,
-    startedAt: meta.startedAt ?? null,
+    pack: run.plan?.pack ?? "unknown",
+    protocol: run.protocol ?? null,
+    models: run.plan?.models ?? [],
+    samples,
+    retries: run.plan?.retries ?? 0,
+    maxTokens,
+    records: run.records ?? 0,
+    failed: run.failed ?? 0,
+    spent: run.spentUsd ?? 0,
+    startedAt: run.startedAt ?? null,
+    selected: EVIDENCE_RUNS.has(entry.name),
+    purpose: purposeFor(entry.name, run),
   });
 }
 runs.sort((a, b) => String(b.startedAt).localeCompare(String(a.startedAt)));
@@ -218,49 +443,96 @@ if (existsSync(ledger)) {
 }
 
 const runSpend = runs.reduce((sum, run) => sum + (Number.isFinite(run.spent) ? run.spent : 0), 0);
+const evidenceSpend = runs
+  .filter((run) => run.selected)
+  .reduce((sum, run) => sum + (Number.isFinite(run.spent) ? run.spent : 0), 0);
+const tuningSpend = Number((runSpend - evidenceSpend).toFixed(6));
+
+const chosenRows = ["chair", "shape", "experience", "risk"]
+  .map((id) => seats[id].chosen)
+  .filter(Boolean);
+const councilOneRound = chosenRows.reduce(
+  (sum, row) => sum + (row.costPerCall ?? row.costPerTask ?? 0),
+  0,
+);
+
 const findings = {
   generatedAt: new Date().toISOString().slice(0, 10),
   project: project.split(/[\\/]/).pop(),
   sources: Object.fromEntries(
-    Object.entries(sources).map(([key, file]) => [key, existsSync(file) ? "present" : "missing"]),
+    [
+      ...new Map(
+        Object.values(seatConfigs)
+          .flatMap((config) => Object.values(config.models).flat())
+          .map((file) => [
+            file.startsWith(benchmarks)
+              ? file.slice(benchmarks.length + 1).replace(/\\/g, "/")
+              : file,
+            existsSync(file) ? "present" : "missing",
+          ]),
+      ).entries(),
+    ],
   ),
   runs,
   costs: {
     runSpend: Number(runSpend.toFixed(6)),
+    evidenceSpend: Number(evidenceSpend.toFixed(6)),
+    tuningSpend,
     probeSpend: Number(probeSpend.toFixed(6)),
     totalRecorded: Number((runSpend + probeSpend).toFixed(6)),
+    councilOneRound: Number(councilOneRound.toFixed(6)),
     visualReviewUncosted: true,
   },
   risk: {
-    rows: candidateRows.risk,
-    risk4k: risk4k.rows,
-    tasks: riskTasks,
+    rows: seats.risk.rows,
+    tasks: seats.risk.tasks,
+    models: seats.risk.models,
+    chosen: seats.risk.chosen,
+    runnerUp: seats.risk.runnerUp,
+    diff: seats.risk.diff,
   },
   chair: {
-    rows: candidateRows.chair,
-    tasks: councilTasks(packs.chair, chair.records, chairModels),
-    models: chairModels,
+    rows: seats.chair.rows,
+    tasks: seats.chair.tasks,
+    models: seats.chair.models,
+    chosen: seats.chair.chosen,
+    runnerUp: seats.chair.runnerUp,
+    diff: seats.chair.diff,
   },
   shape: {
-    rows: candidateRows.shape,
-    tasks: councilTasks(packs.shape, shape.records, shapeModels),
-    models: shapeModels,
+    rows: seats.shape.rows,
+    tasks: seats.shape.tasks,
+    models: seats.shape.models,
+    chosen: seats.shape.chosen,
+    runnerUp: seats.shape.runnerUp,
+    diff: seats.shape.diff,
   },
   experience: {
-    rows: candidateRows.experience,
-    tasks: councilTasks(packs.experience, experience.records, experienceModels),
-    models: experienceModels,
+    rows: seats.experience.rows,
+    tasks: seats.experience.tasks,
+    models: seats.experience.models,
+    chosen: seats.experience.chosen,
+    runnerUp: seats.experience.runnerUp,
+    diff: seats.experience.diff,
   },
   visual: {
-    row: candidateRows.blindspot,
-    caught: visualRecord?.caught ?? [],
-    missed: (visualRecord?.missed ?? []).map((id) => visualDefects.get(id)).filter(Boolean),
-    fp: visualRecord?.falsePositives ?? null,
-    weighted: visualRecord
-      ? `${visualRecord.weightedCaught}/${visualRecord.weightedTotal}`
+    row: seats.visual.rows,
+    rows: seats.visual.rows,
+    tasks: seats.visual.tasks,
+    models: seats.visual.models,
+    chosen: seats.visual.chosen,
+    caught: seats.visual.tasks.flatMap((task) =>
+      Object.values(task.models).flatMap((cell) => cell.caught ?? []),
+    ),
+    missed: seats.visual.tasks.flatMap((task) =>
+      Object.values(task.models).flatMap((cell) => cell.missed ?? []),
+    ),
+    fp: seats.visual.rows.reduce((sum, row) => sum + (row.fp ?? 0), 0),
+    weighted: seats.visual.rows[0]
+      ? `${round(seats.visual.rows[0].catch)}%`
       : null,
-    keyCount: packs.visual.tasks[0].key.defects.length,
-    shotCount: packs.visual.tasks[0].shots.length,
+    keyCount: packs.visual.tasks.reduce((sum, task) => sum + (task.key.defects?.length ?? 0), 0),
+    shotCount: packs.visual.tasks.reduce((sum, task) => sum + (task.shots?.length ?? 0), 0),
   },
 };
 
@@ -268,7 +540,14 @@ writeFileSync(outFile, `${JSON.stringify(findings, null, 2)}\n`);
 console.log(`wrote ${outFile}`);
 console.log(`  runs: ${runs.length}`);
 console.log(`  spend: $${findings.costs.totalRecorded}`);
+console.log(`  evidence: $${findings.costs.evidenceSpend}; tuning: $${findings.costs.tuningSpend}`);
+console.log(`  council round: $${findings.costs.councilOneRound}`);
 console.log(`  project: ${findings.project}`);
 if (Object.values(findings.sources).includes("missing")) {
-  console.warn(`  missing sources: ${Object.entries(findings.sources).filter(([, v]) => v === "missing").map(([k]) => k).join(", ")}`);
+  console.warn(
+    `  missing sources: ${Object.entries(findings.sources)
+      .filter(([, value]) => value === "missing")
+      .map(([key]) => key)
+      .join(", ")}`,
+  );
 }

@@ -3,9 +3,10 @@
   "baseVersion": "0.7.1",
   "generatedAt": "2026-11-22",
   "capUsd": 1.45,
-  "spentUsd": 0.441245,
-  "tests": 137,
+  "spentUsd": 0.717013,
+  "tests": 140,
   "publishPolicy": "Summaries only. No API keys, raw provider responses, project .scratch paths, or active-pack keys.",
+  "nextReview": "2027-05-21",
   "seats": [
     {
       "id": "chair",
@@ -13,7 +14,7 @@
       "slot": "council.chair",
       "chosen": "surplus/deepseek-v4.1-flash-1017",
       "tier": "measured",
-      "reason": "Measured 78% catch / 100% precision with no invented options. Qwen catches two more points but invented an option id."
+      "reason": "Measured 78% catch / 100% precision on the one-sample pair; a two-sample repeat narrowed the gap and Qwen failed two schema checks. The binding is unchanged."
     },
     {
       "id": "shape",
@@ -21,7 +22,7 @@
       "slot": "council.shape",
       "chosen": "surplus/deepseek-v4.1-flash-1017",
       "tier": "measured",
-      "reason": "Measured 91% catch / 100% precision. Qwen is 87% / 100% on the same pack."
+      "reason": "Measured 91% catch / 100% precision. Qwen is 87%; GLM 5.3 was 87% on 9 of 10 at about 6.6x the cost."
     },
     {
       "id": "experience",
@@ -29,7 +30,7 @@
       "slot": "council.experience",
       "chosen": "surplus/deepseek-v4.1-flash-1017",
       "tier": "measured",
-      "reason": "Measured 10/10 at 93% catch / 100% precision. GLM Flash's stronger three-task prose did not survive ten tasks (6/10)."
+      "reason": "Measured 93% catch / 100% precision, completed 10 of 10 at 8k. GLM 5.3 completed 10 of 10 at 91% for about 25x the cost; GLM Flash was incomplete at both budgets."
     },
     {
       "id": "risk",
@@ -37,16 +38,119 @@
       "slot": "council.risk",
       "chosen": "surplus/glm-5.3",
       "tier": "measured",
-      "reason": "Measured 100% catch / 85% precision. Caught the major credential leak Qwen missed; four false positives are the accepted cost."
+      "reason": "Measured 100% catch / 85% precision. Caught the major credential leak Qwen missed; four false claims are the accepted cost."
     },
     {
       "id": "blindspot",
       "name": "Blindspot",
       "slot": "hillclimb.blindspot",
       "chosen": "surplus/glm-5.3-flash",
-      "tier": "pilot",
-      "reason": "The only blindspot model that returned a valid visual review. The keyed visual pack is a one-task pilot at 73% catch / 100% precision."
+      "tier": "measured",
+      "reason": "Measured on ten tasks at 60% catch / 66% precision with 40 false claims. The one-task pilot was optimistic; GLM Flash is still the only model with a valid visual review."
     }
+  ],
+  "decisions": {
+    "chair": {
+      "tiebreaker": "Qwen's 80% vs DeepSeek's 78% is inside the rough confidence band. On Task 07 Qwen returned `new pane command list` as an option id instead of B, so the chair keeps DeepSeek. GLM Flash also failed: at 16k it returned invalid JSON on 6 of 10 tasks; at 8k it returned 7 of 10. GLM 5.3 also ran at 16k: 81% catch / 100% precision on 7 of 10 tasks; three answers hit the 16k output cap. Its all-in cost was about $0.016 per valid task, roughly 25x DeepSeek, so it did not earn a rebind.",
+      "whatWouldFlip": "If Qwen removes the invalid option id and keeps its catch, the chair becomes a genuine coin-flip and cost decides.",
+      "reviewBy": "2027-05-20",
+      "stability": "A two-sample repeat is a stability check: DeepSeek 77% catch / 99% precision on 20/20 records, Qwen 79% / 100% on 18/20 (two schema failures in sample 2). The earlier precision gap did not replicate, so the chair is closer than one run suggested; the binding is unchanged."
+    },
+    "shape": {
+      "tiebreaker": "DeepSeek is 91% vs Qwen's 87%. The bands overlap, but DeepSeek leads on the complete runs and has no false claims. GLM Flash returned invalid JSON on 5 of 10 tasks at 16k and 2 of 10 at 8k, so it is not a complete challenger. GLM 5.3 ran at 16k: 87% catch / 100% precision on 9 of 10 tasks, below DeepSeek's 91% and about 6.6x the cost.",
+      "whatWouldFlip": "A complete Qwen run above 91% with 100% precision, or a DeepSeek regression below 87%.",
+      "reviewBy": "2027-05-20"
+    },
+    "experience": {
+      "tiebreaker": "DeepSeek completed all ten tasks at 93% catch / 100% precision at 8k. GLM 5.3 also completed all ten at 16k, but at 91% catch and about 25x the cost per valid task ($0.00787 vs $0.000309). The complete premium challenger did not beat the binding. GLM Flash completed 7/10 at 16k and 6/10 at 8k.",
+      "whatWouldFlip": "A complete challenger above 93% at a cost the user accepts, or a DeepSeek regression below 91%.",
+      "reviewBy": "2027-05-21"
+    },
+    "risk": {
+      "tiebreaker": "GLM 5.3 caught every key defect (100%) and Qwen missed the major credential exposure in Task 08. The four false claims are the accepted cost of that catch.",
+      "whatWouldFlip": "A Qwen run that catches the credential exposure without adding false claims, at roughly a third of the cost.",
+      "reviewBy": "2027-05-20"
+    },
+    "blindspot": {
+      "tiebreaker": "GLM Flash completed all ten tasks when one retry per task was allowed. Catch fell to 60% and precision to 66% with 40 false claims, so the one-task 73% / 100% pilot was optimistic. It remains the only model with a valid visual review.",
+      "whatWouldFlip": "A second model with a valid ten-task review, or a GLM Flash run with materially higher precision at the same catch.",
+      "reviewBy": "2027-05-21"
+    }
+  },
+  "coverage": {
+    "chair": {
+      "covers": [
+        "Synthesis of four seat proposals into an options table, a recommendation, dissent and rejected options.",
+        "Use of the proposals' option ids, including a trap that rejects an invented id.",
+        "Precision under disagreement: the chair must not hide dissent or claim consensus."
+      ],
+      "limits": [
+        "Text only; it does not test whether the options are modern, beautiful or well sourced.",
+        "Ten briefs from one project; no multi-user, auth, performance or migration-scale cases.",
+        "One sample per task; confidence is medium.",
+        "GLM Flash is partial at both budgets: 4/10 valid at 16k, 7/10 at 8k. The 16k row is shown because it matches the measured budget.",
+        "GLM 5.3 is partial at 16k: 7/10 valid, 81% catch, 100% precision, at about $0.016 per valid task."
+      ]
+    },
+    "shape": {
+      "covers": [
+        "The smallest viable shape, the existing seams it uses, what it defers and how to reverse it.",
+        "Whether a new dependency or a second path is proposed when a simpler seam exists.",
+        "A rollback path for storage and settings changes."
+      ],
+      "limits": [
+        "It rewards the smallest shape; it does not judge whether the result is modern or pleasant.",
+        "Ten tasks from one project; no greenfield stack choice.",
+        "GLM Flash is partial at both budgets: 5/10 valid at 16k, 8/10 at 8k.",
+        "GLM 5.3 is partial at 16k: 9/10 valid, 87% catch, 100% precision, at about $0.0038 per valid task."
+      ]
+    },
+    "experience": {
+      "covers": [
+        "An observable experience thesis: the three-second read, first-run path, copy voice, one good moment and the friction to avoid.",
+        "Empty, loading, error, composer, destructive confirmation, settings and first-run states.",
+        "Evidence and non-goals rather than adjective-only claims."
+      ],
+      "limits": [
+        "The thesis is still an assertion; no artifact exists to score.",
+        "Beauty is tested with the one throwaway visual probe, not this seat.",
+        "DeepSeek ran at 8k; GLM 5.3 completed at 16k and GLM Flash did not complete at either budget, so the budgets differ.",
+        "One sample; confidence is medium."
+      ]
+    },
+    "risk": {
+      "covers": [
+        "Ten blind code slices: SQL injection, path traversal, IDOR, JWT, SSRF, command injection, deserialization, secret leakage, crypto and config exposure.",
+        "Every key defect is listed, including the major credential leak Qwen missed.",
+        "False claims are counted, so the 100% catch is not reported without its precision cost."
+      ],
+      "limits": [
+        "Small synthetic slices, not a full application or dependency audit.",
+        "Ten tasks; one sample each; confidence is medium.",
+        "The 4k rows for GLM Flash, DeepSeek and Haiku are partial and not comparable with the 16k rows."
+      ]
+    },
+    "blindspot": {
+      "covers": [
+        "Ten screens at 375 and 900, light and dark: project list, empty, loading, error, settings, table, navigation, validation, long content and a dark dashboard.",
+        "130 keyed defects covering contrast, clipping, overlap, alignment, spacing, missing badges, colour-only status and invisible borders.",
+        "A one-to-one match between the model's finding region and the keyed defect region."
+      ],
+      "limits": [
+        "The measured run allowed one retry per task; the first ten-task run completed 8 of 10.",
+        "Precision is 66% with 40 false claims, so the seat is noisy even when it completes.",
+        "It measures defect detection, not taste or beauty.",
+        "One sample; confidence is medium."
+      ]
+    }
+  },
+  "priceBasis": [
+    "Prices are the declared prices carried by each run record, in USD per 1M tokens.",
+    "The council and visual runs used the min80 estimate; the risk GLM run used min80 and the risk Qwen run used list.",
+    "Measured cost per task is the run record, not a catalogue ratio.",
+    "Risk measured cost: GLM 5.3 $0.00324/task, Qwen $0.00123/task, about 2.6×. The earlier 13× claim is not supported by the declared prices or the measured cost.",
+    "The price table was fetched on 2026-11-21 from the provider catalogue.",
+    "Cost / task in the tables is the all-in evidence cost across every sample; a single council call divides by the sample count."
   ],
   "modelInfo": {
     "surplus/deepseek-v4.1-flash-1017": {
@@ -83,14 +187,19 @@
   "protocolNotes": [
     "Reasoning models need large output budgets: 1,200 and 4,000 tokens truncated JSON; 16,000 was needed for several tasks.",
     "A fenced JSON answer is a failed task. Claude Haiku fences every answer and cannot be measured under this protocol.",
-    "--samples 2 is refused, so measured rows are medium confidence, not high.",
+    "One sample gives medium confidence; repeated samples give high confidence. The runner now accepts 1–5 samples.",
     "Seat variants (#low/#high) are not tested; the harness tests base models.",
-    "Risk GLM used min80 prices and Qwen used list; Qwen is about 13x cheaper like-for-like.",
-    "The visual pack is a one-task pilot; ten tasks are needed for measured evidence."
+    "The visual pack is now ten tasks and 130 keyed defects. The measured run completed 10/10 with one retry per task, at 60% catch / 66% precision and 40 false claims."
   ],
   "commits": [
-    "drax-ai-workflow 214c146 - council-seat protocol and ten-task packs",
-    "drax-ai-workflow 190fd89 - visual-review protocol and pilot pack",
+    "drax-ai-workflow 447181c - ten-task visual review pack",
+    "drax-ai-workflow cd96b71 - repeated samples and failed-call cost",
     "personal-website d3a3877 - 0.7.1 update and local evidence ignores"
+  ],
+  "expansionNotes": [
+    "Visual blindspot pack expanded from 1 task to 10 tasks and 130 keyed defects; the measured retry run is 60% catch / 66% precision with 40 false claims.",
+    "GLM Flash at 16k was incomplete on chair (4/10), shape (5/10) and experience (7/10); it is not a complete challenger at either budget.",
+    "GLM 5.3 was not a clean win: chair 81% on 7/10, shape 87% on 9/10, experience 91% on 10/10, at roughly 6-25x the cost.",
+    "The chair two-sample repeat is a stability check: DeepSeek 77% / 99%, Qwen 79% / 100% (18/20); the earlier precision gap did not replicate. No rebind."
   ]
 }

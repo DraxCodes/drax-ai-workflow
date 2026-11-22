@@ -6,134 +6,378 @@
     "security-review": "The model reviews a small code slice blind and returns JSON findings. A finding catches a key defect when it names the same file and is within the line window. Every key defect is listed below so you can see what was caught or missed.",
     "visual-project-list": "The model reviews screenshots blind and returns visual findings by shot and region. A finding catches a key defect when it names the same shot and its region covers the key location."
   },
+  "optionsBrief": {
+    "title": "The options brief before the stack",
+    "intro": "A short, dated survey written before a stack, skeleton, library or language is chosen. It is an input to /start-project and /council, not a fifth seat and not a vote. The user decides value and variety; the brief makes the choice visible.",
+    "rules": [
+      "Boring default — the existing stack or the most familiar low-risk option.",
+      "Modern default — the current well-adopted option that improves the work. Modern means maintained, documented, compatible and accessible, not merely new.",
+      "Wildcard — a credible option you may not know: a different UI library, admin panel, database, framework or language/runtime. If the constraints rule it out, say why.",
+      "Minimal — build it yourself or add no dependency.",
+      "Portfolio check — if the last projects used React + shadcn, name a non-React/non-shadcn option and either justify repeating the stack or justify the deliberate change.",
+      "Dated sources — read official docs, registries and release notes, and date every claim. If live sources are unavailable, mark the brief unverified and ask for a probe; never present memory as current.",
+      "Price a language as a stack. Rust, Go or Elixir means the web framework, template/UI layer, admin path, database access, auth and deployment, not a language swap."
+    ],
+    "example": {
+      "title": "personal-website (Fastify + TypeScript)",
+      "intro": "The site is server-rendered, not React. shadcn is React-only, so a good brief says it does not apply before naming a component library. The real choice is the component layer and the admin surface.",
+      "rows": [
+        {
+          "option": "Design tokens + server-rendered components",
+          "useful": "High for M1",
+          "design": "High if the art direction is restrained",
+          "modern": "Stable; no new runtime",
+          "cost": "Low",
+          "reversible": "High"
+        },
+        {
+          "option": "CSS framework + small React island",
+          "useful": "High for the admin",
+          "design": "Medium; depends on the island",
+          "modern": "Active; broad adoption",
+          "cost": "Build step and a React island",
+          "reversible": "Medium"
+        },
+        {
+          "option": "Full React/Next front end",
+          "useful": "Low for M1",
+          "design": "High ceiling",
+          "modern": "Active",
+          "cost": "A second runtime and a rewrite",
+          "reversible": "Low"
+        },
+        {
+          "option": "Wildcard: Rust + Axum/Leptos",
+          "useful": "Low for M1",
+          "design": "High ceiling",
+          "modern": "Credible, but a different stack",
+          "cost": "Language, UI, admin, auth and deployment gaps",
+          "reversible": "Low"
+        }
+      ],
+      "recommendation": "Default: design tokens + server-rendered components for M1. Revisit a small React island only if the admin surface needs it.",
+      "whatWouldFlip": "An admin surface with complex tables, filters and forms, or a hard requirement for a React component ecosystem."
+    },
+    "limits": "The brief can only surface current options if the agent has live web access. If it does not, it must mark the brief unverified and ask for names or a probe. It does not decide value, and it does not make a new library safe by calling it modern. Beauty is tested with the one throwaway visual probe, not asserted in a table."
+  },
   "tasks": {
     "council-chair": {
       "01-switching-threads": {
         "title": "Switching threads in the pane",
         "question": "Where does switching threads live, and what may a row tell the host?",
         "options": [
-          { "id": "A", "label": "Topbar picker" },
-          { "id": "B", "label": "In-pane list" },
-          { "id": "C", "label": "Palette command" }
+          {
+            "id": "A",
+            "label": "Topbar picker"
+          },
+          {
+            "id": "B",
+            "label": "In-pane list"
+          },
+          {
+            "id": "C",
+            "label": "Palette command"
+          }
         ]
       },
       "02-summary-cache": {
         "title": "Thread summary cache",
         "question": "Should the pane cache thread summaries between ticks, and in which shape?",
         "options": [
-          { "id": "A", "label": "In-memory map" },
-          { "id": "B", "label": "JSON file under .scratch" },
-          { "id": "C", "label": "SQLite" }
+          {
+            "id": "A",
+            "label": "In-memory map"
+          },
+          {
+            "id": "B",
+            "label": "JSON file under .scratch"
+          },
+          {
+            "id": "C",
+            "label": "SQLite"
+          }
         ]
       },
       "03-storage-migration": {
         "title": "Transcript storage migration",
         "question": "How should the transcript store move from one JSON blob per thread to chunked files?",
         "options": [
-          { "id": "A", "label": "Dual-write / dual-read" },
-          { "id": "B", "label": "Big-bang rewrite" },
-          { "id": "C", "label": "Adapter layer" }
+          {
+            "id": "A",
+            "label": "Dual-write / dual-read"
+          },
+          {
+            "id": "B",
+            "label": "Big-bang rewrite"
+          },
+          {
+            "id": "C",
+            "label": "Adapter layer"
+          }
         ]
       },
       "04-search-index": {
         "title": "Local transcript search",
         "question": "Should transcript search be local, and in which shape?",
         "options": [
-          { "id": "A", "label": "In-memory index" },
-          { "id": "B", "label": "On-disk index" },
-          { "id": "C", "label": "External service" }
+          {
+            "id": "A",
+            "label": "In-memory index"
+          },
+          {
+            "id": "B",
+            "label": "On-disk index"
+          },
+          {
+            "id": "C",
+            "label": "External service"
+          }
         ]
       },
       "05-status-ownership": {
         "title": "Thread status ownership",
         "question": "Should the host or the transport own thread status?",
         "options": [
-          { "id": "A", "label": "Host owns status" },
-          { "id": "B", "label": "Transport owns status" },
-          { "id": "C", "label": "Both keep a copy" }
+          {
+            "id": "A",
+            "label": "Host owns status"
+          },
+          {
+            "id": "B",
+            "label": "Transport owns status"
+          },
+          {
+            "id": "C",
+            "label": "Both keep a copy"
+          }
         ]
       },
       "06-warning-placement": {
         "title": "Connection warning placement",
         "question": "Where does a persistent connection warning live: a topbar strip, a body banner, or a toast?",
         "options": [
-          { "id": "A", "label": "Topbar strip" },
-          { "id": "B", "label": "Body banner" },
-          { "id": "C", "label": "Toast" }
+          {
+            "id": "A",
+            "label": "Topbar strip"
+          },
+          {
+            "id": "B",
+            "label": "Body banner"
+          },
+          {
+            "id": "C",
+            "label": "Toast"
+          }
         ]
       },
       "07-command-palette": {
         "title": "Command palette",
         "question": "The user asks for a command palette for all pane actions. Which shape satisfies that without duplicating the current menus?",
         "options": [
-          { "id": "A", "label": "Extend the existing palette" },
-          { "id": "B", "label": "New pane command list" },
-          { "id": "C", "label": "Keep the current menus" }
+          {
+            "id": "A",
+            "label": "Extend the existing palette"
+          },
+          {
+            "id": "B",
+            "label": "New pane command list"
+          },
+          {
+            "id": "C",
+            "label": "Keep the current menus"
+          }
         ]
       },
       "08-second-transport": {
         "title": "A second transport for live updates",
         "question": "A proposal would add a second transport so the pane can receive live updates. Should the council accept it?",
         "options": [
-          { "id": "A", "label": "Second transport" },
-          { "id": "B", "label": "Poll the existing transport" },
-          { "id": "C", "label": "No live updates" }
+          {
+            "id": "A",
+            "label": "Second transport"
+          },
+          {
+            "id": "B",
+            "label": "Poll the existing transport"
+          },
+          {
+            "id": "C",
+            "label": "No live updates"
+          }
         ]
       },
       "09-no-dissent": {
         "title": "A unanimous cache proposal",
         "question": "All four seats propose the same in-memory cache. Should the chair record dissent or rejected options that no seat raised?",
         "options": [
-          { "id": "A", "label": "In-memory cache" },
-          { "id": "B", "label": "No cache" },
-          { "id": "C", "label": "On-disk file" }
+          {
+            "id": "A",
+            "label": "In-memory cache"
+          },
+          {
+            "id": "B",
+            "label": "No cache"
+          },
+          {
+            "id": "C",
+            "label": "On-disk file"
+          }
         ]
       },
       "10-admin-endpoint": {
         "title": "Admin metadata endpoint",
         "question": "Should a new admin endpoint expose project metadata, and with what posture?",
         "options": [
-          { "id": "A", "label": "Public read-only endpoint" },
-          { "id": "B", "label": "Authenticated endpoint" },
-          { "id": "C", "label": "No endpoint" }
+          {
+            "id": "A",
+            "label": "Public read-only endpoint"
+          },
+          {
+            "id": "B",
+            "label": "Authenticated endpoint"
+          },
+          {
+            "id": "C",
+            "label": "No endpoint"
+          }
         ]
       }
     },
     "council-shape": {
-      "01-status-page": { "title": "Project status page", "question": "What is the smallest viable shape for a public status page per project?" },
-      "02-read-only-list": { "title": "Read-only thread list", "question": "What is the smallest viable shape to expose a read-only thread list to the pane?" },
-      "03-per-thread-drafts": { "title": "Per-thread drafts", "question": "What is the smallest viable shape for keeping a draft per thread?" },
-      "04-background-refresh": { "title": "Hourly status refresh", "question": "What is the smallest viable shape for refreshing project status about once an hour?" },
-      "05-landing-cache": { "title": "Landing-page cache", "question": "What is the smallest viable cache for the landing page's project metadata?" },
-      "06-import-projects": { "title": "Import projects", "question": "What is the smallest viable shape for importing projects from a JSON file?" },
-      "07-settings-page": { "title": "Settings page", "question": "What is the smallest viable shape for a settings page for the site title and accent colour?" },
-      "08-delete-project": { "title": "Delete a project", "question": "What is the smallest viable shape for deleting a project?" },
-      "09-sqlite-migration": { "title": "Move the project store to SQLite", "question": "What is the smallest viable shape for moving the project store from JSON to SQLite?" },
-      "10-test-results-table": { "title": "Test-results table", "question": "What is the smallest viable shape for a table of test results on a project page?" }
+      "01-status-page": {
+        "title": "Project status page",
+        "question": "What is the smallest viable shape for a public status page per project?"
+      },
+      "02-read-only-list": {
+        "title": "Read-only thread list",
+        "question": "What is the smallest viable shape to expose a read-only thread list to the pane?"
+      },
+      "03-per-thread-drafts": {
+        "title": "Per-thread drafts",
+        "question": "What is the smallest viable shape for keeping a draft per thread?"
+      },
+      "04-background-refresh": {
+        "title": "Hourly status refresh",
+        "question": "What is the smallest viable shape for refreshing project status about once an hour?"
+      },
+      "05-landing-cache": {
+        "title": "Landing-page cache",
+        "question": "What is the smallest viable cache for the landing page's project metadata?"
+      },
+      "06-import-projects": {
+        "title": "Import projects",
+        "question": "What is the smallest viable shape for importing projects from a JSON file?"
+      },
+      "07-settings-page": {
+        "title": "Settings page",
+        "question": "What is the smallest viable shape for a settings page for the site title and accent colour?"
+      },
+      "08-delete-project": {
+        "title": "Delete a project",
+        "question": "What is the smallest viable shape for deleting a project?"
+      },
+      "09-sqlite-migration": {
+        "title": "Move the project store to SQLite",
+        "question": "What is the smallest viable shape for moving the project store from JSON to SQLite?"
+      },
+      "10-test-results-table": {
+        "title": "Test-results table",
+        "question": "What is the smallest viable shape for a table of test results on a project page?"
+      }
     },
     "council-experience": {
-      "01-empty-state": { "title": "No threads yet", "question": "What should the empty state for the thread list feel like at 8/10?" },
-      "02-loading-state": { "title": "A thread is loading", "question": "What should the loading state feel like at 8/10 while a thread is read?" },
-      "03-delete-confirmation": { "title": "Delete a thread", "question": "What should the delete confirmation feel like at 8/10?" },
-      "04-error-state": { "title": "A project page fails to load", "question": "What should a failed project page feel like at 8/10?" },
-      "05-composer": { "title": "The message composer", "question": "What should the message composer feel like at 8/10?" },
-      "06-disconnect-confirmation": { "title": "Disconnect a connection", "question": "What should the disconnect confirmation feel like at 8/10?" },
-      "07-settings-page": { "title": "Settings page", "question": "What should the settings page for the site title and accent colour feel like at 8/10?" },
-      "08-first-project": { "title": "The first project", "question": "What should the admin page's first-run state feel like at 8/10 when there are no projects?" },
-      "09-test-results-table": { "title": "Test-results table", "question": "What should the test-results table on a project page feel like at 8/10?" },
-      "10-stale-live-update": { "title": "A live update fails", "question": "What should the pane feel like at 8/10 when a live update fails mid-session?" }
+      "01-empty-state": {
+        "title": "No threads yet",
+        "question": "What should the empty state for the thread list feel like at 8/10?"
+      },
+      "02-loading-state": {
+        "title": "A thread is loading",
+        "question": "What should the loading state feel like at 8/10 while a thread is read?"
+      },
+      "03-delete-confirmation": {
+        "title": "Delete a thread",
+        "question": "What should the delete confirmation feel like at 8/10?"
+      },
+      "04-error-state": {
+        "title": "A project page fails to load",
+        "question": "What should a failed project page feel like at 8/10?"
+      },
+      "05-composer": {
+        "title": "The message composer",
+        "question": "What should the message composer feel like at 8/10?"
+      },
+      "06-disconnect-confirmation": {
+        "title": "Disconnect a connection",
+        "question": "What should the disconnect confirmation feel like at 8/10?"
+      },
+      "07-settings-page": {
+        "title": "Settings page",
+        "question": "What should the settings page for the site title and accent colour feel like at 8/10?"
+      },
+      "08-first-project": {
+        "title": "The first project",
+        "question": "What should the admin page's first-run state feel like at 8/10 when there are no projects?"
+      },
+      "09-test-results-table": {
+        "title": "Test-results table",
+        "question": "What should the test-results table on a project page feel like at 8/10?"
+      },
+      "10-stale-live-update": {
+        "title": "A live update fails",
+        "question": "What should the pane feel like at 8/10 when a live update fails mid-session?"
+      }
     },
     "security-review": {
-      "01-sql-injection": { "title": "SQL injection — inventory search", "question": "Review the inventory service for security defects.", "what": "A search term and request JSON are interpolated into SQL." },
-      "02-path-traversal": { "title": "Path traversal — attachment browser", "question": "Review the attachment browser for security defects.", "what": "A request path is joined to a base directory without confinement." },
-      "03-idor": { "title": "IDOR — invoice API", "question": "Review the invoice API for security defects.", "what": "An invoice endpoint trusts a client-supplied id." },
-      "04-jwt": { "title": "JWT verification — admin authentication", "question": "Review the admin authentication for security defects.", "what": "A JWT verification path can accept an unverified token." },
-      "05-ssrf": { "title": "SSRF — image proxy", "question": "Review the image proxy for security defects.", "what": "A user-supplied URL is fetched by the server." },
-      "06-command-injection": { "title": "Command injection — image converter", "question": "Review the image converter for security defects.", "what": "A shell command is built from a filename." },
-      "07-deserialization": { "title": "Unsafe deserialization — session import", "question": "Review the session import for security defects.", "what": "Untrusted session data is deserialized." },
-      "08-secret-leak": { "title": "Secret leak — user API", "question": "Review the user API for security defects.", "what": "The user endpoint returns the full record, including credential fields." },
-      "09-crypto": { "title": "Password / token crypto — account service", "question": "Review the account service for security defects.", "what": "Password hashing and token generation." },
-      "10-config-exposure": { "title": "Config exposure — ops service", "question": "Review the ops service for security defects.", "what": "CORS, debug and environment exposure." }
+      "01-sql-injection": {
+        "title": "SQL injection — inventory search",
+        "question": "Review the inventory service for security defects.",
+        "what": "A search term and request JSON are interpolated into SQL."
+      },
+      "02-path-traversal": {
+        "title": "Path traversal — attachment browser",
+        "question": "Review the attachment browser for security defects.",
+        "what": "A request path is joined to a base directory without confinement."
+      },
+      "03-idor": {
+        "title": "IDOR — invoice API",
+        "question": "Review the invoice API for security defects.",
+        "what": "An invoice endpoint trusts a client-supplied id."
+      },
+      "04-jwt": {
+        "title": "JWT verification — admin authentication",
+        "question": "Review the admin authentication for security defects.",
+        "what": "A JWT verification path can accept an unverified token."
+      },
+      "05-ssrf": {
+        "title": "SSRF — image proxy",
+        "question": "Review the image proxy for security defects.",
+        "what": "A user-supplied URL is fetched by the server."
+      },
+      "06-command-injection": {
+        "title": "Command injection — image converter",
+        "question": "Review the image converter for security defects.",
+        "what": "A shell command is built from a filename."
+      },
+      "07-deserialization": {
+        "title": "Unsafe deserialization — session import",
+        "question": "Review the session import for security defects.",
+        "what": "Untrusted session data is deserialized."
+      },
+      "08-secret-leak": {
+        "title": "Secret leak — user API",
+        "question": "Review the user API for security defects.",
+        "what": "The user endpoint returns the full record, including credential fields."
+      },
+      "09-crypto": {
+        "title": "Password / token crypto — account service",
+        "question": "Review the account service for security defects.",
+        "what": "Password hashing and token generation."
+      },
+      "10-config-exposure": {
+        "title": "Config exposure — ops service",
+        "question": "Review the ops service for security defects.",
+        "what": "CORS, debug and environment exposure."
+      }
     },
     "visual-project-list": {
       "01-project-list": {
@@ -146,6 +390,93 @@
           "D4": "Open and More buttons are misaligned",
           "D5": "Gap above the third row is too large",
           "D6": "Rows 2 and 3 have no status badge"
+        }
+      },
+      "02-empty-state": {
+        "title": "Empty project list",
+        "question": "Review the empty project list at 375 and 900, light and dark.",
+        "defects": {
+          "E1": "Low-contrast empty-state copy",
+          "E2": "Create project button clipped at 375",
+          "E3": "Empty-state card off-centre at 375",
+          "E4": "Empty-state heading is the same size as body text"
+        }
+      },
+      "03-loading-state": {
+        "title": "Project list loading",
+        "question": "Review the loading state at 375 and 900, light and dark.",
+        "defects": {
+          "L1": "Spinner overlaps the loading text",
+          "L2": "Second skeleton row is much shorter",
+          "L3": "Loading text is low contrast"
+        }
+      },
+      "04-error-state": {
+        "title": "Project page error",
+        "question": "Review the failed project page at 375 and 900, light and dark.",
+        "defects": {
+          "X1": "Raw SQLITE_BUSY error code exposed",
+          "X2": "Error message is low contrast",
+          "X3": "Retry and Back buttons do not share a baseline"
+        }
+      },
+      "05-settings-form": {
+        "title": "Settings form",
+        "question": "Review the settings form at 375 and 900, light and dark.",
+        "defects": {
+          "S1": "Site title label is separated from its input",
+          "S2": "Accent swatch overflows its control at 375",
+          "S3": "Disabled Save changes button is low contrast",
+          "S4": "Accent helper text is low contrast"
+        }
+      },
+      "06-test-results-table": {
+        "title": "Test results table",
+        "question": "Review the test-results table at 375 and 900, light and dark.",
+        "defects": {
+          "T1": "Duration numbers are left-aligned",
+          "T2": "First test name is clipped at 375",
+          "T3": "Status is shown by colour alone",
+          "T4": "When values wrap onto two lines at 375"
+        }
+      },
+      "07-mobile-nav": {
+        "title": "Mobile navigation",
+        "question": "Review the navigation at 375 and 900, light and dark.",
+        "defects": {
+          "N1": "Menu button overlaps the page title at 375",
+          "N2": "Menu items are only 24px high",
+          "N3": "Current page is not indicated in the menu",
+          "N4": "Menu panel blends into the page"
+        }
+      },
+      "08-form-validation": {
+        "title": "Sign-in validation",
+        "question": "Review the invalid sign-in form at 375 and 900, light and dark.",
+        "defects": {
+          "V1": "Email error text is low contrast",
+          "V2": "Email input shows the error by border colour alone",
+          "V3": "Error summary is placed after the submit button",
+          "V4": "Sign in button stays enabled while the form has an error"
+        }
+      },
+      "09-long-content": {
+        "title": "Long project content",
+        "question": "Review the long project detail at 375 and 900, light and dark.",
+        "defects": {
+          "C1": "Description line length is too long at 900",
+          "C2": "Code block is clipped at 375",
+          "C3": "Section heading is smaller than body text"
+        }
+      },
+      "10-dark-dashboard": {
+        "title": "Dark dashboard contrast",
+        "question": "Review the dark dashboard at 375 and 900.",
+        "defects": {
+          "K1": "Card label is low contrast in dark",
+          "K2": "Primary button is low contrast in dark",
+          "K3": "Status badge is low contrast in dark",
+          "K4": "Card border is invisible in dark"
         }
       }
     }
