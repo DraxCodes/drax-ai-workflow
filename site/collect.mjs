@@ -137,11 +137,11 @@ const riskTasks = packs.security.tasks.map((task) => {
     qwenFp: q?.falsePositives ?? null,
     qwenMissed: (q?.missed ?? []).map((id) => {
       const d = key.get(id);
-      return d ? `${id} ${d.severity}: ${d.summary}` : id;
+      return d ? { id, severity: d.severity, summary: d.summary } : { id, severity: "unknown", summary: id };
     }),
     glmMissed: (g?.missed ?? []).map((id) => {
       const d = key.get(id);
-      return d ? `${id} ${d.severity}: ${d.summary}` : id;
+      return d ? { id, severity: d.severity, summary: d.summary } : { id, severity: "unknown", summary: id };
     }),
   };
 });
@@ -153,11 +153,15 @@ function councilTasks(pack, records, models) {
     const row = { task: task.id, total: task.key.criteria.length, models: {} };
     for (const model of models) {
       const record = by[model].get(task.id);
+      if (!record || record.ok === false) {
+        row.models[model] = { ok: false, caught: 0, fp: 0, missed: [] };
+        continue;
+      }
       row.models[model] = {
-        ok: record?.ok ?? false,
-        caught: record?.caught.length ?? 0,
-        fp: record?.falsePositives ?? null,
-        missed: (record?.missed ?? []).map((id) => {
+        ok: true,
+        caught: record.caught.length,
+        fp: record.falsePositives ?? 0,
+        missed: (record.missed ?? []).map((id) => {
           const criterion = criteria.get(id);
           return criterion ? `${id}: ${criterion.description}` : id;
         }),

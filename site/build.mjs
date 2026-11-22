@@ -9,8 +9,20 @@ const repoRoot = resolve(siteRoot, "..");
 const outRoot = join(siteRoot, "public");
 const findings = JSON.parse(readFileSync(join(siteRoot, "data", "findings.json"), "utf8"));
 const meta = JSON.parse(readFileSync(join(siteRoot, "data", "meta.json"), "utf8"));
+const explanations = JSON.parse(readFileSync(join(siteRoot, "data", "explanations.json"), "utf8"));
+const securityPack = loadPack(join(repoRoot, "benchmarks", "packs", "security-review"));
+const chairPack = loadPack(join(repoRoot, "benchmarks", "packs", "council-chair"));
+const shapePack = loadPack(join(repoRoot, "benchmarks", "packs", "council-shape"));
+const experiencePack = loadPack(join(repoRoot, "benchmarks", "packs", "council-experience"));
 const visualPack = loadPack(join(repoRoot, "benchmarks", "packs", "visual-project-list"));
 const visualDefects = visualPack.tasks[0].key.defects;
+const packById = {
+  "security-review": securityPack,
+  "council-chair": chairPack,
+  "council-shape": shapePack,
+  "council-experience": experiencePack,
+  "visual-project-list": visualPack,
+};
 const buildVersion = Date.now().toString(36);
 
 const PACK_TO_SEAT = {
@@ -34,6 +46,121 @@ const pct = (value) => (value === null || value === undefined ? "n/a" : `${value
 const usd = (value) =>
   value === null || value === undefined ? "n/a" : `$${Number(value).toFixed(6)}`;
 const badge = (tier) => `<span class="badge ${esc(tier)}">${esc(tier)}</span>`;
+
+function taskInfo(packId, taskId) {
+  return explanations.tasks[packId]?.[taskId] ?? { title: taskId, question: "" };
+}
+
+function optionLegend(packId, taskId) {
+  const options = taskInfo(packId, taskId).options;
+  if (!Array.isArray(options) || options.length === 0) return "";
+  return `<div class="option-legend"><b>Options in this task</b>${options
+    .map((option) => `<span><b>${esc(option.id)}</b> ${esc(option.label)}</span>`)
+    .join("")}</div>`;
+}
+
+const VERBS = {
+  lists: "List",
+  captures: "Record",
+  names: "Name",
+  describes: "Describe",
+  reuses: "Reuse",
+  defers: "Defer",
+  keeps: "Keep",
+  uses: "Use",
+  avoids: "Avoid",
+  gives: "Give",
+  states: "State",
+  recommends: "Recommend",
+  rejects: "Reject",
+};
+
+const CHECK_LABELS = {
+  "lists all three options A, B and C": "List all three options (A, B, C)",
+  "captures the experience dissent about a visible stale read": "Record the experience dissent: stale data must be visible",
+  "names C as rejected because it adds SQLite or a new store": "Reject C (SQLite) because it adds a new store",
+  "names B as rejected because it is a file or second store": "Reject B (JSON file) because it adds a second store",
+  "names B as rejected for being an on-disk store or leak": "Reject B (on-disk index) because it adds a store and can leak content",
+  "names B as rejected for a second source of truth": "Reject B (transport ownership) as a second source of truth",
+  "names C as rejected for duplication": "Reject C (both keep a copy) as duplication",
+  "names B as rejected for a duplicate command list": "Reject B (new command list) as a duplicate",
+  "names C as rejected for not giving a keyboard path": "Reject C (current menus) because it gives no keyboard path",
+  "rejects the second transport (A) on the one-path constraint": "Reject A (second transport) on the one-path constraint",
+  "rejects the public endpoint (A) on exposure": "Reject A (public endpoint) on exposure",
+  "names A as rejected because it moves the title": "Reject A (topbar picker) because it moves the title",
+  "names C as rejected because it hides the list": "Reject C (palette command) because it hides the list",
+  "names B as rejected because it cannot be rolled back": "Reject B (big-bang rewrite) because it cannot be rolled back",
+  "describes A as an in-memory map": "Describe A as an in-memory map",
+  "describes A as dual-write or dual-read": "Describe A as dual-write / dual-read",
+  "lists all three options": "List all three options (A, B, C)",
+  "lists the three options A, B and C": "List the three options (A, B, C)",
+  "captures the risk dissent about the held run": "Record the risk dissent: the held run is voided with a sentence",
+  "captures the experience dissent about focus": "Record the experience dissent: focus lands on the first row",
+  "captures the risk dissent about persistence": "Record the risk dissent: the cache should survive a restart",
+  "captures the experience dissent about a visible stale read": "Record the experience dissent: stale data must be visible",
+  "captures the risk dissent about rollback": "Record the risk dissent: a one-step rollback is required",
+  "captures the experience dissent about a blank transcript": "Record the experience dissent: no blank transcript during migration",
+  "captures the risk dissent about destructive confirmations": "Record the risk dissent: destructive commands keep their confirmation",
+  "captures the experience point about reusing visible labels": "Record the experience point: reuse the visible labels",
+  "names B as rejected because it adds a second source of truth": "Reject B (transport ownership) as a second source of truth",
+  "names C as rejected because it adds SQLite or a new store": "Reject C (SQLite) because it adds a new store",
+  "names the create or attach action as the first-run path": "Name create or attach as the first-run path",
+  "names the first row appearing without a layout jump": "Describe the first row appearing without a layout jump",
+  "names wait, switch or retry as the first-run path": "Name what the user can do while loading: wait, switch or retry",
+  "names the risk position that the state must stay visible": "Record the risk position: the warning stays visible",
+  "names the store and read seams": "Name the store and read seams",
+  "names the store and render seams": "Name the store and render seams",
+  "names the route and renderer seams": "Name the route and renderer seams",
+  "names the port and render seams": "Name the port and render seams",
+  "names the composer and page-state seams": "Name the composer and page-state seams",
+  "names the render and data seams": "Name the render and data seams",
+  "names the data and render seams": "Name the data and render seams",
+  "names the admin and data seams": "Name the admin and data seams",
+  "names the render and config seams": "Name the render and config seams",
+  "describes a reversible removal": "Describe a reversible removal",
+  "describes a restore or revert path": "Describe a restore or revert path",
+  "describes a rollback path": "Describe a rollback path",
+  "keeps one data path": "Keep one data path",
+  "keeps one process and one path": "Keep one process and one path",
+  "keeps one folder-scoped path": "Keep one folder-scoped path",
+  "keeps the draft page-local": "Keep the draft page-local",
+  "keys the draft to the thread": "Key the draft to the thread",
+};
+
+function humanCheck(description) {
+  const raw = String(description ?? "")
+    .replace(/^[A-Z]\d+:\s*/, "")
+    .replace(/\.$/, "")
+    .trim();
+  if (CHECK_LABELS[raw]) return CHECK_LABELS[raw];
+  let text = raw;
+  if (/^names\s+[A-Z]\s+as\s+rejected\b/.test(text)) {
+    text = text.replace(/^names\s+([A-Z])\s+as\s+rejected\s*/i, "Reject $1 ");
+  }
+  const first = text.match(/^([a-z]+)\b/);
+  if (first) {
+    const verb = VERBS[first[1]];
+    if (verb) text = `${verb}${text.slice(first[0].length)}`;
+    else text = `${text[0].toUpperCase()}${text.slice(1)}`;
+  } else {
+    text = `${text[0].toUpperCase()}${text.slice(1)}`;
+  }
+  return text;
+}
+
+function criteriaFor(packId, taskId) {
+  const task = packById[packId]?.tasks.find((entry) => entry.id === taskId);
+  return task?.key.criteria ?? [];
+}
+
+function defectsFor(packId, taskId) {
+  const task = packById[packId]?.tasks.find((entry) => entry.id === taskId);
+  return task?.key.defects ?? [];
+}
+
+function severityTag(severity) {
+  return `<span class="sev ${esc(severity)}">${esc(severity)}</span>`;
+}
 
 function seatRows(id) {
   return id === "blindspot" ? findings.visual.row : findings[id].rows ?? [];
@@ -258,73 +385,135 @@ function candidateTable(id) {
 }
 
 function riskTasks() {
-  const rows = findings.risk.tasks;
-  return `<div class="card scroll"><table>
-    <thead><tr><th>Task</th><th class="num">Key</th><th class="num">GLM 5.3</th><th class="num">Qwen 3.8 Flash</th><th>Qwen missed</th></tr></thead>
-    <tbody>${rows
-      .map(
-        (row) => `<tr>
-          <td>${esc(row.task)}</td>
-          <td class="num">${row.key}</td>
-          <td class="num">${row.glmCaught}/${row.key}${row.glmFp ? ` · ${row.glmFp} FP` : ""}</td>
-          <td class="num">${row.qwenCaught}/${row.key}${row.qwenFp ? ` · ${row.qwenFp} FP` : ""}</td>
-          <td>${row.qwenMissed.length ? row.qwenMissed.map(esc).join("<br>") : "—"}</td>
-        </tr>`,
-      )
-      .join("")}</tbody>
-  </table></div>`;
+  const glm = "surplus/glm-5.3";
+  const qwen = "surplus/qwen3.8-flash";
+  return `<div class="task-list">${findings.risk.tasks
+    .map((task) => {
+      const info = taskInfo("security-review", task.task);
+      const defects = defectsFor("security-review", task.task);
+      const missed = task.qwenMissed ?? [];
+      return `<article class="task-card">
+        <div class="task-head">
+          <div>
+            <h3>${esc(info.title)}</h3>
+            <p class="question">${esc(info.question)}</p>
+            ${info.what ? `<p class="what">${esc(info.what)}</p>` : ""}
+          </div>
+          <span class="task-id">Task ${esc(task.task.split("-")[0])}</span>
+        </div>
+        <div class="score-chips">
+          <span class="chip">${esc(modelName(glm))} <b>${task.glmCaught}/${task.key}</b> key defects${task.glmFp ? ` · ${task.glmFp} FP` : ""}</span>
+          <span class="chip">${esc(modelName(qwen))} <b>${task.qwenCaught}/${task.key}</b> key defects${task.qwenFp ? ` · ${task.qwenFp} FP` : ""}</span>
+        </div>
+        ${
+          missed.length
+            ? `<div class="miss"><b>Qwen missed</b><ul>${missed
+                .map((defect) => `<li>${severityTag(defect.severity)} ${esc(defect.summary)}</li>`)
+                .join("")}</ul></div>`
+            : `<div class="miss ok"><b>Both models caught every key defect in this slice.</b></div>`
+        }
+        <details><summary>Key defects in this slice (${defects.length})</summary>
+          <ul class="checks">${defects
+            .map((defect) => `<li>${severityTag(defect.severity)} ${esc(defect.summary)}</li>`)
+            .join("")}</ul>
+        </details>
+      </article>`;
+    })
+    .join("")}</div>`;
 }
 
 function councilTasks(id) {
+  const packId =
+    id === "chair" ? "council-chair" : id === "shape" ? "council-shape" : "council-experience";
   const data = findings[id];
   const models = data.models ?? [];
-  const head = models
-    .map((model) => `<th class="num">${esc(modelName(model))}</th>`)
-    .join("");
-  const rows = data.tasks
+  return `<div class="task-list">${data.tasks
     .map((task) => {
-      const cells = models
+      const info = taskInfo(packId, task.task);
+      const criteria = criteriaFor(packId, task.task);
+      const chips = models
         .map((model) => {
           const cell = task.models[model];
-          return `<td class="num">${cell.ok ? `${cell.caught}/${task.total}` : "failed"}</td>`;
+          return `<span class="chip ${cell.ok ? "" : "failed"}">${esc(modelName(model))} <b>${cell.ok ? `${cell.caught}/${task.total}` : "failed"}</b> checks${cell.ok && cell.fp ? ` · ${cell.fp} FP` : ""}</span>`;
         })
         .join("");
-      const details = models
+      const misses = models
         .map((model) => {
           const cell = task.models[model];
-          if (!cell.ok) return `<b>${esc(modelName(model))}:</b> failed`;
-          if (!cell.missed.length) return "";
-          return `<b>${esc(modelName(model))}:</b> ${cell.missed.map(esc).join("; ")}`;
+          if (!cell.ok) {
+            return `<div class="miss"><b>${esc(modelName(model))}</b> could not be scored: the answer was not valid JSON.</div>`;
+          }
+          if (!cell.missed.length) {
+            return `<div class="miss ok"><b>${esc(modelName(model))}</b> missed no checks.</div>`;
+          }
+          return `<div class="miss"><b>${esc(modelName(model))}</b> missed:<ul>${cell.missed
+            .map((description) => `<li>${esc(humanCheck(description))}</li>`)
+            .join("")}</ul></div>`;
         })
-        .filter(Boolean)
-        .join("<br>");
-      return `<tr><td>${esc(task.task)}</td><td class="num">${task.total}</td>${cells}<td>${details || "—"}</td></tr>`;
+        .join("");
+      return `<article class="task-card">
+        <div class="task-head">
+          <div>
+            <h3>${esc(info.title)}</h3>
+            <p class="question">${esc(info.question)}</p>
+          </div>
+          <span class="task-id">Task ${esc(task.task.split("-")[0])}</span>
+        </div>
+        ${optionLegend(packId, task.task)}
+        <div class="score-chips">${chips}</div>
+        ${misses}
+        <details><summary>All ${task.total} checks in this task</summary>
+          <ul class="checks">${criteria
+            .map(
+              (criterion) =>
+                `<li>${esc(humanCheck(criterion.description))} <span class="weight">weight ${criterion.weight}</span></li>`,
+            )
+            .join("")}</ul>
+        </details>
+      </article>`;
     })
-    .join("");
-  return `<div class="card scroll"><table>
-    <thead><tr><th>Task</th><th class="num">Total</th>${head}<th>Missed criteria</th></tr></thead>
-    <tbody>${rows}</tbody>
-  </table></div>`;
+    .join("")}</div>`;
 }
 
 function visualTasks() {
   const caught = new Set(findings.visual.caught);
-  const rows = visualDefects
-    .map((defect) => {
-      const isCaught = caught.has(defect.id);
-      return `<tr class="${isCaught ? "" : "miss-row"}">
-        <td>${esc(defect.id)}</td>
-        <td>${esc(defect.shot)}</td>
-        <td>${esc(defect.region)}</td>
-        <td>${esc(defect.severity)}</td>
-        <td>${isCaught ? '<span class="ok">caught</span>' : '<span class="bad">missed</span>'}</td>
-      </tr>`;
+  const groups = new Map();
+  for (const defect of visualDefects) {
+    const key = defect.id.split("-")[0];
+    if (!groups.has(key)) groups.set(key, []);
+    groups.get(key).push(defect);
+  }
+  const info = taskInfo("visual-project-list", "01-project-list");
+  const titles = info.defects ?? {};
+  const total = visualDefects.length;
+  const totalCaught = findings.visual.caught.length;
+  const rows = [...groups.entries()]
+    .map(([key, defects]) => {
+      const caughtCount = defects.filter((defect) => caught.has(defect.id)).length;
+      const all = caughtCount === defects.length;
+      return `<div class="defect-row">
+        <div>
+          <div class="defect-title">${esc(titles[key] ?? key)}</div>
+          <div class="defect-meta">${esc(defects[0].severity)} severity · ${caughtCount}/${defects.length} shots</div>
+        </div>
+        <div class="result ${all ? "caught" : "missed"}">${all ? "caught" : "missed"}</div>
+      </div>`;
     })
     .join("");
-  return `<div class="card scroll"><table>
-    <thead><tr><th>Defect</th><th>Shot</th><th>Region</th><th>Severity</th><th>Result</th></tr></thead>
-    <tbody>${rows}</tbody>
-  </table></div>`;
+  return `<div class="card">
+    <h3>${esc(info.title)}</h3>
+    <p class="question">${esc(info.question)}</p>
+    <p class="fine">${totalCaught} of ${total} keyed defects caught · ${pct(findings.visual.row?.[0]?.catch)} weighted catch · ${findings.visual.fp} false positives.</p>
+    <div class="defect-list">${rows}</div>
+    <details><summary>Per-shot detail (${total} keyed defects)</summary>
+      <ul class="checks">${visualDefects
+        .map(
+          (defect) =>
+            `<li>${caught.has(defect.id) ? '<span class="ok">caught</span>' : '<span class="bad">missed</span>'} ${esc(titles[defect.id.split("-")[0]] ?? defect.id)} — ${esc(defect.shot)}</li>`,
+        )
+        .join("")}</ul>
+    </details>
+  </div>`;
 }
 
 function seatPage(id) {
@@ -349,9 +538,14 @@ function seatPage(id) {
       <p class="lede">${esc(seat.slot)} · chosen <b>${esc(modelName(seat.chosen))}</b> · ${badge(seat.tier)}</p>
       <div class="callout">${esc(seat.reason)}</div>
       ${extra}
+      <div class="card explainer">
+        <h3>How to read this page</h3>
+        <p>${esc(explanations.packNotes[pack] ?? "")}</p>
+        <p><b>Catch</b> is the weighted share of required checks met; the weight beside a check is how much it counts. <b>Precision</b> is caught findings over caught plus false claims. <b>Unique</b> is a check this model caught that the reference missed. A failed JSON answer is incomplete, not a miss.</p>
+      </div>
       <h2>Candidates</h2>
       ${candidateTable(id)}
-      <h2>Per-task result</h2>
+      <h2>Task results</h2>
       <p class="fine">${id === "risk" ? "Covers the measured 16k group; the 4k pilots are in the candidate table." : id === "blindspot" ? "Every keyed visual defect, including the misses." : "Covers the measured group; pilot candidates are in the candidate table."}</p>
       ${taskBlock}
       <h2>Runs</h2>
@@ -417,6 +611,13 @@ th span{display:block;text-transform:none;letter-spacing:0;font-weight:400;margi
 .chosen-row{background:var(--green-bg)}.sub{display:block;color:var(--muted);font-size:11px}.ok{color:var(--green);font-weight:700}.bad{color:var(--red);font-weight:700}.miss-row{background:var(--red-bg)}
 .cost-row{display:grid;grid-template-columns:150px 1fr 100px;gap:10px;align-items:center;margin:7px 0}.track{height:13px;background:var(--track);border-radius:999px;overflow:hidden}.bar{height:100%;background:linear-gradient(90deg,#2563eb,#7aa2ff);border-radius:999px}.amount{text-align:right;font-variant-numeric:tabular-nums;font-size:12px}
 .total{display:flex;justify-content:space-between;border-top:2px solid var(--line);margin-top:10px;padding-top:8px;font-weight:750}.fine{color:var(--muted);font-size:12px}.callout{background:var(--green-bg);border-left:4px solid var(--green);padding:12px 14px;border-radius:8px;margin:14px 0}
+.explainer{background:var(--panel);border-left:4px solid var(--blue)}.explainer p{margin:6px 0;font-size:12px;color:var(--muted)}
+.task-list{display:grid;gap:12px}.task-card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px}.task-head{display:flex;justify-content:space-between;gap:14px;align-items:flex-start}.task-head h3{margin:0;font-size:15px}.question{color:var(--ink);margin:4px 0 0;font-size:13px}.what{color:var(--muted);margin:4px 0 0;font-size:12px}.task-id{color:var(--muted);font:11px ui-monospace,SFMono-Regular,Consolas,monospace;white-space:nowrap}
+.option-legend{display:flex;gap:14px;flex-wrap:wrap;margin:10px 0 6px;padding:8px 10px;background:var(--panel);border-radius:8px;font-size:12px}.option-legend b{color:var(--muted);font-weight:650}.option-legend span b{color:var(--ink)}
+.score-chips{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}.chip{display:inline-flex;gap:6px;align-items:center;padding:4px 8px;border:1px solid var(--line);border-radius:999px;font-size:12px;background:var(--panel)}.chip b{font-variant-numeric:tabular-nums}.chip.failed{border-color:var(--red);color:var(--red);background:var(--red-bg)}
+.miss{margin:8px 0 2px;font-size:12px}.miss b{font-size:12px}.miss ul{margin:4px 0 0 16px}.miss li{margin:2px 0}.miss.ok{color:var(--muted)}.checks{margin:6px 0 0 16px;font-size:12px;color:var(--muted)}.checks li{margin:3px 0}.weight{color:var(--muted);font-size:10px;border:1px solid var(--line);border-radius:999px;padding:1px 5px;margin-left:4px}
+.sev{font-size:10px;font-weight:750;text-transform:uppercase;padding:1px 5px;border-radius:4px;margin-right:5px}.sev.blocker{color:var(--red);background:var(--red-bg)}.sev.major{color:var(--amber);background:var(--amber-bg)}.sev.minor{color:var(--blue);background:var(--blue-bg)}
+.defect-list{margin-top:8px}.defect-row{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid var(--line)}.defect-title{font-weight:650}.defect-meta{color:var(--muted);font-size:11px;margin-top:2px}.result{font-weight:750;font-size:12px}.result.caught{color:var(--green)}.result.missed{color:var(--red)}details summary{cursor:pointer;color:var(--blue);font-size:12px;margin-top:8px}
 ul{margin:0;padding-left:18px}li{margin:5px 0}.mono{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:12px}
 footer{max-width:1280px;margin:0 auto;padding:20px 28px 40px;color:var(--muted);font-size:12px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
 @media(max-width:1100px){.kpis{grid-template-columns:repeat(3,1fr)}.seat-grid{grid-template-columns:repeat(2,1fr)}.grid2{grid-template-columns:1fr}}

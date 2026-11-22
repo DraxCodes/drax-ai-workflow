@@ -414,7 +414,11 @@
         "qwenCaught": 3,
         "qwenFp": 0,
         "qwenMissed": [
-          "K4 major: the full user record, including credential fields, is returned to the caller"
+          {
+            "id": "K4",
+            "severity": "major",
+            "summary": "the full user record, including credential fields, is returned to the caller"
+          }
         ],
         "glmMissed": []
       },
@@ -1025,15 +1029,7 @@
             "ok": false,
             "caught": 0,
             "fp": 0,
-            "missed": [
-              "C1: the three-second read says the list is empty",
-              "C2: names the create or attach action as the first-run path",
-              "C3: uses sentence-case, quiet copy",
-              "C4: names the first row appearing without a layout jump",
-              "C5: avoids a modal, spinner or tour",
-              "C6: gives at least two observable evidence points",
-              "C7: names at least one non-goal"
-            ]
+            "missed": []
           }
         }
       },
@@ -1071,15 +1067,7 @@
             "ok": false,
             "caught": 0,
             "fp": 0,
-            "missed": [
-              "C1: the three-second read names the thread being deleted",
-              "C2: cancel is the default and holds focus",
-              "C3: copy is sentence case and names the object",
-              "C4: the list updates without a layout jump",
-              "C5: avoids a second confirmation, a modal stack or typed confirmation",
-              "C6: gives at least two observable evidence points",
-              "C7: names at least one non-goal"
-            ]
+            "missed": []
           }
         }
       },
@@ -1122,15 +1110,7 @@
             "ok": false,
             "caught": 0,
             "fp": 0,
-            "missed": [
-              "C1: the three-second read finds the composer and send action",
-              "C2: names type, send or attach as the first-run path",
-              "C3: the placeholder is a verb in sentence case",
-              "C4: send clears the draft without moving focus",
-              "C5: avoids a modal, a lost draft or a disabled composer",
-              "C6: gives at least two observable evidence points",
-              "C7: names at least one non-goal"
-            ]
+            "missed": []
           }
         }
       },
@@ -1228,15 +1208,7 @@
             "ok": false,
             "caught": 0,
             "fp": 0,
-            "missed": [
-              "C1: the three-second read says the data is stale or disconnected",
-              "C2: names retry, reconnect or wait as the first-run path",
-              "C3: one sentence, no blame, names the last update",
-              "C4: reconnect keeps the reader's place without a jump",
-              "C5: avoids silent stale data, a spinner or a modal",
-              "C6: gives at least two observable evidence points",
-              "C7: names at least one non-goal"
-            ]
+            "missed": []
           }
         }
       }
