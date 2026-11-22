@@ -40,6 +40,11 @@ The sources for the current report are the measured 16k runs, the 4k pilot runs,
 the ten-task council runs, and the visual-pack final run. If a source is missing,
 the collector prints it and leaves that section empty rather than inventing data.
 
+The `sources` map at the top of `collect.mjs` is the curation point. When a new
+run supersedes one of these, point that entry at the new run directory (or add it
+as a pilot source) and run `collect` again. The run ledger discovers all run
+directories automatically; only the per-task detail sources are curated.
+
 ## Docker
 
 ```sh
