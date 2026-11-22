@@ -1,6 +1,7 @@
 # Local
 node_modules/
 .scratch/
+site/public/
 .opencode/.workflow-backup/
 .opencode/.workflow-stage/
 *.local.json

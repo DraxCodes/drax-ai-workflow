@@ -1,0 +1,15 @@
+services:
+  council-benchmarks:
+    image: nginx:1.27-alpine
+    container_name: council-benchmarks
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:${SITE_PORT:-8080}:80"
+    volumes:
+      - ./public:/usr/share/nginx/html:ro
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1/ >/dev/null 2>&1 || exit 1"]
+      interval: 30s
+      timeout: 3s
+      retries: 3

@@ -1,0 +1,1353 @@
+{
+  "generatedAt": "2026-11-22",
+  "project": "personal-website",
+  "sources": {
+    "risk": "present",
+    "risk4k": "present",
+    "chair": "present",
+    "chair10": "present",
+    "shape": "present",
+    "shape10": "present",
+    "experience": "present",
+    "visual": "present"
+  },
+  "runs": [
+    {
+      "dir": "2026-11-21-visual-pack-final",
+      "pack": "visual-project-list",
+      "maxTokens": 16000,
+      "records": 1,
+      "failed": 0,
+      "spent": 0.000465,
+      "startedAt": "2026-11-21T22:37:38.626Z"
+    },
+    {
+      "dir": "2026-11-21-visual-pack-tuned",
+      "pack": "visual-project-list",
+      "maxTokens": 16000,
+      "records": 1,
+      "failed": 0,
+      "spent": 0.000707,
+      "startedAt": "2026-11-21T22:32:53.070Z"
+    },
+    {
+      "dir": "2026-11-21-visual-pack-glmflash-retry",
+      "pack": "visual-project-list",
+      "maxTokens": 16000,
+      "records": 1,
+      "failed": 0,
+      "spent": 0.001124,
+      "startedAt": "2026-11-21T22:26:33.311Z"
+    },
+    {
+      "dir": "2026-11-21-visual-pack-glmflash-16k",
+      "pack": "visual-project-list",
+      "maxTokens": 16000,
+      "records": 1,
+      "failed": 1,
+      "spent": 0.00099,
+      "startedAt": "2026-11-21T22:21:16.847Z"
+    },
+    {
+      "dir": "2026-11-21-visual-pack-glmflash",
+      "pack": "visual-project-list",
+      "maxTokens": 4000,
+      "records": 1,
+      "failed": 1,
+      "spent": 0.000455,
+      "startedAt": "2026-11-21T22:19:31.614Z"
+    },
+    {
+      "dir": "2026-11-21-shape-10-16k",
+      "pack": "council-shape",
+      "maxTokens": 16000,
+      "records": 20,
+      "failed": 0,
+      "spent": 0.009635,
+      "startedAt": "2026-11-21T21:50:24.737Z"
+    },
+    {
+      "dir": "2026-11-21-chair-10-16k",
+      "pack": "council-chair",
+      "maxTokens": 16000,
+      "records": 20,
+      "failed": 0,
+      "spent": 0.011118,
+      "startedAt": "2026-11-21T21:33:51.295Z"
+    },
+    {
+      "dir": "2026-11-21-experience-10",
+      "pack": "council-experience",
+      "maxTokens": 8000,
+      "records": 20,
+      "failed": 4,
+      "spent": 0.00861,
+      "startedAt": "2026-11-21T21:16:54.425Z"
+    },
+    {
+      "dir": "2026-11-21-shape-10",
+      "pack": "council-shape",
+      "maxTokens": 8000,
+      "records": 30,
+      "failed": 4,
+      "spent": 0.011078,
+      "startedAt": "2026-11-21T20:58:13.773Z"
+    },
+    {
+      "dir": "2026-11-21-chair-10",
+      "pack": "council-chair",
+      "maxTokens": 8000,
+      "records": 30,
+      "failed": 5,
+      "spent": 0.015063,
+      "startedAt": "2026-11-21T20:33:39.169Z"
+    },
+    {
+      "dir": "2026-11-21-risk-glm53-16k",
+      "pack": "security-review",
+      "maxTokens": 16000,
+      "records": 10,
+      "failed": 0,
+      "spent": 0.032409,
+      "startedAt": "2026-11-21T20:22:04.208Z"
+    },
+    {
+      "dir": "2026-11-21-risk-glmflash-16k",
+      "pack": "security-review",
+      "maxTokens": 16000,
+      "records": 10,
+      "failed": 5,
+      "spent": 0.008971,
+      "startedAt": "2026-11-21T20:12:10.085Z"
+    },
+    {
+      "dir": "2026-11-21-experience",
+      "pack": "council-experience",
+      "maxTokens": 8000,
+      "records": 6,
+      "failed": 0,
+      "spent": 0.012408,
+      "startedAt": "2026-11-21T20:08:15.403Z"
+    },
+    {
+      "dir": "2026-11-21-shape",
+      "pack": "council-shape",
+      "maxTokens": 8000,
+      "records": 9,
+      "failed": 1,
+      "spent": 0.01433,
+      "startedAt": "2026-11-21T20:03:26.330Z"
+    },
+    {
+      "dir": "2026-11-21-chair",
+      "pack": "council-chair",
+      "maxTokens": 8000,
+      "records": 9,
+      "failed": 0,
+      "spent": 0.023654,
+      "startedAt": "2026-11-21T19:54:24.582Z"
+    },
+    {
+      "dir": "2026-11-21-risk-qwen-16k",
+      "pack": "security-review",
+      "maxTokens": 16000,
+      "records": 10,
+      "failed": 0,
+      "spent": 0.012327,
+      "startedAt": "2026-11-21T19:48:16.440Z"
+    },
+    {
+      "dir": "2026-11-21-risk-qwen-8k",
+      "pack": "security-review",
+      "maxTokens": 8000,
+      "records": 10,
+      "failed": 1,
+      "spent": 0.017786,
+      "startedAt": "2026-11-21T19:39:27.277Z"
+    },
+    {
+      "dir": "2026-11-21-risk-4k",
+      "pack": "security-review",
+      "maxTokens": 4000,
+      "records": 50,
+      "failed": 25,
+      "spent": 0.163435,
+      "startedAt": "2026-11-21T19:20:46.865Z"
+    },
+    {
+      "dir": "2026-11-21-risk",
+      "pack": "security-review",
+      "maxTokens": 1200,
+      "records": 50,
+      "failed": 40,
+      "spent": 0.090776,
+      "startedAt": "2026-11-21T19:11:00.405Z"
+    }
+  ],
+  "costs": {
+    "runSpend": 0.435341,
+    "probeSpend": 0.001752,
+    "totalRecorded": 0.437093,
+    "visualReviewUncosted": true
+  },
+  "risk": {
+    "rows": [
+      {
+        "model": "surplus/glm-5.3",
+        "tier": "measured",
+        "confidence": "medium",
+        "scored": 10,
+        "failed": 0,
+        "catch": 100,
+        "precision": 85,
+        "fp": 4,
+        "cost": 0.032409,
+        "costPerTask": 0.003241,
+        "unique": null,
+        "maxTokens": 16000
+      },
+      {
+        "model": "surplus/qwen3.8-flash",
+        "tier": "measured",
+        "confidence": "medium",
+        "scored": 10,
+        "failed": 0,
+        "catch": 97,
+        "precision": 96,
+        "fp": 1,
+        "cost": 0.012327,
+        "costPerTask": 0.001233,
+        "unique": 0,
+        "maxTokens": 16000
+      },
+      {
+        "model": "surplus/glm-5.3-flash",
+        "tier": "pilot",
+        "confidence": "low",
+        "scored": 6,
+        "failed": 4,
+        "catch": 95,
+        "precision": 93,
+        "fp": 1,
+        "cost": 0.003848,
+        "costPerTask": 0.000641,
+        "unique": 0,
+        "maxTokens": 4000
+      },
+      {
+        "model": "surplus/deepseek-v4.1-flash-1017",
+        "tier": "pilot",
+        "confidence": "low",
+        "scored": 5,
+        "failed": 5,
+        "catch": 86,
+        "precision": 100,
+        "fp": 0,
+        "cost": 0.004324,
+        "costPerTask": 0.000865,
+        "unique": 0,
+        "maxTokens": 4000
+      },
+      {
+        "model": "surplus/claude-haiku-4.5",
+        "tier": "incomplete",
+        "confidence": "low",
+        "scored": 0,
+        "failed": 10,
+        "catch": 0,
+        "precision": null,
+        "fp": 0,
+        "cost": null,
+        "costPerTask": null,
+        "unique": 0,
+        "maxTokens": 4000
+      }
+    ],
+    "risk4k": [
+      {
+        "model": "surplus/glm-5.3",
+        "tier": "pilot",
+        "confidence": "low",
+        "scored": 6,
+        "failed": 4,
+        "catch": 100,
+        "precision": 92,
+        "fp": 1,
+        "cost": 0.036252,
+        "costPerTask": 0.006042,
+        "unique": null,
+        "maxTokens": 4000
+      },
+      {
+        "model": "surplus/qwen3.8-flash",
+        "tier": "pilot",
+        "confidence": "low",
+        "scored": 8,
+        "failed": 2,
+        "catch": 95,
+        "precision": 100,
+        "fp": 0,
+        "cost": 0.007854,
+        "costPerTask": 0.000982,
+        "unique": 0,
+        "maxTokens": 4000
+      },
+      {
+        "model": "surplus/glm-5.3-flash",
+        "tier": "pilot",
+        "confidence": "low",
+        "scored": 6,
+        "failed": 4,
+        "catch": 95,
+        "precision": 93,
+        "fp": 1,
+        "cost": 0.003848,
+        "costPerTask": 0.000641,
+        "unique": 0,
+        "maxTokens": 4000
+      },
+      {
+        "model": "surplus/deepseek-v4.1-flash-1017",
+        "tier": "pilot",
+        "confidence": "low",
+        "scored": 5,
+        "failed": 5,
+        "catch": 86,
+        "precision": 100,
+        "fp": 0,
+        "cost": 0.004324,
+        "costPerTask": 0.000865,
+        "unique": 0,
+        "maxTokens": 4000
+      },
+      {
+        "model": "surplus/claude-haiku-4.5",
+        "tier": "incomplete",
+        "confidence": "low",
+        "scored": 0,
+        "failed": 10,
+        "catch": 0,
+        "precision": null,
+        "fp": 0,
+        "cost": null,
+        "costPerTask": null,
+        "unique": 0,
+        "maxTokens": 4000
+      }
+    ],
+    "tasks": [
+      {
+        "task": "01-sql-injection",
+        "key": 2,
+        "glmCaught": 2,
+        "glmFp": 0,
+        "qwenCaught": 2,
+        "qwenFp": 0,
+        "qwenMissed": [],
+        "glmMissed": []
+      },
+      {
+        "task": "02-path-traversal",
+        "key": 1,
+        "glmCaught": 1,
+        "glmFp": 2,
+        "qwenCaught": 1,
+        "qwenFp": 0,
+        "qwenMissed": [],
+        "glmMissed": []
+      },
+      {
+        "task": "03-idor",
+        "key": 2,
+        "glmCaught": 2,
+        "glmFp": 0,
+        "qwenCaught": 2,
+        "qwenFp": 0,
+        "qwenMissed": [],
+        "glmMissed": []
+      },
+      {
+        "task": "04-jwt",
+        "key": 2,
+        "glmCaught": 2,
+        "glmFp": 0,
+        "qwenCaught": 2,
+        "qwenFp": 0,
+        "qwenMissed": [],
+        "glmMissed": []
+      },
+      {
+        "task": "05-ssrf",
+        "key": 1,
+        "glmCaught": 1,
+        "glmFp": 1,
+        "qwenCaught": 1,
+        "qwenFp": 1,
+        "qwenMissed": [],
+        "glmMissed": []
+      },
+      {
+        "task": "06-command-injection",
+        "key": 3,
+        "glmCaught": 3,
+        "glmFp": 0,
+        "qwenCaught": 3,
+        "qwenFp": 0,
+        "qwenMissed": [],
+        "glmMissed": []
+      },
+      {
+        "task": "07-deserialization",
+        "key": 2,
+        "glmCaught": 2,
+        "glmFp": 0,
+        "qwenCaught": 2,
+        "qwenFp": 0,
+        "qwenMissed": [],
+        "glmMissed": []
+      },
+      {
+        "task": "08-secret-leak",
+        "key": 4,
+        "glmCaught": 4,
+        "glmFp": 0,
+        "qwenCaught": 3,
+        "qwenFp": 0,
+        "qwenMissed": [
+          "K4 major: the full user record, including credential fields, is returned to the caller"
+        ],
+        "glmMissed": []
+      },
+      {
+        "task": "09-crypto",
+        "key": 3,
+        "glmCaught": 3,
+        "glmFp": 1,
+        "qwenCaught": 3,
+        "qwenFp": 0,
+        "qwenMissed": [],
+        "glmMissed": []
+      },
+      {
+        "task": "10-config-exposure",
+        "key": 3,
+        "glmCaught": 3,
+        "glmFp": 0,
+        "qwenCaught": 3,
+        "qwenFp": 0,
+        "qwenMissed": [],
+        "glmMissed": []
+      }
+    ]
+  },
+  "chair": {
+    "rows": [
+      {
+        "model": "surplus/qwen3.8-flash",
+        "tier": "measured",
+        "confidence": "medium",
+        "scored": 10,
+        "failed": 0,
+        "catch": 80,
+        "precision": 98,
+        "fp": 1,
+        "cost": 0.0047,
+        "costPerTask": 0.00047,
+        "unique": 6,
+        "maxTokens": 16000
+      },
+      {
+        "model": "surplus/deepseek-v4.1-flash-1017",
+        "tier": "measured",
+        "confidence": "medium",
+        "scored": 10,
+        "failed": 0,
+        "catch": 78,
+        "precision": 100,
+        "fp": 0,
+        "cost": 0.006418,
+        "costPerTask": 0.000642,
+        "unique": null,
+        "maxTokens": 16000
+      },
+      {
+        "model": "surplus/glm-5.3-flash",
+        "tier": "pilot",
+        "confidence": "low",
+        "scored": 7,
+        "failed": 3,
+        "catch": 83,
+        "precision": 100,
+        "fp": 0,
+        "cost": 0.003461,
+        "costPerTask": 0.000494,
+        "unique": 9,
+        "maxTokens": 8000
+      }
+    ],
+    "tasks": [
+      {
+        "task": "01-switching-threads",
+        "total": 6,
+        "models": {
+          "surplus/deepseek-v4.1-flash-1017": {
+            "ok": true,
+            "caught": 6,
+            "fp": 0,
+            "missed": []
+          },
+          "surplus/qwen3.8-flash": {
+            "ok": true,
+            "caught": 6,
+            "fp": 0,
+            "missed": []
+          }
+        }
+      },
+      {
+        "task": "02-summary-cache",
+        "total": 7,
+        "models": {
+          "surplus/deepseek-v4.1-flash-1017": {
+            "ok": true,
+            "caught": 4,
+            "fp": 0,
+            "missed": [
+              "C1: lists all three options A, B and C",
+              "C4: captures the experience dissent about a visible stale read",
+              "C6: names C as rejected because it adds SQLite or a new store"
+            ]
+          },
+          "surplus/qwen3.8-flash": {
+            "ok": true,
+            "caught": 4,
+            "fp": 0,
+            "missed": [
+              "C1: lists all three options A, B and C",
+              "C5: names B as rejected because it is a file or second store",
+              "C6: names C as rejected because it adds SQLite or a new store"
+            ]
+          }
+        }
+      },
+      {
+        "task": "03-storage-migration",
+        "total": 6,
+        "models": {
+          "surplus/deepseek-v4.1-flash-1017": {
+            "ok": true,
+            "caught": 6,
+            "fp": 0,
+            "missed": []
+          },
+          "surplus/qwen3.8-flash": {
+            "ok": true,
+            "caught": 5,
+            "fp": 0,
+            "missed": [
+              "C5: names B as rejected because it cannot be rolled back"
+            ]
+          }
+        }
+      },
+      {
+        "task": "04-search-index",
+        "total": 6,
+        "models": {
+          "surplus/deepseek-v4.1-flash-1017": {
+            "ok": true,
+            "caught": 3,
+            "fp": 0,
+            "missed": [
+              "C1: lists all three options",
+              "C4: captures the experience dissent about stale results",
+              "C6: names C as rejected for a service or dependency"
+            ]
+          },
+          "surplus/qwen3.8-flash": {
+            "ok": true,
+            "caught": 3,
+            "fp": 0,
+            "missed": [
+              "C1: lists all three options",
+              "C5: names B as rejected for being an on-disk store or leak",
+              "C6: names C as rejected for a service or dependency"
+            ]
+          }
+        }
+      },
+      {
+        "task": "05-status-ownership",
+        "total": 6,
+        "models": {
+          "surplus/deepseek-v4.1-flash-1017": {
+            "ok": true,
+            "caught": 2,
+            "fp": 0,
+            "missed": [
+              "C1: lists all three options",
+              "C4: captures the shape warning about a duplicated copy",
+              "C5: names B as rejected for a second source of truth",
+              "C6: names C as rejected for duplication"
+            ]
+          },
+          "surplus/qwen3.8-flash": {
+            "ok": true,
+            "caught": 3,
+            "fp": 0,
+            "missed": [
+              "C1: lists all three options",
+              "C5: names B as rejected for a second source of truth",
+              "C6: names C as rejected for duplication"
+            ]
+          }
+        }
+      },
+      {
+        "task": "06-warning-placement",
+        "total": 6,
+        "models": {
+          "surplus/deepseek-v4.1-flash-1017": {
+            "ok": true,
+            "caught": 4,
+            "fp": 0,
+            "missed": [
+              "C4: captures the shape dissent for the topbar",
+              "C6: names the risk position that the state must stay visible"
+            ]
+          },
+          "surplus/qwen3.8-flash": {
+            "ok": true,
+            "caught": 3,
+            "fp": 0,
+            "missed": [
+              "C3: captures the experience dissent for the body banner",
+              "C4: captures the shape dissent for the topbar",
+              "C6: names the risk position that the state must stay visible"
+            ]
+          }
+        }
+      },
+      {
+        "task": "07-command-palette",
+        "total": 6,
+        "models": {
+          "surplus/deepseek-v4.1-flash-1017": {
+            "ok": true,
+            "caught": 3,
+            "fp": 0,
+            "missed": [
+              "C1: lists all three options",
+              "C4: captures the experience point about reusing visible labels",
+              "C5: names B as rejected for a duplicate command list"
+            ]
+          },
+          "surplus/qwen3.8-flash": {
+            "ok": true,
+            "caught": 5,
+            "fp": 1,
+            "missed": [
+              "C5: names B as rejected for a duplicate command list"
+            ]
+          }
+        }
+      },
+      {
+        "task": "08-second-transport",
+        "total": 6,
+        "models": {
+          "surplus/deepseek-v4.1-flash-1017": {
+            "ok": true,
+            "caught": 5,
+            "fp": 0,
+            "missed": [
+              "C6: captures the experience goal of lower latency"
+            ]
+          },
+          "surplus/qwen3.8-flash": {
+            "ok": true,
+            "caught": 6,
+            "fp": 0,
+            "missed": []
+          }
+        }
+      },
+      {
+        "task": "09-no-dissent",
+        "total": 4,
+        "models": {
+          "surplus/deepseek-v4.1-flash-1017": {
+            "ok": true,
+            "caught": 3,
+            "fp": 0,
+            "missed": [
+              "C1: lists the three options A, B and C"
+            ]
+          },
+          "surplus/qwen3.8-flash": {
+            "ok": true,
+            "caught": 3,
+            "fp": 0,
+            "missed": [
+              "C1: lists the three options A, B and C"
+            ]
+          }
+        }
+      },
+      {
+        "task": "10-admin-endpoint",
+        "total": 6,
+        "models": {
+          "surplus/deepseek-v4.1-flash-1017": {
+            "ok": true,
+            "caught": 4,
+            "fp": 0,
+            "missed": [
+              "C4: captures the risk dissent about metadata exposure",
+              "C5: captures the shape preference for no endpoint"
+            ]
+          },
+          "surplus/qwen3.8-flash": {
+            "ok": true,
+            "caught": 4,
+            "fp": 0,
+            "missed": [
+              "C4: captures the risk dissent about metadata exposure",
+              "C5: captures the shape preference for no endpoint"
+            ]
+          }
+        }
+      }
+    ],
+    "models": [
+      "surplus/deepseek-v4.1-flash-1017",
+      "surplus/qwen3.8-flash"
+    ]
+  },
+  "shape": {
+    "rows": [
+      {
+        "model": "surplus/deepseek-v4.1-flash-1017",
+        "tier": "measured",
+        "confidence": "medium",
+        "scored": 10,
+        "failed": 0,
+        "catch": 91,
+        "precision": 100,
+        "fp": 0,
+        "cost": 0.005819,
+        "costPerTask": 0.000582,
+        "unique": null,
+        "maxTokens": 16000
+      },
+      {
+        "model": "surplus/qwen3.8-flash",
+        "tier": "measured",
+        "confidence": "medium",
+        "scored": 10,
+        "failed": 0,
+        "catch": 87,
+        "precision": 100,
+        "fp": 0,
+        "cost": 0.003816,
+        "costPerTask": 0.000382,
+        "unique": 1,
+        "maxTokens": 16000
+      },
+      {
+        "model": "surplus/glm-5.3-flash",
+        "tier": "pilot",
+        "confidence": "low",
+        "scored": 8,
+        "failed": 2,
+        "catch": 93,
+        "precision": 100,
+        "fp": 0,
+        "cost": 0.002227,
+        "costPerTask": 0.000278,
+        "unique": 0,
+        "maxTokens": 8000
+      }
+    ],
+    "tasks": [
+      {
+        "task": "01-status-page",
+        "total": 5,
+        "models": {
+          "surplus/deepseek-v4.1-flash-1017": {
+            "ok": true,
+            "caught": 4,
+            "fp": 0,
+            "missed": [
+              "C3: defers live updates and analytics"
+            ]
+          },
+          "surplus/qwen3.8-flash": {
+            "ok": true,
+            "caught": 4,
+            "fp": 0,
+            "missed": [
+              "C3: defers live updates and analytics"
+            ]
+          }
+        }
+      },
+      {
+        "task": "02-read-only-list",
+        "total": 5,
+        "models": {
+          "surplus/deepseek-v4.1-flash-1017": {
+            "ok": true,
+            "caught": 5,
+            "fp": 0,
+            "missed": []
+          },
+          "surplus/qwen3.8-flash": {
+            "ok": true,
+            "caught": 5,
+            "fp": 0,
+            "missed": []
+          }
+        }
+      },
+      {
+        "task": "03-per-thread-drafts",
+        "total": 5,
+        "models": {
+          "surplus/deepseek-v4.1-flash-1017": {
+            "ok": true,
+            "caught": 4,
+            "fp": 0,
+            "missed": [
+              "C3: defers cross-device sync"
+            ]
+          },
+          "surplus/qwen3.8-flash": {
+            "ok": true,
+            "caught": 5,
+            "fp": 0,
+            "missed": []
+          }
+        }
+      },
+      {
+        "task": "04-background-refresh",
+        "total": 5,
+        "models": {
+          "surplus/deepseek-v4.1-flash-1017": {
+            "ok": true,
+            "caught": 4,
+            "fp": 0,
+            "missed": [
+              "C3: defers hourly freshness and the worker"
+            ]
+          },
+          "surplus/qwen3.8-flash": {
+            "ok": true,
+            "caught": 4,
+            "fp": 0,
+            "missed": [
+              "C3: defers hourly freshness and the worker"
+            ]
+          }
+        }
+      },
+      {
+        "task": "05-landing-cache",
+        "total": 5,
+        "models": {
+          "surplus/deepseek-v4.1-flash-1017": {
+            "ok": true,
+            "caught": 5,
+            "fp": 0,
+            "missed": []
+          },
+          "surplus/qwen3.8-flash": {
+            "ok": true,
+            "caught": 4,
+            "fp": 0,
+            "missed": [
+              "C1: uses an in-memory cache over the existing module"
+            ]
+          }
+        }
+      },
+      {
+        "task": "06-import-projects",
+        "total": 5,
+        "models": {
+          "surplus/deepseek-v4.1-flash-1017": {
+            "ok": true,
+            "caught": 5,
+            "fp": 0,
+            "missed": []
+          },
+          "surplus/qwen3.8-flash": {
+            "ok": true,
+            "caught": 5,
+            "fp": 0,
+            "missed": []
+          }
+        }
+      },
+      {
+        "task": "07-settings-page",
+        "total": 5,
+        "models": {
+          "surplus/deepseek-v4.1-flash-1017": {
+            "ok": true,
+            "caught": 4,
+            "fp": 0,
+            "missed": [
+              "C3: defers multi-user settings and auth"
+            ]
+          },
+          "surplus/qwen3.8-flash": {
+            "ok": true,
+            "caught": 4,
+            "fp": 0,
+            "missed": [
+              "C3: defers multi-user settings and auth"
+            ]
+          }
+        }
+      },
+      {
+        "task": "08-delete-project",
+        "total": 5,
+        "models": {
+          "surplus/deepseek-v4.1-flash-1017": {
+            "ok": true,
+            "caught": 5,
+            "fp": 0,
+            "missed": []
+          },
+          "surplus/qwen3.8-flash": {
+            "ok": true,
+            "caught": 4,
+            "fp": 0,
+            "missed": [
+              "C4: describes a restore or revert path"
+            ]
+          }
+        }
+      },
+      {
+        "task": "09-sqlite-migration",
+        "total": 5,
+        "models": {
+          "surplus/deepseek-v4.1-flash-1017": {
+            "ok": true,
+            "caught": 4,
+            "fp": 0,
+            "missed": [
+              "C2: names the store and read seams"
+            ]
+          },
+          "surplus/qwen3.8-flash": {
+            "ok": true,
+            "caught": 3,
+            "fp": 0,
+            "missed": [
+              "C2: names the store and read seams",
+              "C4: describes a rollback path"
+            ]
+          }
+        }
+      },
+      {
+        "task": "10-test-results-table",
+        "total": 5,
+        "models": {
+          "surplus/deepseek-v4.1-flash-1017": {
+            "ok": true,
+            "caught": 5,
+            "fp": 0,
+            "missed": []
+          },
+          "surplus/qwen3.8-flash": {
+            "ok": true,
+            "caught": 5,
+            "fp": 0,
+            "missed": []
+          }
+        }
+      }
+    ],
+    "models": [
+      "surplus/deepseek-v4.1-flash-1017",
+      "surplus/qwen3.8-flash"
+    ]
+  },
+  "experience": {
+    "rows": [
+      {
+        "model": "surplus/deepseek-v4.1-flash-1017",
+        "tier": "measured",
+        "confidence": "medium",
+        "scored": 10,
+        "failed": 0,
+        "catch": 93,
+        "precision": 100,
+        "fp": 0,
+        "cost": 0.00309,
+        "costPerTask": 0.000309,
+        "unique": null,
+        "maxTokens": 8000
+      },
+      {
+        "model": "surplus/glm-5.3-flash",
+        "tier": "pilot",
+        "confidence": "low",
+        "scored": 6,
+        "failed": 4,
+        "catch": 87,
+        "precision": 100,
+        "fp": 0,
+        "cost": 0.003203,
+        "costPerTask": 0.000534,
+        "unique": 1,
+        "maxTokens": 8000
+      }
+    ],
+    "tasks": [
+      {
+        "task": "01-empty-state",
+        "total": 7,
+        "models": {
+          "surplus/deepseek-v4.1-flash-1017": {
+            "ok": true,
+            "caught": 7,
+            "fp": 0,
+            "missed": []
+          },
+          "surplus/glm-5.3-flash": {
+            "ok": false,
+            "caught": 0,
+            "fp": 0,
+            "missed": [
+              "C1: the three-second read says the list is empty",
+              "C2: names the create or attach action as the first-run path",
+              "C3: uses sentence-case, quiet copy",
+              "C4: names the first row appearing without a layout jump",
+              "C5: avoids a modal, spinner or tour",
+              "C6: gives at least two observable evidence points",
+              "C7: names at least one non-goal"
+            ]
+          }
+        }
+      },
+      {
+        "task": "02-loading-state",
+        "total": 7,
+        "models": {
+          "surplus/deepseek-v4.1-flash-1017": {
+            "ok": true,
+            "caught": 7,
+            "fp": 0,
+            "missed": []
+          },
+          "surplus/glm-5.3-flash": {
+            "ok": true,
+            "caught": 7,
+            "fp": 0,
+            "missed": []
+          }
+        }
+      },
+      {
+        "task": "03-delete-confirmation",
+        "total": 7,
+        "models": {
+          "surplus/deepseek-v4.1-flash-1017": {
+            "ok": true,
+            "caught": 6,
+            "fp": 0,
+            "missed": [
+              "C4: the list updates without a layout jump"
+            ]
+          },
+          "surplus/glm-5.3-flash": {
+            "ok": false,
+            "caught": 0,
+            "fp": 0,
+            "missed": [
+              "C1: the three-second read names the thread being deleted",
+              "C2: cancel is the default and holds focus",
+              "C3: copy is sentence case and names the object",
+              "C4: the list updates without a layout jump",
+              "C5: avoids a second confirmation, a modal stack or typed confirmation",
+              "C6: gives at least two observable evidence points",
+              "C7: names at least one non-goal"
+            ]
+          }
+        }
+      },
+      {
+        "task": "04-error-state",
+        "total": 7,
+        "models": {
+          "surplus/deepseek-v4.1-flash-1017": {
+            "ok": true,
+            "caught": 5,
+            "fp": 0,
+            "missed": [
+              "C1: the three-second read says the page failed to load",
+              "C4: content is replaced in place without a jump"
+            ]
+          },
+          "surplus/glm-5.3-flash": {
+            "ok": true,
+            "caught": 4,
+            "fp": 0,
+            "missed": [
+              "C1: the three-second read says the page failed to load",
+              "C4: content is replaced in place without a jump",
+              "C5: avoids a stack trace, blame or modal"
+            ]
+          }
+        }
+      },
+      {
+        "task": "05-composer",
+        "total": 7,
+        "models": {
+          "surplus/deepseek-v4.1-flash-1017": {
+            "ok": true,
+            "caught": 7,
+            "fp": 0,
+            "missed": []
+          },
+          "surplus/glm-5.3-flash": {
+            "ok": false,
+            "caught": 0,
+            "fp": 0,
+            "missed": [
+              "C1: the three-second read finds the composer and send action",
+              "C2: names type, send or attach as the first-run path",
+              "C3: the placeholder is a verb in sentence case",
+              "C4: send clears the draft without moving focus",
+              "C5: avoids a modal, a lost draft or a disabled composer",
+              "C6: gives at least two observable evidence points",
+              "C7: names at least one non-goal"
+            ]
+          }
+        }
+      },
+      {
+        "task": "06-disconnect-confirmation",
+        "total": 7,
+        "models": {
+          "surplus/deepseek-v4.1-flash-1017": {
+            "ok": true,
+            "caught": 7,
+            "fp": 0,
+            "missed": []
+          },
+          "surplus/glm-5.3-flash": {
+            "ok": true,
+            "caught": 7,
+            "fp": 0,
+            "missed": []
+          }
+        }
+      },
+      {
+        "task": "07-settings-page",
+        "total": 7,
+        "models": {
+          "surplus/deepseek-v4.1-flash-1017": {
+            "ok": true,
+            "caught": 7,
+            "fp": 0,
+            "missed": []
+          },
+          "surplus/glm-5.3-flash": {
+            "ok": true,
+            "caught": 7,
+            "fp": 0,
+            "missed": []
+          }
+        }
+      },
+      {
+        "task": "08-first-project",
+        "total": 7,
+        "models": {
+          "surplus/deepseek-v4.1-flash-1017": {
+            "ok": true,
+            "caught": 6,
+            "fp": 0,
+            "missed": [
+              "C5: avoids a tour, a modal or sample data"
+            ]
+          },
+          "surplus/glm-5.3-flash": {
+            "ok": true,
+            "caught": 6,
+            "fp": 0,
+            "missed": [
+              "C1: the three-second read says there are no projects"
+            ]
+          }
+        }
+      },
+      {
+        "task": "09-test-results-table",
+        "total": 7,
+        "models": {
+          "surplus/deepseek-v4.1-flash-1017": {
+            "ok": true,
+            "caught": 7,
+            "fp": 0,
+            "missed": []
+          },
+          "surplus/glm-5.3-flash": {
+            "ok": true,
+            "caught": 6,
+            "fp": 0,
+            "missed": [
+              "C5: avoids horizontal scroll and colour-only status"
+            ]
+          }
+        }
+      },
+      {
+        "task": "10-stale-live-update",
+        "total": 7,
+        "models": {
+          "surplus/deepseek-v4.1-flash-1017": {
+            "ok": true,
+            "caught": 6,
+            "fp": 0,
+            "missed": [
+              "C5: avoids silent stale data, a spinner or a modal"
+            ]
+          },
+          "surplus/glm-5.3-flash": {
+            "ok": false,
+            "caught": 0,
+            "fp": 0,
+            "missed": [
+              "C1: the three-second read says the data is stale or disconnected",
+              "C2: names retry, reconnect or wait as the first-run path",
+              "C3: one sentence, no blame, names the last update",
+              "C4: reconnect keeps the reader's place without a jump",
+              "C5: avoids silent stale data, a spinner or a modal",
+              "C6: gives at least two observable evidence points",
+              "C7: names at least one non-goal"
+            ]
+          }
+        }
+      }
+    ],
+    "models": [
+      "surplus/deepseek-v4.1-flash-1017",
+      "surplus/glm-5.3-flash"
+    ]
+  },
+  "visual": {
+    "row": [
+      {
+        "model": "surplus/glm-5.3-flash",
+        "tier": "pilot",
+        "confidence": "low",
+        "scored": 1,
+        "failed": 0,
+        "catch": 73,
+        "precision": 100,
+        "fp": 0,
+        "cost": 0.000465,
+        "costPerTask": 0.000465,
+        "unique": null,
+        "maxTokens": 16000
+      }
+    ],
+    "caught": [
+      "D1-375-light",
+      "D1-900-light",
+      "D1-375-dark",
+      "D1-900-dark",
+      "D4-375-light",
+      "D4-900-light",
+      "D4-375-dark",
+      "D4-900-dark",
+      "D3-375-light",
+      "D3-900-light",
+      "D3-375-dark",
+      "D3-900-dark",
+      "D2-375-light",
+      "D2-375-dark"
+    ],
+    "missed": [
+      {
+        "id": "D5-375-light",
+        "shot": "375-light",
+        "region": "gap above third row",
+        "kind": "defect",
+        "severity": "minor",
+        "summary": "the gap above the third row is larger than the other row gaps"
+      },
+      {
+        "id": "D5-900-light",
+        "shot": "900-light",
+        "region": "gap above third row",
+        "kind": "defect",
+        "severity": "minor",
+        "summary": "the gap above the third row is larger than the other row gaps"
+      },
+      {
+        "id": "D5-375-dark",
+        "shot": "375-dark",
+        "region": "gap above third row",
+        "kind": "defect",
+        "severity": "minor",
+        "summary": "the gap above the third row is larger than the other row gaps"
+      },
+      {
+        "id": "D5-900-dark",
+        "shot": "900-dark",
+        "region": "gap above third row",
+        "kind": "defect",
+        "severity": "minor",
+        "summary": "the gap above the third row is larger than the other row gaps"
+      },
+      {
+        "id": "D6-375-light",
+        "shot": "375-light",
+        "region": "row 2 3 second third",
+        "kind": "defect",
+        "severity": "major",
+        "summary": "rows 2 and 3 have no status badge"
+      },
+      {
+        "id": "D6-900-light",
+        "shot": "900-light",
+        "region": "row 2 3 second third",
+        "kind": "defect",
+        "severity": "major",
+        "summary": "rows 2 and 3 have no status badge"
+      },
+      {
+        "id": "D6-375-dark",
+        "shot": "375-dark",
+        "region": "row 2 3 second third",
+        "kind": "defect",
+        "severity": "major",
+        "summary": "rows 2 and 3 have no status badge"
+      },
+      {
+        "id": "D6-900-dark",
+        "shot": "900-dark",
+        "region": "row 2 3 second third",
+        "kind": "defect",
+        "severity": "major",
+        "summary": "rows 2 and 3 have no status badge"
+      }
+    ],
+    "fp": 0,
+    "weighted": "64/88",
+    "keyCount": 22,
+    "shotCount": 4
+  }
+}

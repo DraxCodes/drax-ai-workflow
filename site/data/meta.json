@@ -1,0 +1,96 @@
+{
+  "project": "personal-website",
+  "baseVersion": "0.7.1",
+  "generatedAt": "2026-11-22",
+  "capUsd": 1.45,
+  "spentUsd": 0.441245,
+  "tests": 137,
+  "publishPolicy": "Summaries only. No API keys, raw provider responses, project .scratch paths, or active-pack keys.",
+  "seats": [
+    {
+      "id": "chair",
+      "name": "Chair",
+      "slot": "council.chair",
+      "chosen": "surplus/deepseek-v4.1-flash-1017",
+      "tier": "measured",
+      "reason": "Measured 78% catch / 100% precision with no invented options. Qwen catches two more points but invented an option id."
+    },
+    {
+      "id": "shape",
+      "name": "Shape",
+      "slot": "council.shape",
+      "chosen": "surplus/deepseek-v4.1-flash-1017",
+      "tier": "measured",
+      "reason": "Measured 91% catch / 100% precision. Qwen is 87% / 100% on the same pack."
+    },
+    {
+      "id": "experience",
+      "name": "Experience",
+      "slot": "council.experience",
+      "chosen": "surplus/deepseek-v4.1-flash-1017",
+      "tier": "measured",
+      "reason": "Measured 10/10 at 93% catch / 100% precision. GLM Flash's stronger three-task prose did not survive ten tasks (6/10)."
+    },
+    {
+      "id": "risk",
+      "name": "Risk",
+      "slot": "council.risk",
+      "chosen": "surplus/glm-5.3",
+      "tier": "measured",
+      "reason": "Measured 100% catch / 85% precision. Caught the major credential leak Qwen missed; four false positives are the accepted cost."
+    },
+    {
+      "id": "blindspot",
+      "name": "Blindspot",
+      "slot": "hillclimb.blindspot",
+      "chosen": "surplus/glm-5.3-flash",
+      "tier": "pilot",
+      "reason": "The only blindspot model that returned a valid visual review. The keyed visual pack is a one-task pilot at 73% catch / 100% precision."
+    }
+  ],
+  "modelInfo": {
+    "surplus/deepseek-v4.1-flash-1017": {
+      "name": "DeepSeek 4.1 Flash",
+      "lineage": "DeepSeek",
+      "list": "$0.147 / $0.60",
+      "min80": "$0.029 / $0.120"
+    },
+    "surplus/qwen3.8-flash": {
+      "name": "Qwen 3.8 Flash",
+      "lineage": "Qwen",
+      "list": "$0.150 / $0.47",
+      "min80": "$0.030 / $0.094"
+    },
+    "surplus/glm-5.3": {
+      "name": "GLM 5.3",
+      "lineage": "GLM",
+      "list": "$1.19 / $4.40",
+      "min80": "$0.238 / $0.880"
+    },
+    "surplus/glm-5.3-flash": {
+      "name": "GLM 5.3 Flash",
+      "lineage": "GLM",
+      "list": "$0.12 / $0.50",
+      "min80": "$0.024 / $0.100"
+    },
+    "surplus/claude-haiku-4.5": {
+      "name": "Claude Haiku 4.5",
+      "lineage": "Claude",
+      "list": "$1.00 / $5.00",
+      "min80": "$0.200 / $1.000"
+    }
+  },
+  "protocolNotes": [
+    "Reasoning models need large output budgets: 1,200 and 4,000 tokens truncated JSON; 16,000 was needed for several tasks.",
+    "A fenced JSON answer is a failed task. Claude Haiku fences every answer and cannot be measured under this protocol.",
+    "--samples 2 is refused, so measured rows are medium confidence, not high.",
+    "Seat variants (#low/#high) are not tested; the harness tests base models.",
+    "Risk GLM used min80 prices and Qwen used list; Qwen is about 13x cheaper like-for-like.",
+    "The visual pack is a one-task pilot; ten tasks are needed for measured evidence."
+  ],
+  "commits": [
+    "drax-ai-workflow 214c146 - council-seat protocol and ten-task packs",
+    "drax-ai-workflow 190fd89 - visual-review protocol and pilot pack",
+    "personal-website d3a3877 - 0.7.1 update and local evidence ignores"
+  ]
+}

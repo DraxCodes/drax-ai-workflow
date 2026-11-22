@@ -8,7 +8,11 @@
     "base": "tools/base.mjs"
   },
   "scripts": {
-    "test": "node --test"
+    "test": "node --test",
+    "site:collect": "node site/collect.mjs",
+    "site:build": "node site/build.mjs",
+    "site:serve": "node site/serve.mjs",
+    "site": "node site/collect.mjs && node site/build.mjs"
   },
   "engines": {
     "node": ">=20"
